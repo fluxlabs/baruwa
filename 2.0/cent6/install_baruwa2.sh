@@ -1267,7 +1267,7 @@ if [ `whoami` == root ]
 		while [ $menu == "1" ]
 		do
 			main_menu
-			read_options
+			read_main
 		done
 	else
 		echo "Sorry, but you are not root."
