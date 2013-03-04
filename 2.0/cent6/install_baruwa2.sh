@@ -77,7 +77,6 @@ baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.0/extras"	# Extras from
 fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
 hosts=$(hostname -s)
 hostf=$(hostname -f)
-erlang=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';) # ERLANG Version
 
 # +---------------------------------------------------+
 # Functions
@@ -1139,7 +1138,8 @@ rabbitmqctl start_app
 }
 
 function erlang () {
-	echo "Your erlang KEY is : $erlang"
+	erlang_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
+	echo "Your erlang KEY is : $erlang_key";
 }
 
 function rabbit_status () {
