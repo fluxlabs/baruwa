@@ -70,6 +70,16 @@ adminpass1=M0nk3ym4n123$
 adminemail1=jeremy@fluxlabs.net
 
 # +---------------------------------------------------+
+# More Stuff
+# +---------------------------------------------------+
+
+baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.0/extras"	# Extras from Baruwa
+fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
+hosts=$(hostname -s)
+hostf=$(hostname -f)
+erlang=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';) # ERLANG Version
+
+# +---------------------------------------------------+
 # Functions
 # +---------------------------------------------------+
 
@@ -159,15 +169,6 @@ fi
 #	:
 #fi
 
-# +---------------------------------------------------+
-# More Stuff
-# +---------------------------------------------------+
-
-baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.0/extras"	# Extras from Baruwa
-fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/extras"	# Extras from Flux Labs
-hosts=$(hostname -s)
-hostf=$(hostname -f)
-erlang="$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)"
 
 # +---------------------------------------------------+
 # Start Script
