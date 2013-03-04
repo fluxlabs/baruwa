@@ -164,7 +164,7 @@ fi
 # +---------------------------------------------------+
 
 baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.0/extras"	# Extras from Baruwa
-fluxlabs_extras="https://raw.github.com/fluxlabs/scripting/baruwa/extras"	# Extras from Flux Labs
+fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/extras"	# Extras from Flux Labs
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 erlang="$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)"
@@ -1090,7 +1090,7 @@ do_prompt
 # +---------------------------------------------------+
 
 # Master
-function master () {
+function rabbit_master () {
 while :
 do
 echo ""
@@ -1114,7 +1114,7 @@ rabbitmqctl start_app
 }
 
 # Slave
-function slave () {
+function rabbit_slave () {
 	while :
 	do
 	echo ""
@@ -1137,11 +1137,11 @@ rabbitmqctl join_cluster --disk rabbit@$cluster2a
 rabbitmqctl start_app
 }
 
-function erlang_key () {
+function erlang () {
 	echo "Your erlang KEY is : $erlang"
 }
 
-function status () {
+function rabbit_status () {
 	clear 2>/dev/null
 	rabbitmqctl status
 }
@@ -1155,7 +1155,7 @@ function cluster_status () {
 # Display menus
 # +---------------------------------------------------+
 
-do_menu() {
+main_menu() {
 	clear
 	echo "------------------------------"
 	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
@@ -1182,7 +1182,7 @@ do_menu() {
 	echo "x) Exit"
 }
 
-do_menu_cluster() {
+cluster_menu() {
 	clear
 	echo "------------------------------"
 	echo "Cluster Options"
@@ -1202,7 +1202,7 @@ do_menu_cluster() {
 # Choices
 # +---------------------------------------------------+
 
-read_options() {
+read_main() {
 	local choice
 	read -p "Enter Choice: " choice
 	case $choice in
@@ -1242,6 +1242,20 @@ read_options() {
 	esac
 }
 
+read_cluster() {
+	local cluster
+	read -p "Enter Choice: " cluster
+	case $cluster in
+		a) master ;;
+		b) slave ;;
+		c) erlang ;;
+		d) rabbit_status ;;
+		e) cluster_status ;;
+		x) exit 0;;
+		*) echo -e "Error \"$cluster\" is not an option..." && sleep 2
+	esac
+}
+
 # +---------------------------------------------------+
 # Be sure we're root
 # +---------------------------------------------------+
@@ -1251,7 +1265,7 @@ if [ `whoami` == root ]
 		menu="1"
 		while [ $menu == "1" ]
 		do
-			do_menu
+			main_menu
 			read_options
 		done
 	else
