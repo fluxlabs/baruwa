@@ -1,4 +1,2 @@
-scripting
+Additions and Installers for Baruwa 2.0
 =========
-
-Random Scripts
