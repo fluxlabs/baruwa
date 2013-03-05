@@ -82,11 +82,11 @@ hostf=$(hostname -f)
 # Functions
 # +---------------------------------------------------+
 
-do_prompt(){
+function show_confirm(){
 	read -p "Press [Enter] key to continue..." fackEnterKey
 }
 
-do_done(){
+function show_complete(){
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
 	echo "S E C T I O N  C O M P L E T E";
@@ -94,7 +94,7 @@ do_done(){
 	sleep 2
 }
 
-do_cleanup(){
+function cleanup(){
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L E R  C L E A N  U P";
@@ -168,7 +168,6 @@ fi
 #	:
 #fi
 
-
 # +---------------------------------------------------+
 # Start Script
 # +---------------------------------------------------+
@@ -207,9 +206,9 @@ echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
-do_prompt
+show_confirm
 
-func_dirs(){
+function directories(){
 	
 	if [[ -d $track && -d $logs ]];
 		then
@@ -381,7 +380,7 @@ fi
 	echo "shortly for some perl mod confirmations."
 	echo "------------------------------------------------------------------------------";
 	echo $admemail1 $repemail1 $erremail1 $bdomain1 $adminuser1 $adminpass1 $adminemail1 $pssqlpass1 $rabbpass1 > $track/answers
-	do_prompt	
+	show_confirm	
 fi
 }
 
@@ -389,7 +388,7 @@ fi
 # Dependencies Function
 # +---------------------------------------------------+
 
-func_dependencies(){
+function dependencies(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "R E Q U I R E D  D E P E N D E N C I E S";
@@ -447,7 +446,7 @@ else
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes -y
 	touch $track/dependencies
 	clear 2>/dev/null
-do_done
+show_complete
 fi
 }
 
@@ -455,7 +454,7 @@ fi
 # Virtual Python Function
 # +---------------------------------------------------+
 
-func_virtpython(){
+function python(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "V I R T U A L  P Y T H O N  E N V I R O N M E N T";
@@ -489,7 +488,7 @@ curl -O $baruwa_extras/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
-do_done
+show_complete
 fi
 }
 
@@ -497,7 +496,7 @@ fi
 # Postgresql Function
 # +---------------------------------------------------+
 
-func_postgresql(){
+function postgresql(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "P O S T G R E S Q L";
@@ -534,7 +533,7 @@ sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass1':' \
 -e 's:sql_db =:sql_db = baruwa:' sphinx.conf
 touch $track/pssql
-do_done
+show_complete
 fi
 }
 
@@ -542,7 +541,7 @@ fi
 # Rabbit MQ Function
 # +---------------------------------------------------+
 
-func_rabbit(){
+function rabbitmq(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "R A B B I T M Q ";
@@ -559,7 +558,7 @@ else
 	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
-	do_done
+	show_complete
 fi
 }
 
@@ -567,7 +566,7 @@ fi
 # Mailscanner Function
 # +---------------------------------------------------+
 
-func_mailscanner(){
+function mailscanner(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "M A I L S C A N N E R ";
@@ -619,11 +618,11 @@ if rpm -q --quiet mailscanner;
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	touch $track/mailscanner
 	rm -rf /usr/src/MailScanner-$msver
-do_done
+show_complete
 fi
 }
 
-func_exim(){
+function exim(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "E X I M  I N S T A L L";
@@ -690,11 +689,11 @@ else
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
 	curl -0 $baruwa_extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
-do_done
+show_complete
 fi
 }
 
-func_perlmods(){
+function perl(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "P E R L  M O D S  I N S T A L L";
@@ -708,13 +707,13 @@ else
 	echo "We are now going to install a few Perl Modules"
 	echo "that at not available via Yum Repo's."
 	echo "Please press Yes/Enter throughout the questions."
-	do_prompt
+	show_confirm
 
 	perl -MCPAN -e  'install Encoding::FixLatin'
 	perl -MCPAN -e  'install AnyEvent::Handle'
 	perl -MCPAN -e  'install EV'
 	touch $track/perlmods
-do_done
+show_complete
 fi
 }
 
@@ -722,7 +721,7 @@ fi
 # Libmem Source Function
 # +---------------------------------------------------+
 
-func_libmemsource(){
+function libmem(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "L I B M E M  S O U R C E";
@@ -738,7 +737,7 @@ else
 	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached=/usr/bin/memcached
 	make && make install
 	touch $track/libmem
-do_done
+show_complete
 fi
 }
 
@@ -746,7 +745,7 @@ fi
 # Baruwa Function
 # +---------------------------------------------------+
 
-func_baruwaconfig(){
+function configuration(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "B U I L D I N G  B A R U W A";
@@ -815,14 +814,14 @@ else
 	chmod +x /etc/init.d/baruwa
 fi
 
-do_done
+show_complete
 }
 
 # +---------------------------------------------------+
 # Baruwa Admin Function
 # +---------------------------------------------------+
 
-func_baruwaadmin(){
+function administrator(){
 	clear 2>/dev/null
 if [ -a $track/baruwaadmin ];
 	then
@@ -846,7 +845,7 @@ fi
 # Apache2 Function
 # +---------------------------------------------------+
 
-func_apache(){
+function apache(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "A P A C H E  I N S T A L L A T I O N";
@@ -867,7 +866,7 @@ else
 	curl -O $baruwa_extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
 	clear 2>/dev/null
-	do_done
+	show_complete
 fi
 }
 
@@ -875,7 +874,7 @@ fi
 # CronJobs Function
 # +---------------------------------------------------+
 
-func_cronjobs(){
+function cronjobs(){
 clear 2>/dev/null
 if [ -f /etc/cron.hourly/baruwa-updateindex ];
 	then
@@ -948,7 +947,7 @@ echo "Your MailScanner Cronjobs are setup as:"
 echo ""
 cat /etc/cron.d/mailscanner
 echo ""
-do_prompt
+show_confirm
 
 else
 	clear 2>/dev/null
@@ -960,7 +959,7 @@ fi
 # Services Function
 # +---------------------------------------------------+
 
-func_services(){
+function services(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "S E R V I C E  R E S T A R T";
@@ -980,6 +979,8 @@ else
 	touch $track/sphinx
 fi
 
+mkdir /var/run/MailScanner
+chmod 755 /var/run/MailScanner
 chown -R baruwa: /var/log/baruwa
 chown -R baruwa: /var/run/baruwa
 chown -R apache: /var/lib/baruwa/data
@@ -1014,7 +1015,7 @@ service clamd start
 # Finish Up
 # +---------------------------------------------------+
 
-func_finish(){
+function finish(){
 sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail1':' $etcdir/production.ini
 sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail1':' $etcdir/production.ini
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$bdomain1':' /etc/httpd/conf.d/baruwa.conf
@@ -1035,7 +1036,7 @@ echo "Username: $adminuser1"
 echo "Password: $adminpass1"
 echo ""
 echo "Let's send an email to $admemail1 with these instructions."
-do_prompt
+show_confirm
 
 # +---------------------------------------------------+
 # Email Results
@@ -1082,8 +1083,11 @@ echo ""
 echo "Please support the Baruwa project by donating at"
 echo "http://pledgie.com/campaigns/12056"
 echo ""
-do_prompt
+show_confirm
 }
+
+
+### SECION INCOMPLETE
 
 # +---------------------------------------------------+
 # RabbitMQ Cluster 
@@ -1111,6 +1115,7 @@ rabbitmqctl set_permissions -p $cluster1a baruwa ".*" ".*" ".*"
 rabbitmqctl list_vhosts
 rabbitmqctl stop_app
 rabbitmqctl start_app
+
 }
 
 # Slave
@@ -1135,6 +1140,7 @@ rabbitmqctl list_vhosts
 rabbitmqctl stop_app
 rabbitmqctl join_cluster --disk rabbit@$cluster2a
 rabbitmqctl start_app
+
 }
 
 function erlang () {
@@ -1165,25 +1171,26 @@ main_menu() {
 	echo ""
 	echo "a) New Install"
 	echo "b) Install Dependencies"
-	echo "c) Setup Virtual Python"
-	echo "d) Install Postgresql"
-	echo "e) Setup RabbitMQ"
-	echo "f) Install MailScanner"
-	echo "g) Install Exim"
-	echo "h) Install Perl Modules"
-	echo "i) Install Libmem Source"
-	echo "j) Build Baruwa 2.0"
-	echo "k) Add Baruwa Admin"
-	echo "l) Setup Apache2"
-	echo "m) Install CronJobs"
-	echo "n) Setup Services"
-	echo "o) Finalize Install"
+	#echo "c) Setup Virtual Python"
+	#echo "d) Install Postgresql"
+	#echo "e) Setup RabbitMQ"
+	#echo "f) Install MailScanner"
+	#echo "g) Install Exim"
+	#echo "h) Install Perl Modules"
+	#echo "i) Install Libmem Source"
+	#echo "j) Build Baruwa 2.0"
+	#echo "k) Add Baruwa Admin"
+	#echo "l) Setup Apache2"
+	#echo "m) Install CronJobs"
+	#echo "n) Setup Services"
+	#echo "o) Finalize Install"
+	echo "c) Setup A Cluster"
 	echo "p) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
 }
 
-cluster_menu() {
+function cluster_menu() {
 	clear
 	echo "------------------------------"
 	echo "Cluster Options"
@@ -1207,37 +1214,38 @@ read_main() {
 	local choice
 	read -p "Enter Choice: " choice
 	case $choice in
-		a)  func_dirs
+		a)  function directories
 			#func_required
-			func_dependencies
-			func_virtpython
-			func_postgresql
-			func_rabbit
-			func_mailscanner
-			func_exim
-			func_perlmods
-			func_libmemsource
-			func_baruwaconfig
-			func_baruwaadmin
-			func_apache
-			func_cronjobs
-			func_services
-			func_finish ;;
-		b) func_dependencies ;;
-		c) func_virtpython ;;
-		d) func_postgresql ;;
-		e) func_rabbit ;;
-		f) func_mailscanner ;;
-		g) func_exim ;;
-		h) func_perlmods ;;
-		i) func_libmemsource ;;
-		j) func_baruwaconfig ;;
-		k) func_baruwaadmin ;;
-		l) func_apache ;;
-		m) func_cronjobs ;;
-		n) func_services	 ;;
-		o) func_finish ;;
-		p) do_cleanup ;;
+			function dependencies
+			function python
+			function postgresql
+			function rabbitmq
+			function mailscanner
+			function exim
+			function perl
+			function libmem
+			function configuration
+			function administrator
+			function apache
+			function cronjobs
+			function services
+			function finish ;;
+		b) function dependencies ;;
+		#c) function python ;;
+		c) function cluster_menu ;;
+		d) function postgresql ;;
+		e) function rabbitmq ;;
+		f) function mailscanner ;;
+		g) function exim ;;
+		h) function perl ;;
+		i) function libmem ;;
+		j) function configuration ;;
+		k) function administrator ;;
+		l) function apache ;;
+		m) function cronjobs ;;
+		n) function services	 ;;
+		o) function finish ;;
+		p) function cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
@@ -1274,4 +1282,5 @@ if [ `whoami` == root ]
 		echo "Please su - then try again."
 		exit 0
 	fi
+	
 # +---------------------------------------------------+
