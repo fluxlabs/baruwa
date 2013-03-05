@@ -1232,7 +1232,7 @@ read_main() {
 			function_finish ;;
 		b) function_dependencies ;;
 		#c) function_python ;;
-		c) cluster_menu ;;
+		c) menu_cluster ;;
 		d) function_postgresql ;;
 		e) function_rabbitmq ;;
 		f) function_mailscanner ;;
