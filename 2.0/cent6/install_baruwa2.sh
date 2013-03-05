@@ -1162,7 +1162,7 @@ function_cluster_status () {
 # Display menus
 # +---------------------------------------------------+
 
-main_menu() {
+menu_main() {
 	clear
 	echo "------------------------------"
 	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
@@ -1190,7 +1190,7 @@ main_menu() {
 	echo "x) Exit"
 }
 
-function_cluster_menu() {
+menu_cluster() {
 	clear
 	echo "------------------------------"
 	echo "Cluster Options"
@@ -1232,7 +1232,7 @@ read_main() {
 			function_finish ;;
 		b) function_dependencies ;;
 		#c) function_python ;;
-		c) function_cluster_menu ;;
+		c) cluster_menu ;;
 		d) function_postgresql ;;
 		e) function_rabbitmq ;;
 		f) function_mailscanner ;;
@@ -1255,11 +1255,11 @@ read_cluster() {
 	local cluster
 	read -p "Enter Choice: " cluster
 	case $cluster in
-		a) master ;;
-		b) slave ;;
-		c) erlang ;;
-		d) rabbit_status ;;
-		e) cluster_status ;;
+		a) function_master ;;
+		b) function_slave ;;
+		c) function_erlang ;;
+		d) function_rabbit_status ;;
+		e) function_cluster_status ;;
 		x) exit 0;;
 		*) echo -e "Error \"$cluster\" is not an option..." && sleep 2
 	esac
@@ -1274,7 +1274,7 @@ if [ `whoami` == root ]
 		menu="1"
 		while [ $menu == "1" ]
 		do
-			main_menu
+			menu_main
 			read_main
 		done
 	else
