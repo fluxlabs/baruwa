@@ -82,11 +82,11 @@ hostf=$(hostname -f)
 # Functions
 # +---------------------------------------------------+
 
-function show_confirm(){
+function_show_confirm(){
 	read -p "Press [Enter] key to continue..." fackEnterKey
 }
 
-function show_complete(){
+function_show_complete(){
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
 	echo "S E C T I O N  C O M P L E T E";
@@ -94,7 +94,7 @@ function show_complete(){
 	sleep 2
 }
 
-function cleanup(){
+function_cleanup(){
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L E R  C L E A N  U P";
@@ -208,7 +208,7 @@ echo "--------------------------------------------------------------------------
 echo ""
 show_confirm
 
-function directories(){
+function_directories(){
 	
 	if [[ -d $track && -d $logs ]];
 		then
@@ -221,7 +221,7 @@ function directories(){
 # +---------------------------------------------------+
 # User Prompt Function
 # +---------------------------------------------------+
-function requirements () {
+function_requirements () {
 
 if $track/answers1;
 	then
@@ -388,7 +388,7 @@ fi
 # Dependencies Function
 # +---------------------------------------------------+
 
-function dependencies(){
+function_dependencies(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "R E Q U I R E D  D E P E N D E N C I E S";
@@ -454,7 +454,7 @@ fi
 # Virtual Python Function
 # +---------------------------------------------------+
 
-function python(){
+function_python(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "V I R T U A L  P Y T H O N  E N V I R O N M E N T";
@@ -496,7 +496,7 @@ fi
 # Postgresql Function
 # +---------------------------------------------------+
 
-function postgresql(){
+function_postgresql(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "P O S T G R E S Q L";
@@ -541,7 +541,7 @@ fi
 # Rabbit MQ Function
 # +---------------------------------------------------+
 
-function rabbitmq(){
+function_rabbitmq(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "R A B B I T M Q ";
@@ -566,7 +566,7 @@ fi
 # Mailscanner Function
 # +---------------------------------------------------+
 
-function mailscanner(){
+function_mailscanner(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "M A I L S C A N N E R ";
@@ -622,7 +622,7 @@ show_complete
 fi
 }
 
-function exim(){
+function_exim(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "E X I M  I N S T A L L";
@@ -693,7 +693,7 @@ show_complete
 fi
 }
 
-function perl(){
+function_perl(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "P E R L  M O D S  I N S T A L L";
@@ -721,7 +721,7 @@ fi
 # Libmem Source Function
 # +---------------------------------------------------+
 
-function libmem(){
+function_libmem(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "L I B M E M  S O U R C E";
@@ -745,7 +745,7 @@ fi
 # Baruwa Function
 # +---------------------------------------------------+
 
-function configuration(){
+function_configuration(){
 	clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "B U I L D I N G  B A R U W A";
@@ -821,7 +821,7 @@ show_complete
 # Baruwa Admin Function
 # +---------------------------------------------------+
 
-function administrator(){
+function_administrator(){
 	clear 2>/dev/null
 if [ -a $track/baruwaadmin ];
 	then
@@ -845,7 +845,7 @@ fi
 # Apache2 Function
 # +---------------------------------------------------+
 
-function apache(){
+function_apache(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "A P A C H E  I N S T A L L A T I O N";
@@ -874,7 +874,7 @@ fi
 # CronJobs Function
 # +---------------------------------------------------+
 
-function cronjobs(){
+function_cronjobs(){
 clear 2>/dev/null
 if [ -f /etc/cron.hourly/baruwa-updateindex ];
 	then
@@ -959,7 +959,7 @@ fi
 # Services Function
 # +---------------------------------------------------+
 
-function services(){
+function_services(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "S E R V I C E  R E S T A R T";
@@ -1015,7 +1015,7 @@ service clamd start
 # Finish Up
 # +---------------------------------------------------+
 
-function finish(){
+function_finish(){
 sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail1':' $etcdir/production.ini
 sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail1':' $etcdir/production.ini
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$bdomain1':' /etc/httpd/conf.d/baruwa.conf
@@ -1094,7 +1094,7 @@ show_confirm
 # +---------------------------------------------------+
 
 # Master
-function rabbit_master () {
+function_rabbit_master () {
 while :
 do
 echo ""
@@ -1119,7 +1119,7 @@ rabbitmqctl start_app
 }
 
 # Slave
-function rabbit_slave () {
+function_rabbit_slave () {
 	while :
 	do
 	echo ""
@@ -1143,17 +1143,17 @@ rabbitmqctl start_app
 
 }
 
-function erlang () {
+function_erlang () {
 	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
 	echo "Your erlang KEY is : $get_key";
 }
 
-function rabbit_status () {
+function_rabbit_status () {
 	clear 2>/dev/null
 	rabbitmqctl status
 }
 
-function cluster_status () {
+function_cluster_status () {
 	clear 2>/dev/null
 	rabbitmqctl cluster_status
 }
@@ -1190,7 +1190,7 @@ main_menu() {
 	echo "x) Exit"
 }
 
-function cluster_menu() {
+function_cluster_menu() {
 	clear
 	echo "------------------------------"
 	echo "Cluster Options"
@@ -1214,38 +1214,38 @@ read_main() {
 	local choice
 	read -p "Enter Choice: " choice
 	case $choice in
-		a)  function directories
+		a)  function_directories
 			#func_required
-			function dependencies
-			function python
-			function postgresql
-			function rabbitmq
-			function mailscanner
-			function exim
-			function perl
-			function libmem
-			function configuration
-			function administrator
-			function apache
-			function cronjobs
-			function services
-			function finish ;;
-		b) function dependencies ;;
-		#c) function python ;;
-		c) function cluster_menu ;;
-		d) function postgresql ;;
-		e) function rabbitmq ;;
-		f) function mailscanner ;;
-		g) function exim ;;
-		h) function perl ;;
-		i) function libmem ;;
-		j) function configuration ;;
-		k) function administrator ;;
-		l) function apache ;;
-		m) function cronjobs ;;
-		n) function services	 ;;
-		o) function finish ;;
-		p) function cleanup ;;
+			function_dependencies
+			function_python
+			function_postgresql
+			function_rabbitmq
+			function_mailscanner
+			function_exim
+			function_perl
+			function_libmem
+			function_configuration
+			function_administrator
+			function_apache
+			function_cronjobs
+			function_services
+			function_finish ;;
+		b) function_dependencies ;;
+		#c) function_python ;;
+		c) function_cluster_menu ;;
+		d) function_postgresql ;;
+		e) function_rabbitmq ;;
+		f) function_mailscanner ;;
+		g) function_exim ;;
+		h) function_perl ;;
+		i) function_libmem ;;
+		j) function_configuration ;;
+		k) function_administrator ;;
+		l) function_apache ;;
+		m) function_cronjobs ;;
+		n) function_services	 ;;
+		o) function_finish ;;
+		p) function_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
