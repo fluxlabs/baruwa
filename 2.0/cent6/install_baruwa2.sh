@@ -206,7 +206,7 @@ echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
-show_confirm
+function_show_confirm
 
 function_directories(){
 	
@@ -380,7 +380,7 @@ fi
 	echo "shortly for some perl mod confirmations."
 	echo "------------------------------------------------------------------------------";
 	echo $admemail1 $repemail1 $erremail1 $bdomain1 $adminuser1 $adminpass1 $adminemail1 $pssqlpass1 $rabbpass1 > $track/answers
-	show_confirm	
+	function_show_confirm	
 fi
 }
 
@@ -446,7 +446,7 @@ else
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes -y
 	touch $track/dependencies
 	clear 2>/dev/null
-show_complete
+function_show_complete
 fi
 }
 
@@ -488,7 +488,7 @@ curl -O $baruwa_extras/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
-show_complete
+function_show_complete
 fi
 }
 
@@ -533,7 +533,7 @@ sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass1':' \
 -e 's:sql_db =:sql_db = baruwa:' sphinx.conf
 touch $track/pssql
-show_complete
+function_show_complete
 fi
 }
 
@@ -558,7 +558,7 @@ else
 	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
-	show_complete
+	function_show_complete
 fi
 }
 
@@ -618,7 +618,7 @@ if rpm -q --quiet mailscanner;
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	touch $track/mailscanner
 	rm -rf /usr/src/MailScanner-$msver
-show_complete
+function_show_complete
 fi
 }
 
@@ -689,7 +689,7 @@ else
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
 	curl -0 $baruwa_extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
-show_complete
+function_show_complete
 fi
 }
 
@@ -707,13 +707,13 @@ else
 	echo "We are now going to install a few Perl Modules"
 	echo "that at not available via Yum Repo's."
 	echo "Please press Yes/Enter throughout the questions."
-	show_confirm
+	function_show_confirm
 
 	perl -MCPAN -e  'install Encoding::FixLatin'
 	perl -MCPAN -e  'install AnyEvent::Handle'
 	perl -MCPAN -e  'install EV'
 	touch $track/perlmods
-show_complete
+function_show_complete
 fi
 }
 
@@ -737,7 +737,7 @@ else
 	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached=/usr/bin/memcached
 	make && make install
 	touch $track/libmem
-show_complete
+function_show_complete
 fi
 }
 
@@ -814,7 +814,7 @@ else
 	chmod +x /etc/init.d/baruwa
 fi
 
-show_complete
+function_show_complete
 }
 
 # +---------------------------------------------------+
@@ -866,7 +866,7 @@ else
 	curl -O $baruwa_extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
 	clear 2>/dev/null
-	show_complete
+	function_show_complete
 fi
 }
 
@@ -947,7 +947,7 @@ echo "Your MailScanner Cronjobs are setup as:"
 echo ""
 cat /etc/cron.d/mailscanner
 echo ""
-show_confirm
+function_show_confirm
 
 else
 	clear 2>/dev/null
@@ -1036,7 +1036,7 @@ echo "Username: $adminuser1"
 echo "Password: $adminpass1"
 echo ""
 echo "Let's send an email to $admemail1 with these instructions."
-show_confirm
+function_show_confirm
 
 # +---------------------------------------------------+
 # Email Results
@@ -1083,7 +1083,7 @@ echo ""
 echo "Please support the Baruwa project by donating at"
 echo "http://pledgie.com/campaigns/12056"
 echo ""
-show_confirm
+function_show_confirm
 }
 
 
