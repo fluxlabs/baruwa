@@ -23,10 +23,38 @@
 
 
 # +---------------------------------------------------+
+# Automated Install
+# 	If you would like a completely automated install
+#   Fill below out
+# +---------------------------------------------------+
+# Set 1 to Use the autocomplete. 0 to do prompts.
+useauto=1
+# Postgresql Password
+pssqlpass1=passw0rd
+# RabbitMQ Password
+rabbpass1=passw0rd
+# Baruwa Admin Email
+admemail1=jeremy@fluxlabs.net
+# Baruwa Reports From Email
+repemail1=jeremy@fluxlabs.net
+# Baruwa Error Reports From Email
+erremail1=jeremy@fluxlabs.net
+# Baruwa URL
+bdomain1=baruwa.fluxlabs.net
+# Baruwa Admin Username
+adminuser1=jeremy
+# Baruwa Admin Password - Must be Secure
+adminpass1=M0nk3ym4n123$
+# Baruwa Admin Email
+adminemail1=jeremy@fluxlabs.net
+
+# NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
+
+# +---------------------------------------------------+
 # Information
 # +---------------------------------------------------+
 
-date="3-03-2013"						# Date
+date="3-13-2013"						# Date
 version="2.0"							# Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwa="2.0"							# Baruwa Version
@@ -43,31 +71,6 @@ etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
 track="/tmp/tracking"					# Dir for tracking
 logs="/tmp/baruwa2"						# Dir for Logs
-
-# +---------------------------------------------------+
-# Automated Install
-# 	If you would like a completely automated install
-#   Fill below out
-# +---------------------------------------------------+
-
-# Postgresql Password
-pssqlpass1=passw0rd
-# RabbitMQ Password
-rabbpass1=passw0rd
-# Baruwa Admin Email
-admemail1=jeremy@fluxlabs.net
-# Baruwa Reports From Email
-repemail1=jeremy@fluxlabs.net
-# Baruwa Error Reports From Email
-erremail1=jeremy@fluxlabs.net
-# Baruwa URL
-bdomain1=baruwa.fluxlabs.net
-# Baruwa Admin Username
-adminuser1=jeremy
-# Baruwa Admin Password
-adminpass1=M0nk3ym4n123$
-# Baruwa Admin Email
-adminemail1=jeremy@fluxlabs.net
 
 # +---------------------------------------------------+
 # More Stuff
@@ -223,9 +226,9 @@ function_directories(){
 # +---------------------------------------------------+
 function_requirements () {
 
-if $track/answers1;
+if useauto=1;
 	then
-	read_answer
+	:
 else
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
@@ -937,7 +940,6 @@ echo "--------------------------------------------------------------------------
 echo "A D D E D  C R O N J O B S";
 echo "------------------------------------------------------------------------------";
 echo -n "We have created cron entries for you."
-echo ""; sleep 3
 echo ""
 echo "Your Baruwa Cronjobs are setup as:"
 echo ""
