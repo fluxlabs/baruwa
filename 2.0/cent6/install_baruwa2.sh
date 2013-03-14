@@ -727,7 +727,7 @@ fi
 function_libmem(){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
-echo "L I B M E M  S O U R C E";
+echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
@@ -786,7 +786,8 @@ if [ -f $track/baruwaconfig ];
 	sed -i -e 's/sqlalchemy.url/#sqlalchemy.url/' $etcdir/production.ini
 	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass1@127.0.0.1:5432" $etcdir/production.ini
 	sed -i -e 's:broker.password =:broker.password = '$rabbpass1':' \
-	       -e "s:snowy.local:$(hostname):g" \
+		   -e 's:broker.vhost =:broker.vhost = '$hosts':' \
+		   -e "s:snowy.local:$(hostname):g" \
 	       -e 's:^#celery.queues:celery.queues:' $etcdir/production.ini
 	touch $track/baruwaconfig
 
@@ -996,7 +997,7 @@ service postgresql restart
 chkconfig --level 345 postgresql on
 service rabbitmq-server restart
 chkconfig --level 345 rabbitmq-server on
-service searchd start
+service searchd restart
 chkconfig --level 345 searchd on
 service baruwa start
 chkconfig --level 345 baruwa on
@@ -1045,9 +1046,8 @@ function_show_confirm
 # +---------------------------------------------------+
 
 cat >> /tmp/message << EOF
-----------------------------------
 Thanks for installing Baruwa 2.0
-
+----------------------------------
 Your Postgres Password is : $pssqlpass1
 Your Rabbit-MQ Password is : $rabbpass1
 
@@ -1055,7 +1055,7 @@ Your Reports will be sent from : $repemail1
 Your Errors wil be sent from : $erremail1
 
 You can now login at http://$bdomain1
-Username:  $adminuser1
+Username: $adminuser1
 Password: $adminpass1
 
 Please visit http://baruwa.org/docs/2.0/guide/admin/index.html
@@ -1186,7 +1186,7 @@ menu_main() {
 	#echo "m) Install CronJobs"
 	#echo "n) Setup Services"
 	#echo "o) Finalize Install"
-	echo "c) Setup A Cluster"
+	#echo "c) Setup A Cluster"
 	echo "p) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
