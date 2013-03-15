@@ -1093,7 +1093,7 @@ function_show_confirm
 }
 
 
-function pyzor_razor_dcc () {
+function_pyzor_razor_dcc () {
 	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "31,83d #" atomic
 	sh atomic
