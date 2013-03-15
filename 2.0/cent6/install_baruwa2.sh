@@ -1093,7 +1093,7 @@ function_show_confirm
 }
 
 
-function pyzor () {
+function pyzor_razor_dcc () {
 	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "31,83d #" atomic
 	sh atomic
@@ -1112,11 +1112,12 @@ function pyzor () {
 	cp -R /root/.razor /var/lib/MailScanner
 	chown -R exim: /var/spool/MailScanner/
 	chown -R exim: /var/lib/MailScanner/
+	service MailScanner restart
 }
 
 
-### SECTION INCOMPLETE
-
+# ---------------------------------------------------
+### SECTION INCOMPLETE !!! SECTION INCOMPLETE !!! SECTION INCOMPLETE !!!
 # +---------------------------------------------------+
 # RabbitMQ Cluster 
 # +---------------------------------------------------+
@@ -1198,9 +1199,8 @@ menu_main() {
 	echo "Please make a choice:"
 	echo ""
 	echo "a) Install Baruwa"
-	echo "b) Install Pyzor, DCC & Razor"
-	echo "c) Install"
-	echo "p) Cleanup Installer"
+	echo "b) Install Pyzor, Razor & DCC"
+	echo "c) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
 }
@@ -1230,7 +1230,7 @@ read_main() {
 	read -p "Enter Choice: " choice
 	case $choice in
 		a)  function_directories
-			#func_required
+			function_required
 			function_dependencies
 			function_python
 			function_postgresql
@@ -1245,22 +1245,8 @@ read_main() {
 			function_cronjobs
 			function_services
 			function_finish ;;
-		b) function_dependencies ;;
-		#c) function_python ;;
-		c) menu_cluster ;;
-		d) function_postgresql ;;
-		e) function_rabbitmq ;;
-		f) function_mailscanner ;;
-		g) function_exim ;;
-		h) function_perl ;;
-		i) function_libmem ;;
-		j) function_configuration ;;
-		k) function_administrator ;;
-		l) function_apache ;;
-		m) function_cronjobs ;;
-		n) function_services	 ;;
-		o) function_finish ;;
-		p) function_cleanup ;;
+		b) function_pyzor_razor_dcc ;;
+		c) function_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
