@@ -1121,7 +1121,6 @@ function_pyzor_razor_dcc () {
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:envelope_sender_header = :' /etc/MailScanner/spam.assassin.prefs.conf
 	cp -R /root/.pyzor /var/lib/MailScanner
 	cp -R /root/.razor /var/lib/MailScanner
 	chown -R exim: /var/spool/MailScanner/
