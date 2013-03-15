@@ -1006,6 +1006,8 @@ service crond start
 chkconfig --level 345 crond on
 service MailScanner start
 chkconfig --level 345 MailScanner on
+service spamassassin start
+chkconfig --level 345 spamassassin on
 
 clear 2>/dev/null
 echo -n "Let's update our Clam Definitions real quick."
@@ -1106,6 +1108,7 @@ function_pyzor_razor_dcc () {
 	sed -i "31,83d #" atomic
 	sh atomic
 	yum install pyzor razor-agents dcc -y
+	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
 	pyzor discover
@@ -1113,10 +1116,12 @@ function_pyzor_razor_dcc () {
 	razor-admin -register
 	clear 2>/dev/null
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
+	sed -i 's:dcc_path /usr/local/bin/dccproc:dcc_path /usr/bin/dccproc:' /etc/mail/spamassassin/mailscanner.cf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:envelope_sender_header = :' /etc/MailScanner/spam.assassin.prefs.conf
 	cp -R /root/.pyzor /var/lib/MailScanner
 	cp -R /root/.razor /var/lib/MailScanner
 	chown -R exim: /var/spool/MailScanner/
