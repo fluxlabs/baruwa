@@ -159,18 +159,18 @@ fi
 # Check IPTables
 # +---------------------------------------------------+
 
-#if service iptables status | grep REJECT;
-#	then
-#	clear 2>/dev/null
-#	echo "------------------------------------------------------------------------------";
-#	echo "I P T A B L E S  D E T E C T E D";
-#	echo "------------------------------------------------------------------------------";
-#	echo "It looks as though iptables is enabled. It will be up to you"
-#	echo "to punch the appropriate holes. If port 25 is blocked, your Welcome"
-#	echo "email will not be sent from this installer."; sleep 10
-#else
-#	:
-#fi
+if service iptables status | grep REJECT;
+	then
+	clear 2>/dev/null
+	echo "------------------------------------------------------------------------------";
+	echo "I P T A B L E S  D E T E C T E D";
+	echo "------------------------------------------------------------------------------";
+	echo "It looks as though iptables is enabled. It will be up to you"
+	echo "to punch the appropriate holes. If port 25 is blocked, your Welcome"
+	echo "email will not be sent from this installer."; sleep 10
+else
+	:
+fi
 
 # +---------------------------------------------------+
 # Start Script
@@ -1092,8 +1092,16 @@ echo ""
 function_show_confirm
 }
 
+# +---------------------------------------------------+
+# Pyzor, Razor & DCC Install from Atomic Repo
+# +---------------------------------------------------+
 
 function_pyzor_razor_dcc () {
+	clear 2>/dev/null
+	echo "------------------------------------------------------------------------------";
+	echo "I N S T A L L  P Y Z O R, R A Z O R, & D C C";
+	echo "------------------------------------------------------------------------------";
+	echo ""; sleep 3
 	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "31,83d #" atomic
 	sh atomic
@@ -1103,6 +1111,7 @@ function_pyzor_razor_dcc () {
 	pyzor discover
 	razor-admin -create
 	razor-admin -register
+	clear 2>/dev/null
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
@@ -1113,11 +1122,12 @@ function_pyzor_razor_dcc () {
 	chown -R exim: /var/spool/MailScanner/
 	chown -R exim: /var/lib/MailScanner/
 	service MailScanner restart
+	function_show_complete
 }
-
 
 # ---------------------------------------------------
 ### SECTION INCOMPLETE !!! SECTION INCOMPLETE !!! SECTION INCOMPLETE !!!
+
 # +---------------------------------------------------+
 # RabbitMQ Cluster 
 # +---------------------------------------------------+
@@ -1162,6 +1172,7 @@ function_rabbit_slave () {
 	echo ''
 	done
 	clear 2>/dev/null
+	
 rabbitmqctl add_user baruwa $baruwap1
 rabbitmqctl add_vhost $cluster2a
 rabbitmqctl set_permissions -p $cluster2a baruwa ".*" ".*" ".*"
