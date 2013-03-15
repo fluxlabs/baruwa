@@ -47,6 +47,8 @@ adminuser1=jeremy
 adminpass1=M0nk3ym4n123$
 # Baruwa Admin Email
 adminemail1=jeremy@fluxlabs.net
+# Time Zone
+timezone=America/Chicago
 
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
@@ -1029,6 +1031,8 @@ sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail1':' 
 sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail1':' $etcdir/production.ini
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$bdomain1':' /etc/httpd/conf.d/baruwa.conf
 sed -i 's:email_to = baruwa@localhost:email_to = '$admemail1':' $etcdir/production.ini
+sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
+sed -i 's:baruwa.default.url = http:\/\/localhost:baruwa.default.url = http:\/\/'${hosts}':' $etcdir/production.ini
 
 clear 2>/dev/null
 # +---------------------------------------------------+
