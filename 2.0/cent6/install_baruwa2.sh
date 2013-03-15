@@ -66,6 +66,7 @@ msver="4.84.5-3"						# MailScanner Version
 msver1="4.84.5"							# MS Config Version
 libmem="1.0.15"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
+pyzorver="0.5.0"						# Pyzor Version
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -1009,6 +1010,9 @@ chkconfig --level 345 MailScanner on
 clear 2>/dev/null
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
+touch /var/log/freshclam.log
+chown clamav /var/log/freshclam.log
+chmod 660 /var/log/freshclam.log
 freshclam
 chkconfig --level 345 clamd on
 service clamd start
@@ -1089,7 +1093,29 @@ function_show_confirm
 }
 
 
-### SECION INCOMPLETE
+function pyzor () {
+	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
+	sed -i "31,83d #" atomic
+	sh atomic
+	yum install pyzor razor-agents dcc -y
+	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
+	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
+	pyzor discover
+	razor-admin -create
+	razor-admin -register
+	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
+	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
+	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
+	cp -R /root/.pyzor /var/lib/MailScanner
+	cp -R /root/.razor /var/lib/MailScanner
+	chown -R exim: /var/spool/MailScanner/
+	chown -R exim: /var/lib/MailScanner/
+}
+
+
+### SECTION INCOMPLETE
 
 # +---------------------------------------------------+
 # RabbitMQ Cluster 
@@ -1171,22 +1197,9 @@ menu_main() {
 	echo ""
 	echo "Please make a choice:"
 	echo ""
-	echo "a) New Install"
-	echo "b) Install Dependencies"
-	#echo "c) Setup Virtual Python"
-	#echo "d) Install Postgresql"
-	#echo "e) Setup RabbitMQ"
-	#echo "f) Install MailScanner"
-	#echo "g) Install Exim"
-	#echo "h) Install Perl Modules"
-	#echo "i) Install Libmem Source"
-	#echo "j) Build Baruwa 2.0"
-	#echo "k) Add Baruwa Admin"
-	#echo "l) Setup Apache2"
-	#echo "m) Install CronJobs"
-	#echo "n) Setup Services"
-	#echo "o) Finalize Install"
-	#echo "c) Setup A Cluster"
+	echo "a) Install Baruwa"
+	echo "b) Install Pyzor, DCC & Razor"
+	echo "c) Install"
 	echo "p) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
