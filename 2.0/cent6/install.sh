@@ -249,7 +249,7 @@ menu_cluster(){
 	echo "x) Exit"
 
 			local choice
-			read -p "Enter setting you want to change: " choice
+			read -p "Enter Choice: " choice
 			case $choice in
 				a) function_master ;;
 				b) function_slave ;;
@@ -258,7 +258,7 @@ menu_cluster(){
 				e) function_cluster_status ;
 					clustermenu=1
 					;;
-				e) menu=1 && return ;;
+				x) menu=1 && return ;;
 				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 			esac
 	done
@@ -1299,14 +1299,17 @@ rabbitmqctl start_app
 function_erlang () {
 	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
 	echo "Your erlang KEY is : $get_key";
+	function_show_confirm
 }
 
 function_rabbit_status () {
 	clear 2>/dev/null
 	rabbitmqctl status
+	function_show_confirm
 }
 
 function_cluster_status () {
 	clear 2>/dev/null
 	rabbitmqctl cluster_status
+	function_show_confirm
 }
