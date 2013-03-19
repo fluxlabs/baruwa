@@ -197,22 +197,6 @@ menu_main() {
 	echo "x) Exit"
 }
 
-menu_cluster() {
-	clear
-	echo "------------------------------"
-	echo "Cluster Options"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Create Master"
-	echo "b) Setup Slave"
-	echo "c) Show ERLANG Key"
-	echo "d) RabbitMQ Status"
-	echo "e) Cluster Status"
-	echo " "
-	echo "x) Exit"
-}
-
 # +---------------------------------------------------+
 # Choices
 # +---------------------------------------------------+
@@ -245,19 +229,41 @@ read_main() {
 	esac
 }
 
-read_cluster() {
-	local cluster
-	read -p "Enter Choice: " cluster
-	case $cluster in
-		a) function_master ;;
-		b) function_slave ;;
-		c) function_erlang ;;
-		d) function_rabbit_status ;;
-		e) function_cluster_status ;;
-		x) exit 0;;
-		*) echo -e "Error \"$cluster\" is not an option..." && sleep 2
-	esac
+menu_cluster(){
+	menu=0
+	clustermenu=1
+	while [ $clustermenu == "1" ]
+		do
+			clear
+	echo "------------------------------"
+	echo "Cluster Options"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Create Master"
+	echo "b) Setup Slave"
+	echo "c) Show ERLANG Key"
+	echo "d) RabbitMQ Status"
+	echo "e) Cluster Status"
+	echo " "
+	echo "x) Exit"
+
+			local choice
+			read -p "Enter setting you want to change: " choice
+			case $choice in
+				a) function_master ;;
+				b) function_slave ;;
+				c) function_erlang ;;
+				d) function_rabbit_status ;;
+				e) function_cluster_status ;
+					clustermenu=1
+					;;
+				e) menu=1 && return ;;
+				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+			esac
+	done
 }
+
 
 # +---------------------------------------------------+
 # Be sure we're root
