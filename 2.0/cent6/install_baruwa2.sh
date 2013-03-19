@@ -178,6 +178,106 @@ fi
 # Start Script
 # +---------------------------------------------------+
 
+# +---------------------------------------------------+
+# Display menus
+# +---------------------------------------------------+
+
+menu_main() {
+	clear
+	echo "------------------------------"
+	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Install Baruwa"
+	echo "b) Install Pyzor, Razor & DCC"
+	echo "d) Setup a Cluster"
+	echo "c) Cleanup Installer"
+	echo " "
+	echo "x) Exit"
+}
+
+menu_cluster() {
+	clear
+	echo "------------------------------"
+	echo "Cluster Options"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Create Master"
+	echo "b) Setup Slave"
+	echo "c) Show ERLANG Key"
+	echo "d) RabbitMQ Status"
+	echo "e) Cluster Status"
+	echo " "
+	echo "x) Exit"
+}
+
+# +---------------------------------------------------+
+# Choices
+# +---------------------------------------------------+
+
+read_main() {
+	local choice
+	read -p "Enter Choice: " choice
+	case $choice in
+		a)  function_directories
+			function_required
+			function_dependencies
+			function_python
+			function_postgresql
+			function_rabbitmq
+			function_mailscanner
+			function_exim
+			function_perl
+			function_libmem
+			function_configuration
+			function_administrator
+			function_apache
+			function_cronjobs
+			function_services
+			function_finish ;;
+		b) function_pyzor_razor_dcc ;;
+		c) read_cluster ;;
+		d) function_cleanup ;;
+		x) exit 0;;
+		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+	esac
+}
+
+read_cluster() {
+	local cluster
+	read -p "Enter Choice: " cluster
+	case $cluster in
+		a) function_master ;;
+		b) function_slave ;;
+		c) function_erlang ;;
+		d) function_rabbit_status ;;
+		e) function_cluster_status ;;
+		x) exit 0;;
+		*) echo -e "Error \"$cluster\" is not an option..." && sleep 2
+	esac
+}
+
+# +---------------------------------------------------+
+# Be sure we're root
+# +---------------------------------------------------+
+
+if [ `whoami` == root ]
+	then
+		menu="1"
+		while [ $menu == "1" ]
+		do
+			menu_main
+			read_main
+		done
+	else
+		echo "Sorry, but you are not root."
+		echo "Please su - then try again."
+		exit 0
+	fi
+# +---------------------------------------------------+
+
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	___                                      ______    ______"
@@ -711,7 +811,7 @@ if [ -f $track/perlmods ];
 	echo "Perl modules were previously installed. Skipping."; sleep 3
 else
 	echo "We are now going to install a few Perl Modules"
-	echo "that at not available via Yum Repo's."
+	echo "that are not available via Yum Repo's."
 	echo "Please press Yes/Enter throughout the questions."
 	function_show_confirm
 
@@ -1105,14 +1205,13 @@ function_show_confirm
 function_pyzor_razor_dcc () {
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
-	echo "I N S T A L L  P Y Z O R, R A Z O R, & D C C";
+	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
 	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "31,83d #" atomic
 	sh atomic
 	yum install pyzor razor-agents dcc -y
-	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
 	pyzor discover
@@ -1205,102 +1304,3 @@ function_cluster_status () {
 	clear 2>/dev/null
 	rabbitmqctl cluster_status
 }
-
-# +---------------------------------------------------+
-# Display menus
-# +---------------------------------------------------+
-
-menu_main() {
-	clear
-	echo "------------------------------"
-	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Install Baruwa"
-	echo "b) Install Pyzor, Razor & DCC"
-	echo "c) Cleanup Installer"
-	echo " "
-	echo "x) Exit"
-}
-
-menu_cluster() {
-	clear
-	echo "------------------------------"
-	echo "Cluster Options"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Create Master"
-	echo "b) Setup Slave"
-	echo "c) Show ERLANG Key"
-	echo "d) RabbitMQ Status"
-	echo "e) Cluster Status"
-	echo " "
-	echo "x) Exit"
-}
-
-# +---------------------------------------------------+
-# Choices
-# +---------------------------------------------------+
-
-read_main() {
-	local choice
-	read -p "Enter Choice: " choice
-	case $choice in
-		a)  function_directories
-			function_required
-			function_dependencies
-			function_python
-			function_postgresql
-			function_rabbitmq
-			function_mailscanner
-			function_exim
-			function_perl
-			function_libmem
-			function_configuration
-			function_administrator
-			function_apache
-			function_cronjobs
-			function_services
-			function_finish ;;
-		b) function_pyzor_razor_dcc ;;
-		c) function_cleanup ;;
-		x) exit 0;;
-		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
-	esac
-}
-
-read_cluster() {
-	local cluster
-	read -p "Enter Choice: " cluster
-	case $cluster in
-		a) function_master ;;
-		b) function_slave ;;
-		c) function_erlang ;;
-		d) function_rabbit_status ;;
-		e) function_cluster_status ;;
-		x) exit 0;;
-		*) echo -e "Error \"$cluster\" is not an option..." && sleep 2
-	esac
-}
-
-# +---------------------------------------------------+
-# Be sure we're root
-# +---------------------------------------------------+
-
-if [ `whoami` == root ]
-	then
-		menu="1"
-		while [ $menu == "1" ]
-		do
-			menu_main
-			read_main
-		done
-	else
-		echo "Sorry, but you are not root."
-		echo "Please su - then try again."
-		exit 0
-	fi
-	
-# +---------------------------------------------------+
