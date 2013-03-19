@@ -191,7 +191,7 @@ menu_main() {
 	echo ""
 	echo "a) Install Baruwa"
 	echo "b) Install Pyzor, Razor & DCC"
-	echo "c) Setup a Cluster"
+	#echo "c) Setup a Cluster"
 	echo "d) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
@@ -222,7 +222,7 @@ read_main() {
 			function_services
 			function_finish ;;
 		b) function_pyzor_razor_dcc ;;
-		c) menu_cluster ;;
+		#c) menu_cluster ;;
 		d) function_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
