@@ -178,112 +178,6 @@ fi
 # Start Script
 # +---------------------------------------------------+
 
-# +---------------------------------------------------+
-# Display menus
-# +---------------------------------------------------+
-
-menu_main() {
-	clear
-	echo "------------------------------"
-	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Install Baruwa"
-	echo "b) Install Pyzor, Razor & DCC"
-	#echo "c) Setup a Cluster"
-	echo "d) Cleanup Installer"
-	echo " "
-	echo "x) Exit"
-}
-
-# +---------------------------------------------------+
-# Choices
-# +---------------------------------------------------+
-
-read_main() {
-	local choice
-	read -p "Enter Choice: " choice
-	case $choice in
-		a)  function_directories
-			function_required
-			function_dependencies
-			function_python
-			function_postgresql
-			function_rabbitmq
-			function_mailscanner
-			function_exim
-			function_perl
-			function_libmem
-			function_configuration
-			function_administrator
-			function_apache
-			function_cronjobs
-			function_services
-			function_finish ;;
-		b) function_pyzor_razor_dcc ;;
-		#c) menu_cluster ;;
-		d) function_cleanup ;;
-		x) exit 0;;
-		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
-	esac
-}
-
-menu_cluster(){
-	menu=0
-	clustermenu=1
-	while [ $clustermenu == "1" ]
-		do
-			clear
-	echo "------------------------------"
-	echo "Cluster Options"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Create Master"
-	echo "b) Setup Slave"
-	echo "c) Show ERLANG Key"
-	echo "d) RabbitMQ Status"
-	echo "e) Cluster Status"
-	echo " "
-	echo "x) Exit"
-
-			local choice
-			read -p "Enter Choice: " choice
-			case $choice in
-				a) function_master ;;
-				b) function_slave ;;
-				c) function_erlang ;;
-				d) function_rabbit_status ;;
-				e) function_cluster_status ;
-					clustermenu=1
-					;;
-				x) menu=1 && return ;;
-				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
-			esac
-	done
-}
-
-
-# +---------------------------------------------------+
-# Be sure we're root
-# +---------------------------------------------------+
-
-if [ `whoami` == root ]
-	then
-		menu="1"
-		while [ $menu == "1" ]
-		do
-			menu_main
-			read_main
-		done
-	else
-		echo "Sorry, but you are not root."
-		echo "Please su - then try again."
-		exit 0
-	fi
-# +---------------------------------------------------+
-
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	___                                      ______    ______"
@@ -1313,3 +1207,110 @@ function_cluster_status () {
 	rabbitmqctl cluster_status
 	function_show_confirm
 }
+
+
+# +---------------------------------------------------+
+# Display menus
+# +---------------------------------------------------+
+
+menu_main() {
+	clear
+	echo "------------------------------"
+	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Install Baruwa"
+	echo "b) Install Pyzor, Razor & DCC"
+	#echo "c) Setup a Cluster"
+	echo "c) Cleanup Installer"
+	echo " "
+	echo "x) Exit"
+}
+
+# +---------------------------------------------------+
+# Choices
+# +---------------------------------------------------+
+
+read_main() {
+	local choice
+	read -p "Enter Choice: " choice
+	case $choice in
+		a)  function_directories
+			function_required
+			function_dependencies
+			function_python
+			function_postgresql
+			function_rabbitmq
+			function_mailscanner
+			function_exim
+			function_perl
+			function_libmem
+			function_configuration
+			function_administrator
+			function_apache
+			function_cronjobs
+			function_services
+			function_finish ;;
+		b) function_pyzor_razor_dcc ;;
+		#c) menu_cluster ;;
+		c) function_cleanup ;;
+		x) exit 0;;
+		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+	esac
+}
+
+menu_cluster(){
+	menu=0
+	clustermenu=1
+	while [ $clustermenu == "1" ]
+		do
+			clear
+	echo "------------------------------"
+	echo "Cluster Options"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Create Master"
+	echo "b) Setup Slave"
+	echo "c) Show ERLANG Key"
+	echo "d) RabbitMQ Status"
+	echo "e) Cluster Status"
+	echo " "
+	echo "x) Exit"
+
+			local choice
+			read -p "Enter Choice: " choice
+			case $choice in
+				a) function_master ;;
+				b) function_slave ;;
+				c) function_erlang ;;
+				d) function_rabbit_status ;;
+				e) function_cluster_status ;
+					clustermenu=1
+					;;
+				x) menu=1 && return ;;
+				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+			esac
+	done
+}
+
+
+# +---------------------------------------------------+
+# Be sure we're root
+# +---------------------------------------------------+
+
+if [ `whoami` == root ]
+	then
+		menu="1"
+		while [ $menu == "1" ]
+		do
+			menu_main
+			read_main
+		done
+	else
+		echo "Sorry, but you are not root."
+		echo "Please su - then try again."
+		exit 0
+	fi
+# +---------------------------------------------------+
