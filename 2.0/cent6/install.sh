@@ -410,7 +410,7 @@ else
 		then
 			echo "Good, It looks as though EPEL $epel is already installed. Skipping"; sleep 2
 		else
-			rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-$epel.noarch.rpm
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-$epel.noarch.rpm
 	fi
 
 	if rpm -q --quiet centalt-release-$centalt;
