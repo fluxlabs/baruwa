@@ -40,7 +40,7 @@ repemail1=jeremy@fluxlabs.net
 # Baruwa Error Reports From Email
 erremail1=jeremy@fluxlabs.net
 # Baruwa URL
-bdomain1=baruwa.fluxlabs.net
+bdomain1=mx01.fluxlabs.net
 # Baruwa Admin Username
 adminuser1=jeremy
 # Baruwa Admin Password - Must be Secure
@@ -64,7 +64,7 @@ sslcountry=US
 # SSL Province Name
 sslprovince=
 # SSL City Name
-sslcity=Panama City
+sslcity='Panama City'
 # SSL Organization Name
 sslorg='Flux Labs'
 # SSL Common Name
