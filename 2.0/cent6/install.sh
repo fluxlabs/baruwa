@@ -79,23 +79,23 @@ sslemail=$adminemail1
 # Information
 # +---------------------------------------------------+
 
-date="3-13-2013"						# Date
+date="3-29-2013"						# Date
 version="2.0"							# Version
-osver="Cent OS/RHEL x86_64"				# Script ID
+osver="Cent OS/RHEL x86_64"					# Script ID
 baruwa="2.0"							# Baruwa Version
 centalt="6-1"							# CenAlt Version
-epel="6-8"								# EPEL Version
+epel="6-8"							# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.0.2"						# Rabbit MQ Version
+rabbitmq="3.0.4"						# Rabbit MQ Version
 msver="4.84.5-3"						# MailScanner Version
 msver1="4.84.5"							# MS Config Version
-libmem="1.0.15"                      	# LIB MEM Cache Version
+libmem="1.0.15"                     			 	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
 home="/home/baruwa"						# Home Directory
-etcdir="/etc/baruwa"					# Baruwa etc
+etcdir="/etc/baruwa"						# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
-track="/tmp/tracking"					# Dir for tracking
+track="/tmp/tracking"						# Dir for tracking
 logs="/tmp/baruwa2"						# Dir for Logs
 
 # +---------------------------------------------------+
@@ -433,7 +433,7 @@ else
 		then
 			echo "Good, It looks as though EPEL $epel is already installed. Skipping"; sleep 2
 		else
-			rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-$epel.noarch.rpm
+			rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-$epel.noarch.rpm
 	fi
 
 	if rpm -q --quiet centalt-release-$centalt;
