@@ -1008,11 +1008,9 @@ else
 	touch $track/sphinx
 fi
 
-mkdir /var/run/MailScanner
-chmod 755 /var/run/MailScanner
-chown -R baruwa: /var/log/baruwa
-chown -R baruwa: /var/run/baruwa
-chown -R apache: /var/lib/baruwa/data
+mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
+/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
+/etc/MailScanner/baruwa/rules
 usermod -G exim baruwa
 
 service httpd start
