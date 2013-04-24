@@ -831,7 +831,7 @@ CELERYD_LOG_FILE="/var/log/baruwa/celeryd.log"
 CELERYD_PID_FILE="/var/run/baruwa/celeryd.pid"
 CELERYD_USER="baruwa"
 CELERYD_GROUP="baruwa"
-EOF'
+'EOF
 fi
 
 if [ -x /etc/init.d/baruwa ];
