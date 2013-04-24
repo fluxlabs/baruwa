@@ -823,7 +823,7 @@ if [ -f /etc/sysconfig/baruwa ];
 	then
 	echo "I see you already have an /etc/sysconfig/baruwa file. Skipping." ; sleep 3
 else
-cat > /etc/sysconfig/baruwa << 'EOF':
+cat > /etc/sysconfig/baruwa << 'EOF':'
 CELERYD_CHDIR="/etc/baruwa"
 CELERYD="$CELERYD_CHDIR/px/bin/paster celeryd /etc/baruwa/production.ini"
 CELERYD_LOG_LEVEL="INFO"
@@ -831,7 +831,7 @@ CELERYD_LOG_FILE="/var/log/baruwa/celeryd.log"
 CELERYD_PID_FILE="/var/run/baruwa/celeryd.pid"
 CELERYD_USER="baruwa"
 CELERYD_GROUP="baruwa"
-EOF
+EOF'
 fi
 
 if [ -x /etc/init.d/baruwa ];
