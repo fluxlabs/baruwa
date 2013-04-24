@@ -25,7 +25,7 @@
 # +---------------------------------------------------+
 # Automated Install
 # 	If you would like a completely automated install
-#   Fill below out
+#   Fill the required fields below.
 # +---------------------------------------------------+
 # Set 1 to Use the autocomplete. 0 to do prompts.
 useauto=1
@@ -49,6 +49,29 @@ adminpass1=M0nk3ym4n123$
 adminemail1=jeremy@fluxlabs.net
 # Time Zone
 timezone=America/Chicago
+# MailScanner Organization Name - Long
+msorgname=
+# MailScanner Organization Name - Short
+msorgnamelong=
+# Baruwa WebServer Alias
+baruwaalias=
+# Baruwa Cluster Peers
+baruwclusterpeers=
+# Baruwa Cluster Peer IPs
+baruwaclusterpeerips=
+# SSL Country Code
+sslcountry=US
+# SSL Province Name
+sslprovince=
+# SSL City Name
+sslcity=Panama City
+# SSL Organization Name
+sslorg='Flux Labs'
+# SSL Common Name
+sslcommon=$bdomain1
+# SSL Email
+sslemail=$adminemail1
+
 
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
@@ -79,7 +102,7 @@ logs="/tmp/baruwa2"						# Dir for Logs
 # More Stuff
 # +---------------------------------------------------+
 
-baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.0/extras"	# Extras from Baruwa
+baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.1/extras"	# Extras from Baruwa
 fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
 hosts=$(hostname -s)
 hostf=$(hostname -f)
@@ -428,15 +451,6 @@ else
 			rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-$rpmforge.el6.rf.x86_64.rpm
 			sed -i "12i exclude=perl-File-Temp perl" /etc/yum.repos.d/rpmforge.repo
 		fi
-		
-	if rpm -q --quiet rabbitmq-server-$rabbitmq; 
-		then
-		echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
-		else
-			rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-			cd /usr/src; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmq/rabbitmq-server-$rabbitmq-1.noarch.rpm
-			yum install rabbitmq-server-$rabbitmq-1.noarch.rpm -y
-	fi
 
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
     freetype-devel libjpeg-devel zlib-devel openldap-devel openssl-devel swig multitail perl-DBD-Pg perl-DBD-MySQL \
@@ -553,6 +567,15 @@ echo "--------------------------------------------------------------------------
 echo "R A B B I T M Q ";
 echo "------------------------------------------------------------------------------";
 sleep 3
+
+if rpm -q --quiet rabbitmq-server-$rabbitmq; 
+	then
+	echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
+	else
+		rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+		cd /usr/src; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmq/rabbitmq-server-$rabbitmq-1.noarch.rpm
+		yum install rabbitmq-server-$rabbitmq-1.noarch.rpm -y
+fi
 
 if [ -a $track/rabbit ];
 	then
@@ -787,7 +810,7 @@ if [ -f $track/baruwaconfig ];
 	mkdir $etcdir
 	mv $home/production.ini $etcdir/production.ini
 	sed -i -e 's/sqlalchemy.url/#sqlalchemy.url/' $etcdir/production.ini
-	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass1@127.0.0.1:5432" $etcdir/production.ini
+	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass1@127.0.0.1:5432/baruwa" $etcdir/production.ini
 	sed -i -e 's:broker.password =:broker.password = '$rabbpass1':' \
 		   -e 's:broker.vhost =:broker.vhost = '$hosts':' \
 		   -e "s:snowy.local:$(hostname):g" \
@@ -800,9 +823,9 @@ if [ -f /etc/sysconfig/baruwa ];
 	then
 	echo "I see you already have an /etc/sysconfig/baruwa file. Skipping." ; sleep 3
 else
-cat > /etc/sysconfig/baruwa << 'EOF'
+cat > /etc/sysconfig/baruwa << 'EOF':'
 CELERYD_CHDIR="/etc/baruwa"
-CELERYD="'$CELERYD_CHDIR'/px/bin/paster celeryd /etc/baruwa/production.ini"
+CELERYD="$CELERYD_CHDIR/px/bin/paster celeryd /etc/baruwa/production.ini"
 CELERYD_LOG_LEVEL="INFO"
 CELERYD_LOG_FILE="/var/log/baruwa/celeryd.log"
 CELERYD_PID_FILE="/var/run/baruwa/celeryd.pid"
@@ -1000,7 +1023,7 @@ service postgresql restart
 chkconfig --level 345 postgresql on
 service rabbitmq-server restart
 chkconfig --level 345 rabbitmq-server on
-service searchd restart
+service searchd start
 chkconfig --level 345 searchd on
 service baruwa start
 chkconfig --level 345 baruwa on
