@@ -1012,6 +1012,7 @@ mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,up
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
 usermod -G exim baruwa
+usermod -G exim clamav
 
 service httpd start
 chkconfig --level 345 httpd on
@@ -1031,6 +1032,8 @@ service MailScanner start
 chkconfig --level 345 MailScanner on
 service spamassassin start
 chkconfig --level 345 spamassassin on
+service exim restart
+chkconfig --level 345 exim on
 
 clear 2>/dev/null
 echo -n "Let's update our Clam Definitions real quick."
@@ -1112,7 +1115,7 @@ echo "An email has been sent to "$admemail1"."
 echo ""
 echo "Please visit http://baruwa.org/docs/2.0/guide/admin/index.html"
 echo "and follow the guide on how to configure your install."
-echo ""
+echo ""``
 echo "Please support the Baruwa project by donating at"
 echo "http://pledgie.com/campaigns/12056"
 echo ""
