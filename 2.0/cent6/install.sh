@@ -79,8 +79,8 @@ sslemail=$adminemail1
 # Information
 # +---------------------------------------------------+
 
-date="3-13-2013"						# Date
-version="2.0"							# Version
+date="4-24-2013"						# Date
+version="2.1"							# Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwa="2.0"							# Baruwa Version
 centalt="6-1"							# CenAlt Version
