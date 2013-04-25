@@ -977,9 +977,6 @@ getent group baruwa >/dev/null || groupadd -r baruwa
 getent passwd baruwa >/dev/null || \
     useradd -r -g baruwa -d /var/lib/baruwa \
     -s /sbin/nologin -c "Baruwa User" baruwa
-chown baruwa.baruwa -R /var/lib/baruwa \
-        /var/run/baruwa /var/log/baruwa \
-        /var/lock/baruwa /etc/MailScanner/baruwa
 fi
 
 if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
@@ -1033,6 +1030,9 @@ fi
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
+chown baruwa.baruwa -R /var/lib/baruwa \
+        /var/run/baruwa /var/log/baruwa \
+        /var/lock/baruwa /etc/MailScanner/baruwa
 usermod -G exim baruwa
 usermod -G exim clamav
 
