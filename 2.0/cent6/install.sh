@@ -82,7 +82,7 @@ sslemail=$adminemail1
 date="4-24-2013"						# Date
 version="2.1"							# Version
 osver="Cent OS/RHEL x86_64"				# Script ID
-baruwa="2.0"							# Baruwa Version
+baruwa="2.0.1"							# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
@@ -118,7 +118,7 @@ function_show_confirm(){
 function_show_complete(){
 	clear 2>/dev/null
 	echo "------------------------------------------------------------------------------";
-	echo "S E C T I O N  C O M P L E T E";
+	echo "C O M P L E T E";
 	echo "------------------------------------------------------------------------------";
 	sleep 2
 }
