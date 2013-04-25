@@ -27,48 +27,70 @@
 # 	If you would like a completely automated install
 #   Fill the required fields below.
 # +---------------------------------------------------+
+
 # Set 1 to Use the autocomplete. 0 to do prompts.
 useauto=1
+
 # Postgresql Password
 pssqlpass1=passw0rd
+
 # RabbitMQ Password
 rabbpass1=passw0rd
+
 # Baruwa Admin Email
 admemail1=jeremy@fluxlabs.net
+
 # Baruwa Reports From Email
 repemail1=jeremy@fluxlabs.net
+
 # Baruwa Error Reports From Email
 erremail1=jeremy@fluxlabs.net
+
 # Baruwa URL
 bdomain1=mx01.fluxlabs.net
+
 # Baruwa Admin Username
 adminuser1=jeremy
+
 # Baruwa Admin Password - Must be Secure
 adminpass1=M0nk3ym4n123$
+
 # Baruwa Admin Email
 adminemail1=jeremy@fluxlabs.net
+
 # Time Zone
 timezone=America/Chicago
+
 # MailScanner Organization Name - Long
 msorgname=
+
 # MailScanner Organization Name - Short
 msorgnamelong=
+
 # Baruwa WebServer Alias
 baruwaalias=
+
 # Baruwa Cluster Peers
 baruwclusterpeers=
+
 # Baruwa Cluster Peer IPs
 baruwaclusterpeerips=
+
 # SSL Country Code
 sslcountry=US
+
 # SSL Province Name
 sslprovince=
+
 # SSL City Name
 sslcity='Panama City'
+
 # SSL Organization Name
 sslorg='Flux Labs'
+
 # SSL Common Name
 sslcommon=$bdomain1
+
 # SSL Email
 sslemail=$adminemail1
 
@@ -86,10 +108,10 @@ baruwa="2.0.1"							# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.0.2"						# Rabbit MQ Version
+rabbitmq="3.0.4-1"						# Rabbit MQ Version
 msver="4.84.5-3"						# MailScanner Version
 msver1="4.84.5"							# MS Config Version
-libmem="1.0.15"                      	# LIB MEM Cache Version
+libmem="1.0.17"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
 home="/home/baruwa"						# Home Directory
