@@ -67,3 +67,56 @@ function_erlang () {
 	echo "Your erlang KEY is : $get_key";
 	function_show_confirm
 }
+
+menu_cluster(){
+	menu=0
+	clustermenu=1
+	while [ $clustermenu == "1" ]
+		do
+			clear
+	echo "------------------------------"
+	echo "Cluster Options"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Create Master"
+	echo "b) Setup Slave"
+	echo "c) Show ERLANG Key"
+	echo "d) RabbitMQ Status"
+	echo "e) Cluster Status"
+	echo " "
+	echo "x) Exit"
+
+			local choice
+			read -p "Enter Choice: " choice
+			case $choice in
+				a) function_master ;;
+				b) function_slave ;;
+				c) function_erlang ;;
+				d) function_rabbit_status ;;
+				e) function_cluster_status ;
+					clustermenu=1
+					;;
+				x) menu=1 && return ;;
+				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+			esac
+	done
+}
+# +---------------------------------------------------+
+# Be sure we're root
+# +---------------------------------------------------+
+
+if [ `whoami` == root ]
+	then
+		menu="1"
+		while [ $menu == "1" ]
+		do
+			menu_cluster
+			cluster_menu
+		done
+	else
+		echo "Sorry, but you are not root."
+		echo "Please su - then try again."
+		exit 0
+	fi
+# +---------------------------------------------------+
