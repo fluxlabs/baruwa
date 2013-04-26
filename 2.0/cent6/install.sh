@@ -98,7 +98,7 @@ sslemail=$adminemail1
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
 # +---------------------------------------------------+
-# Information
+# Version Tracking
 # +---------------------------------------------------+
 
 date="4-24-2013"						# Date
@@ -114,11 +114,6 @@ msver1="4.84.5"							# MS Config Version
 libmem="1.0.17"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
-home="/home/baruwa"						# Home Directory
-etcdir="/etc/baruwa"					# Baruwa etc
-eximdir="/etc/exim"						# Exim Directory
-track="/tmp/tracking"					# Dir for tracking
-logs="/tmp/baruwa2"						# Dir for Logs
 
 # +---------------------------------------------------+
 # More Stuff
@@ -128,6 +123,12 @@ baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.1/extras"	# Extras from
 fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
 hosts=$(hostname -s)
 hostf=$(hostname -f)
+home="/home/baruwa"						# Home Directory
+etcdir="/etc/baruwa"					# Baruwa etc
+eximdir="/etc/exim"						# Exim Directory
+track="/tmp/tracking"					# Trackign Directory
+logs="/tmp/baruwa2"						# Logs Directory
+builddir="/usr/src/b2build/"			# Build Directory
 
 # +---------------------------------------------------+
 # Functions
@@ -153,7 +154,7 @@ function_cleanup(){
 	echo "Cleaning up Installer files."; sleep 5
 	rm -f $home/*.patch
 	rm -rf {$track,$logs}
-	rm -rf /usr/src/libmemcached-$libmem
+	rm -rf $builddir/libmemcached-$libmem
 }
 
 # +---------------------------------------------------+
@@ -595,7 +596,7 @@ if rpm -q --quiet rabbitmq-server-$rabbitmq;
 	echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
 	else
 		rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-		cd /usr/src; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmq/rabbitmq-server-$rabbitmq-1.noarch.rpm
+		cd $builddir; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmq/rabbitmq-server-$rabbitmq-1.noarch.rpm
 		yum install rabbitmq-server-$rabbitmq-1.noarch.rpm -y
 fi
 
@@ -628,7 +629,7 @@ if rpm -q --quiet mailscanner;
 		echo "I have detected a previous install of MailScanner." ; sleep 3
 	else
 		echo "This process could take a while. Go make a cup of coffee"; sleep 3
-		cd /usr/src; wget http://mailscanner.info/files/4/rpm/MailScanner-$msver.rpm.tar.gz
+		cd $builddir; wget http://mailscanner.info/files/4/rpm/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
 		clear 2>/dev/null
 		sh install.sh fast
@@ -668,7 +669,7 @@ if rpm -q --quiet mailscanner;
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	touch $track/mailscanner
-	rm -rf /usr/src/MailScanner-$msver
+	rm -rf $builddir/MailScanner-$msver
 function_show_complete
 fi
 }
@@ -780,12 +781,12 @@ echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [[ -d /usr/src/libmemcached-$libmem && -f $track/libmem ]];
+if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
 	then
 	echo "It looks as though libmemcached $libmem was already compiled from source. Skipping."; sleep 3
 else
 	yum remove libmemcached -y
-	cd /usr/src/; wget https://launchpad.net/libmemcached/1.0/1.0.15/+download/libmemcached-$libmem.tar.gz
+	cd $builddir/; wget https://launchpad.net/libmemcached/1.0/1.0.15/+download/libmemcached-$libmem.tar.gz
 	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached=/usr/bin/memcached
 	make && make install
 	touch $track/libmem
@@ -882,7 +883,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O https://raw.github.com/fluxlabs/scripting/build/baruwa/cent6/websetup.py
+	curl -O $fluxlabs_extras/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
@@ -1155,7 +1156,7 @@ function_pyzor_razor_dcc () {
 	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
-	cd /usr/src; curl -O http://www.atomicorp.com/installers/atomic
+	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "31,83d #" atomic
 	sh atomic
 	yum install pyzor razor-agents dcc -y
