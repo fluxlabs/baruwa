@@ -1244,20 +1244,34 @@ rabbitmqctl start_app
 }
 
 function_rabbit_erlang () {
+	clear
 	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
 	echo "Your erlang KEY is : $get_key";
+	echo ""
 	function_show_confirm
 }
 
 function_rabbit_status () {
 	clear 2>/dev/null
+	echo "RabbitMQ Status:"
+	echo "----------------"
+	echo ""
 	rabbitmqctl status
+	echo ""
+	echo "----------------"
+	echo ""
 	function_show_confirm
 }
 
 function_cluster_status () {
 	clear 2>/dev/null
+	echo "RabbitMQ Cluster Status:"
+	echo "----------------"
+	echo ""
 	rabbitmqctl cluster_status
+	echo ""
+	echo "----------------"
+	echo ""
 	function_show_confirm
 }
 
@@ -1320,7 +1334,9 @@ menu_cluster(){
 		do
 			clear
 	echo "------------------------------"
-	echo "Cluster Options"
+	echo "THIS IS STILL IN BUILD STAGE"
+	echo "DOES NOT WORK 100%"
+	echo "RabbitMQ Cluster Options"
 	echo ""
 	echo "Please make a choice:"
 	echo ""
