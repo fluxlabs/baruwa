@@ -847,7 +847,7 @@ if [ -f /etc/sysconfig/baruwa ];
 	echo "I see you already have an /etc/sysconfig/baruwa file. Skipping." ; sleep 3
 else
 cat > /etc/sysconfig/baruwa << 'EOF'
-CELERYD_CHDIR="/etc/baruwa"
+CELERYD_CHDIR="/home/baruwa"
 CELERYD="$CELERYD_CHDIR/px/bin/paster celeryd /etc/baruwa/production.ini"
 CELERYD_LOG_LEVEL="INFO"
 CELERYD_LOG_FILE="/var/log/baruwa/celeryd.log"
