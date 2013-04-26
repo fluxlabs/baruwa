@@ -62,10 +62,10 @@ adminemail1=jeremy@fluxlabs.net
 timezone=America/Chicago
 
 # MailScanner Organization Name - Long
-msorgname=
+msorgname='Flux Labs'
 
 # MailScanner Organization Name - Short
-msorgnamelong=
+msorgnamelong='FluxLabs'
 
 # Baruwa WebServer Alias
 baruwaalias=
@@ -77,10 +77,10 @@ baruwclusterpeers=
 baruwaclusterpeerips=
 
 # SSL Country Code
-sslcountry=US
+sslcountry='US'
 
 # SSL Province Name
-sslprovince=
+sslprovince='Florida'
 
 # SSL City Name
 sslcity='Panama City'
