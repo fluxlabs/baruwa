@@ -47,7 +47,7 @@ repemail1=jeremy@fluxlabs.net
 erremail1=jeremy@fluxlabs.net
 
 # Baruwa URL
-bdomain1=mx01.fluxlabs.net
+bdomain1=mx02.fluxlabs.net
 
 # Baruwa Admin Username
 adminuser1=jeremy
@@ -483,7 +483,7 @@ else
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
     perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df perl-File-Temp \
-    perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip \
+    perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident -y
@@ -786,8 +786,8 @@ if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
 	echo "It looks as though libmemcached $libmem was already compiled from source. Skipping."; sleep 3
 else
 	yum remove libmemcached -y
-	cd $builddir/; wget https://launchpad.net/libmemcached/1.0/1.0.15/+download/libmemcached-$libmem.tar.gz
-	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached=/usr/bin/memcached
+	cd $builddir/; wget https://launchpad.net/libmemcached/1.0/$libmem/+download/libmemcached-$libmem.tar.gz
+	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached
 	make && make install
 	touch $track/libmem
 function_show_complete
@@ -1093,6 +1093,9 @@ echo "Your Reports will be sent from: $repemail1"
 echo "Your Errors wil be sent from: $erremail1"
 echo ""
 echo "You can login at http://$bdomain1"
+echo "If you do not have DNS setup yet, you can use"
+echo "http://$ip"
+echo  ""
 echo "Username: $adminuser1"
 echo "Password: $adminpass1"
 echo ""
@@ -1113,6 +1116,10 @@ Your Reports will be sent from : $repemail1
 Your Errors wil be sent from : $erremail1
 
 You can now login at http://$bdomain1
+You can login at http://$bdomain1
+If you do not have DNS setup yet, you can use
+http://$ip
+
 Username: $adminuser1
 Password: $adminpass1
 
