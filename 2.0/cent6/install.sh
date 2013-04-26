@@ -123,6 +123,7 @@ baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.1/extras"	# Extras from
 fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
 hosts=$(hostname -s)
 hostf=$(hostname -f)
+eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -1032,9 +1033,6 @@ fi
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
-chown baruwa.baruwa -R /var/lib/baruwa \
-        /var/run/baruwa /var/log/baruwa \
-        /var/lock/baruwa /etc/MailScanner/baruwa
 usermod -G exim baruwa
 usermod -G exim clamav
 
@@ -1094,7 +1092,7 @@ echo "Your Errors wil be sent from: $erremail1"
 echo ""
 echo "You can login at http://$bdomain1"
 echo "If you do not have DNS setup yet, you can use"
-echo "http://$ip"
+echo "http://$eth0ip"
 echo  ""
 echo "Username: $adminuser1"
 echo "Password: $adminpass1"
@@ -1118,7 +1116,7 @@ Your Errors wil be sent from : $erremail1
 You can now login at http://$bdomain1
 You can login at http://$bdomain1
 If you do not have DNS setup yet, you can use
-http://$ip
+http://$eth0ip
 
 Username: $adminuser1
 Password: $adminpass1
@@ -1245,7 +1243,7 @@ rabbitmqctl start_app
 
 }
 
-function_erlang () {
+function_rabbit_erlang () {
 	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
 	echo "Your erlang KEY is : $get_key";
 	function_show_confirm
@@ -1337,9 +1335,9 @@ menu_cluster(){
 			local choice
 			read -p "Enter Choice: " choice
 			case $choice in
-				a) function_master ;;
-				b) function_slave ;;
-				c) function_erlang ;;
+				a) function_rabbit_master ;;
+				b) function_rabbit_slave ;;
+				c) function_rabbit_erlang ;;
 				d) function_rabbit_status ;;
 				e) function_cluster_status ;
 					clustermenu=1
