@@ -484,8 +484,8 @@ else
     perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df perl-File-Temp \
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
-    perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar \
-    perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes -y
+    perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
+    perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident -y
 	touch $track/dependencies
 	clear 2>/dev/null
 function_show_complete
@@ -760,9 +760,10 @@ else
 	echo "Please press Yes/Enter throughout the questions."
 	function_show_confirm
 
-	perl -MCPAN -e  'install Encoding::FixLatin'
-	perl -MCPAN -e  'install AnyEvent::Handle'
-	perl -MCPAN -e  'install EV'
+	#perl -MCPAN -e  'install Encoding::FixLatin'
+	#perl -MCPAN -e  'install AnyEvent::Handle'
+	#perl -MCPAN -e  'install EV'
+	cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
 	touch $track/perlmods
 function_show_complete
 fi
