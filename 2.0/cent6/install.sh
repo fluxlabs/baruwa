@@ -1067,8 +1067,14 @@ chkconfig --level 345 exim on
 }
 
 function function_generate_key () {
+	if auto=1
+		then
 	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$bdomain1" -keyout baruwa.key -out baruwa.pem -nodes
 	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
+else
+	openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
+	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
+fi
 }
 
 
