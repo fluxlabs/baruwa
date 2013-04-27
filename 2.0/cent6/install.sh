@@ -29,7 +29,7 @@
 # +---------------------------------------------------+
 
 # Set 1 to Use the autocomplete. 0 to do prompts.
-useauto=1
+useauto=0
 
 # Postgresql Password
 pssqlpass1=passw0rd123!
@@ -71,10 +71,10 @@ msorgnamelong='FluxLabs'
 sslcountry='US'
 
 # SSL Province Name
-sslprovince='Florida'
+sslprovince='Illinois'
 
 # SSL City Name
-sslcity='Panama City'
+sslcity='Chicago'
 
 # SSL Organization Name
 sslorg='Flux Labs'
