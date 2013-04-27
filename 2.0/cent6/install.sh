@@ -268,7 +268,7 @@ function_directories(){
 # +---------------------------------------------------+
 function_requirements () {
 
-if useauto=1;
+if $useauto=1;
 	then
 	:
 else
@@ -1223,6 +1223,7 @@ read_main() {
 	read -p "Enter Choice: " choice
 	case $choice in
 		a)  function_directories
+			function_requirements
 			function_dependencies
 			function_python
 			function_postgresql
