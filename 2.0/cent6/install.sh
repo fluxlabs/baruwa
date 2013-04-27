@@ -29,7 +29,7 @@
 # +---------------------------------------------------+
 
 # Set 1 to Use the autocomplete. 0 to do prompts.
-useauto=1
+useauto=0
 
 # Postgresql Password
 pssqlpass1=passw0rd
@@ -66,15 +66,6 @@ msorgname='Flux Labs'
 
 # MailScanner Organization Name - Short
 msorgnamelong='FluxLabs'
-
-# Baruwa WebServer Alias
-baruwaalias=
-
-# Baruwa Cluster Peers
-baruwclusterpeers=
-
-# Baruwa Cluster Peer IPs
-baruwaclusterpeerips=
 
 # SSL Country Code
 sslcountry='US'
