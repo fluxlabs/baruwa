@@ -259,6 +259,7 @@ echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
+mkdir $builddir
 function_show_confirm
 
 function_directories(){
