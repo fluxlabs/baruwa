@@ -259,16 +259,15 @@ echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
-mkdir $builddir
 function_show_confirm
 
 function_directories(){
 	
-	if [[ -d $track && -d $logs ]];
+	if [[ -d $track && -d $logs && -d $builddir ]];
 		then
 		:
 	else
-		mkdir $track; mkdir $logs
+		mkdir $track; mkdir $logs; mkdir $builddir
 	fi
 }
 
