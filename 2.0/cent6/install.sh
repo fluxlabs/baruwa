@@ -1058,8 +1058,7 @@ service MailScanner start
 chkconfig --level 345 MailScanner on
 service spamassassin start
 chkconfig --level 345 spamassassin on
-service exim restart
-chkconfig --level 345 exim on
+
 
 clear 2>/dev/null
 echo -n "Let's update our Clam Definitions real quick."
@@ -1072,6 +1071,8 @@ freshclam
 service clamd restart
 chkconfig --level 345 clamd on
 usermod -G exim clamav
+service exim restart
+chkconfig --level 345 exim on
 }
 
 # +---------------------------------------------------+
