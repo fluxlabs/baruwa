@@ -216,7 +216,8 @@ if service iptables status | grep REJECT;
 	echo "------------------------------------------------------------------------------";
 	echo "It looks as though iptables is enabled. It will be up to you"
 	echo "to punch the appropriate holes. If port 25 is blocked, your Welcome"
-	echo "email will not be sent from this installer."; sleep 10
+	echo "email will not be sent from this installer."
+	echo "Resuming in 10 seconds ..."; sleep 10
 else
 	:
 fi
@@ -1314,7 +1315,6 @@ read_main() {
 	read -p "Enter Choice: " choice
 	case $choice in
 		a)  function_directories
-			function_required
 			function_dependencies
 			function_python
 			function_postgresql
