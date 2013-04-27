@@ -154,8 +154,7 @@ function_cleanup(){
 	echo "------------------------------------------------------------------------------";
 	echo "Cleaning up Installer files."; sleep 5
 	rm -f $home/*.patch
-	rm -rf {$track,$logs}
-	rm -rf $builddir
+	rm -rf {$track,$logs,$builddir}
 }
 
 # +---------------------------------------------------+
@@ -200,6 +199,7 @@ if sestatus | grep enabled;
 	echo "sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config"
 	echo "Then reboot and try running this script again."
 	echo ""
+	echo "Resuming in 10 seconds ..."; sleep 10
 else
 	:
 fi
@@ -268,7 +268,7 @@ function_directories(){
 		then
 		:
 	else
-		mkdir $track; mkdir $logs; mkdir $builddir
+		mkdir {$track,$logs,$builddir}
 	fi
 }
 
@@ -466,7 +466,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamd" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
