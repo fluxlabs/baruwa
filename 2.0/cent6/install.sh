@@ -1246,6 +1246,7 @@ rabbitmqctl start_app
 function_rabbit_erlang () {
 	clear
 	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
+	echo ""
 	echo "Your erlang KEY is : $get_key";
 	echo ""
 	function_show_confirm
