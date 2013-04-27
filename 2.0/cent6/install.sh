@@ -32,28 +32,28 @@
 useauto=0
 
 # Postgresql Password
-pssqlpass1=passw0rd
+pssqlpass1=passw0rd123!
 
 # RabbitMQ Password
-rabbpass1=passw0rd
+rabbpass1=passw0rd321!
 
 # Baruwa Admin Email
 admemail1=jeremy@fluxlabs.net
 
 # Baruwa Reports From Email
-repemail1=jeremy@fluxlabs.net
+repemail1=reports@fluxlabs.net
 
 # Baruwa Error Reports From Email
 erremail1=jeremy@fluxlabs.net
 
 # Baruwa URL
-bdomain1=mx02.fluxlabs.net
+bdomain1=mx01.fluxlabs.net
 
 # Baruwa Admin Username
-adminuser1=jeremy
+adminuser1=admin
 
 # Baruwa Admin Password - Must be Secure
-adminpass1=M0nk3ym4n123$
+adminpass1=p4Ssw0rd123!
 
 # Baruwa Admin Email
 adminemail1=jeremy@fluxlabs.net
@@ -92,7 +92,7 @@ sslemail=$adminemail1
 # Version Tracking
 # +---------------------------------------------------+
 
-date="4-26-2013"						# Latest Date
+date="4-27-2013"						# Latest Date
 version="2.2"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
