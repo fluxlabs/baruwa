@@ -465,7 +465,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-client" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -473,7 +473,7 @@ else
 		echo "Good, It looks as though RPMFORGE $rpmforge is already installed. Skipping"; sleep 2
 		else
 			rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-$rpmforge.el6.rf.x86_64.rpm
-			sed -i "12i exclude=perl-File-Temp perl" /etc/yum.repos.d/rpmforge.repo
+			sed -i "12i exclude=openssh openssh-clients perl-File-Temp perl perl-Razor-Agent razor-agents" /etc/yum.repos.d/rpmforge.repo
 		fi
 
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
@@ -1029,6 +1029,8 @@ else
 	/etc/MailScanner/baruwa/rules
 	touch $track/sphinx
 fi
+
+yum update -y
 
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
