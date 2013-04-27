@@ -1037,7 +1037,7 @@ mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,up
 /etc/MailScanner/baruwa/rules
 chown apache.apache -R /var/lib/baruwa/data/cache
 chown apache.apache -R /var/lib/baruwa/data/uploads
-chown apache.apache -R /var/lib/baruwa/data/templates
+chown baruwa.baruwa -R /var/lib/baruwa/data/templates
 chown apache.apache -R /var/lib/baruwa/data/sessions
 usermod -G exim baruwa
 usermod -G exim clamav
