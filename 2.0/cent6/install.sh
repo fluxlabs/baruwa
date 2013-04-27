@@ -101,10 +101,10 @@ sslemail=$adminemail1
 # Version Tracking
 # +---------------------------------------------------+
 
-date="4-26-2013"						# Date
-version="2.2"							# Version
+date="4-26-2013"						# Latest Date
+version="2.2"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
-baruwa="2.0.1"							# Baruwa Version
+baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
@@ -119,8 +119,8 @@ pyzorver="0.5.0"						# Pyzor Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwa_extras="https://raw.github.com/akissa/baruwa2/2.0.1/extras"	# Extras from Baruwa
-fluxlabs_extras="https://raw.github.com/fluxlabs/baruwa/master/2.0/extras"	# Extras from Flux Labs 
+baruwa_git="https://raw.github.com/akissa/baruwa2/2.0.1/"			# Extras from Baruwa
+fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs 
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
@@ -193,7 +193,7 @@ if sestatus | grep enabled;
 	echo "------------------------------------------------------------------------------";
 	echo "I have detected that SELinux is running and in enforce mode."
 	echo "You will have to work out the necessary permissions in SELinux "
-	echo "for Baruwa $ver to work properly. I cannot guarantee anything."
+	echo "for Baruwa $baruwaver to work properly. I cannot guarantee anything."
 	echo ""
 	echo "You can disable it by typing:"
 	echo "sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config"
@@ -237,18 +237,18 @@ echo "	Installer v$version for $osver"
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
-echo "Welcome to the Baruwa's $baruwa Installer. (Unofficial Version)"
+echo "Welcome to the Baruwa's $baruwaver Installer. (Unofficial Version)"
 echo ""
 echo "Before we begin: This installer was written for a minimal install of $osver"
-echo "This installer is meant to assist you in installing Baruwa $baruwa "
+echo "This installer is meant to assist you in installing Baruwa $baruwaver "
 echo ""
-echo "You still need to know linux basics and have an understanding of how Baruwa $baruwa operates."
+echo "You still need to know linux basics and have an understanding of how Baruwa $baruwaver operates."
 echo "It is a complete re-write from 1.0 branch. Alot of changes were made to the code and how it"
 echo "works."
 echo ""
 echo "Please take the time to review the code that I am using below so you understand what"
 echo "it is doing. This script will prompt you for the minimal amount of questions needed "
-echo "to get Baruwa $baruwa installed and running. You will need to configure baruwa, your firewall,"
+echo "to get Baruwa $baruwaver installed and running. You will need to configure baruwa, your firewall,"
 echo "spamassassin rules, greylisting, RBL, SPF .. etc on your own."
 echo ""
 echo "If you are un-sure that you can maintain a Baruwa install, I recommend going with the"
@@ -515,21 +515,20 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O https://raw.github.com/akissa/baruwa2/2.0.0/requirements.txt
+curl -O https://raw.github.com/akissa/baruwa2/$baruwaver/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
-pip install pyparsing==1.5.7
 pip install --timeout 60 -r requirements.txt
 cd $home	
 curl https://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
-curl -O $baruwa_extras/patches/repoze.who-friendly-form.patch
-curl -O $baruwa_extras/patches/repoze-who-fix-auth_tkt-tokens.patch
+curl -O $baruwa_git/extras/patches/repoze.who-friendly-form.patch
+curl -O $baruwa_git/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
 patch -p3 -i $home/repoze.who-friendly-form.patch
 patch -p4 -i $home/repoze-who-fix-auth_tkt-tokens.patch
 cd $home
-curl -O $baruwa_extras/patches/subprocess_timeout.patch
+curl -O $baruwa_git/extra/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
@@ -568,11 +567,11 @@ su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$ps
 su - postgres -c 'createdb -E UTF8 -O baruwa -T template1 baruwa'
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
-curl -O https://raw.github.com/akissa/baruwa2/2.0.0/baruwa/config/sql/admin-functions.sql
+curl -O https://raw.github.com/akissa/baruwa2/$baruwaver/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 service postgresql restart
 cd /etc/sphinx; mv /etc/sphinx/sphinx.conf /etc/sphinx/sphinx.conf.orig
-curl -O $baruwa_extras/config/sphinx/sphinx.conf
+curl -O $baruwa_git/config/sphinx/sphinx.conf
 sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_user =:sql_user = baruwa:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass1':' \
@@ -640,25 +639,25 @@ if rpm -q --quiet mailscanner;
 		echo "Now let's patch it up."; sleep 3
 		echo ""
 	cd $home
-	curl -O $baruwa_extras/patches/mailscanner-baruwa-iwantlint.patch
-	curl -O $baruwa_extras/patches/mailscanner-baruwa-sql-config.patch
+	curl -O $baruwa_git/extras/patches/mailscanner-baruwa-iwantlint.patch
+	curl -O $baruwa_git/extras/patches/mailscanner-baruwa-sql-config.patch
 	cd /usr/sbin
 	patch -i $home/mailscanner-baruwa-iwantlint.patch
 	cd /usr/lib/MailScanner/MailScanner
 	patch -p3 -i $home/mailscanner-baruwa-sql-config.patch
 	cd $home
-	curl -O $baruwa_extras/perl/BS.pm
+	curl -O $baruwa_git/extras/perl/BS.pm
 	mv BS.pm /usr/lib/MailScanner/MailScanner/CustomFunctions
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabs_extras/config/mailscanner/MailScanner.conf
-	curl -O $baruwa_extras/config/mailscanner/scan.messages.rules
-	curl -O $baruwa_extras/config/mailscanner/nonspam.actions.rules
-	curl -O $baruwa_extras/config/mailscanner/filename.rules
-	curl -O $baruwa_extras/config/mailscanner/filetype.rules
-	curl -O $baruwa_extras/config/mailscanner/filename.rules.allowall.conf
-	curl -O $baruwa_extras/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxlabs_git/config/mailscanner/MailScanner.conf
+	curl -O $baruwa_git/extras/config/mailscanner/scan.messages.rules
+	curl -O $baruwa_git/extras/config/mailscanner/nonspam.actions.rules
+	curl -O $baruwa_git/extras/config/mailscanner/filename.rules
+	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules
+	curl -O $baruwa_git/extras/config/mailscanner/filename.rules.allowall.conf
+	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules.allowall.conf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
@@ -733,15 +732,15 @@ if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
 else
 	
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabs_extras/config/exim/exim.conf
-	curl -O $fluxlabs_extras/config/exim/exim_out.conf
-	curl -O $baruwa_extras/config/exim/macros.conf
-	curl -O $baruwa_extras/config/exim/trusted-configs
+	curl -O $fluxlabs_git/config/exim/exim.conf
+	curl -O $fluxlabs_git/config/exim/exim_out.conf
+	curl -O $baruwa_git/config/exim/macros.conf
+	curl -O $baruwa_git/config/exim/trusted-configs
 #	sed -i -e 's/spf/#spf = /' $eximdir/exim.conf
 #	sed -i -e 's/dbl_/#dbl_/' $eximdir/exim_out.conf
 	sed -i -e 's/verysecretpw/'$pssqlpass1'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $baruwa_extras/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $baruwa_git/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
 function_show_complete
 fi
@@ -865,7 +864,7 @@ if [ -x /etc/init.d/baruwa ];
 	echo "Skipping, as I already detect a baruwa init file." ; sleep 3
 else
 	cd $home
-	curl -O $baruwa_extras/scripts/init/centos/baruwa.init
+	curl -O $baruwa_git/scripts/init/centos/baruwa.init
 	mv baruwa.init /etc/init.d/baruwa
 	chmod +x /etc/init.d/baruwa
 fi
@@ -885,7 +884,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabs_extras/websetup.py
+	curl -O $fluxlabs_git/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
@@ -919,7 +918,7 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 	then
 	echo "It looks as though you already have a baruwa.conf file for Apache, Skipping."; sleep 3
 else
-	curl -O $baruwa_extras/config/mod_wsgi/apache.conf
+	curl -O $baruwa_git/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
 	clear 2>/dev/null
 	function_show_complete
