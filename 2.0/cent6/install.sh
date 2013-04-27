@@ -1240,6 +1240,7 @@ read_main() {
 			fn_apache
 			fn_cronjobs
 			fn_services
+			fn_generate_key
 			fn_finish ;;
 		b) fn_pyzor_razor_dcc ;;
 		c) fn_cleanup ;;
