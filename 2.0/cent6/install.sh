@@ -658,6 +658,7 @@ if rpm -q --quiet mailscanner;
 	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules
 	curl -O $baruwa_git/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $baruwa_git/extras/config/mailscanner/spam.assassin.prefs.conf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
