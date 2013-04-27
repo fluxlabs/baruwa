@@ -1066,11 +1066,11 @@ echo ""; sleep 3
 touch /var/log/freshclam.log
 chown clamav /var/log/freshclam.log
 chmod 660 /var/log/freshclam.log
+usermod -G exim clamav
 service clamd start
 freshclam
 service clamd restart
 chkconfig --level 345 clamd on
-usermod -G exim clamav
 service exim restart
 chkconfig --level 345 exim on
 }
