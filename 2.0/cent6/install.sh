@@ -837,7 +837,7 @@ if [ -f $track/baruwaconfig ];
 	sed -i -e 's/sqlalchemy.url/#sqlalchemy.url/' $etcdir/production.ini
 	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass1@127.0.0.1:5432/baruwa" $etcdir/production.ini
 	sed -i -e 's:broker.password =:broker.password = '$rabbpass1':' \
-		   -e 's:broker.vhost =:broker.vhost = '$hosts':' \
+		   -e 's:broker.vhost = baruwa:broker.vhost = '$hosts':' \
 		   -e "s:snowy.local:$(hostname):g" \
 	       -e 's:^#celery.queues:celery.queues:' $etcdir/production.ini
 	touch $track/baruwaconfig
@@ -1032,9 +1032,13 @@ fi
 
 yum update -y
 
-mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
+mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
+chown apache.apache -R /var/lib/baruwa/data/cache
+chown apache.apache -R /var/lib/baruwa/data/uploads
+chown apache.apache -R /var/lib/baruwa/data/templates
+chown apache.apache -R /var/lib/baruwa/data/sessions
 usermod -G exim baruwa
 usermod -G exim clamav
 
@@ -1172,6 +1176,7 @@ function_pyzor_razor_dcc () {
 	pyzor discover
 	razor-admin -create
 	razor-admin -register
+	yum update -y
 	clear 2>/dev/null
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
 	sed -i 's:dcc_path /usr/local/bin/dccproc:dcc_path /usr/bin/dccproc:' /etc/mail/spamassassin/mailscanner.cf
