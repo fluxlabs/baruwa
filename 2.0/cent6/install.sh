@@ -272,7 +272,7 @@ fn_directories (){
 # +---------------------------------------------------+
 fn_requirements () {
 
-if $useauto == 1;
+if [ $useauto ==  ];
 	then
 	:
 else
