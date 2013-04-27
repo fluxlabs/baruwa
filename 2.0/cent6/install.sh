@@ -29,7 +29,7 @@
 # +---------------------------------------------------+
 
 # Set 1 to Use the autocomplete. 0 to do prompts.
-useauto=0
+useauto=1
 
 # Postgresql Password
 pssqlpass1=passw0rd123!
@@ -110,7 +110,7 @@ pyzorver="0.5.0"						# Pyzor Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwa_git="https://raw.github.com/akissa/baruwa2/2.0.1/"			# Extras from Baruwa
+baruwa_git="https://raw.github.com/akissa/baruwa2/master/"			# Extras from Baruwa
 fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
@@ -523,7 +523,7 @@ cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
 patch -p3 -i $home/repoze.who-friendly-form.patch
 patch -p4 -i $home/repoze-who-fix-auth_tkt-tokens.patch
 cd $home
-curl -O $baruwa_git/extra/patches/subprocess_timeout.patch
+curl -O $baruwa_git/extras/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
@@ -562,11 +562,11 @@ su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$ps
 su - postgres -c 'createdb -E UTF8 -O baruwa -T template1 baruwa'
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
-curl -O https://raw.github.com/akissa/baruwa2/$baruwaver/baruwa/config/sql/admin-functions.sql
+curl -O $baruwa_git/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 service postgresql restart
 cd /etc/sphinx; mv /etc/sphinx/sphinx.conf /etc/sphinx/sphinx.conf.orig
-curl -O $baruwa_git/config/sphinx/sphinx.conf
+curl -O $baruwa_git/extras/config/sphinx/sphinx.conf
 sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_user =:sql_user = baruwa:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass1':' \
