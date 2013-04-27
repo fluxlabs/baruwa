@@ -120,7 +120,7 @@ pyzorver="0.5.0"						# Pyzor Version
 # +---------------------------------------------------+
 
 baruwa_git="https://raw.github.com/akissa/baruwa2/2.0.1/"			# Extras from Baruwa
-fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs 
+fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
@@ -263,7 +263,7 @@ echo ""
 function_show_confirm
 
 function_directories(){
-	
+
 	if [[ -d $track && -d $logs && -d $builddir ]];
 		then
 		:
@@ -403,13 +403,13 @@ if [ -f $track/pssql ];
 	echo $pssqlpass1 > $track/pssqlp
 fi
 
-clear 2>/dev/null	
+clear 2>/dev/null
 if [ -f $track/rabbit ];
 	then
 	    echo " This section has already been completed. Skipping."; sleep 3
 	else
 		while :
-		do 
+		do
 		echo "------------------------------------------------------------------------------";
 		echo "R A B B I T M Q  P A S S W O R D";
 		echo "------------------------------------------------------------------------------";
@@ -434,7 +434,7 @@ fi
 	echo "shortly for some perl mod confirmations."
 	echo "------------------------------------------------------------------------------";
 	echo $admemail1 $repemail1 $erremail1 $bdomain1 $adminuser1 $adminpass1 $adminemail1 $pssqlpass1 $rabbpass1 > $track/answers
-	function_show_confirm	
+	function_show_confirm
 fi
 }
 
@@ -453,7 +453,7 @@ if [ -f $track/dependencies ];
 	then
 	echo "Dependencies have already been installed. Skipping."
 else
-	
+
 	if rpm -q --quiet epel-release-$epel;
 		then
 			echo "Good, It looks as though EPEL $epel is already installed. Skipping"; sleep 2
@@ -520,7 +520,7 @@ pip install distribute
 pip install -U distribute
 pip install python-memcached
 pip install --timeout 60 -r requirements.txt
-cd $home	
+cd $home
 curl https://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwa_git/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwa_git/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
@@ -592,7 +592,7 @@ echo "R A B B I T M Q ";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if rpm -q --quiet rabbitmq-server-$rabbitmq; 
+if rpm -q --quiet rabbitmq-server-$rabbitmq;
 	then
 	echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
 	else
@@ -730,7 +730,7 @@ if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
 	then
 	echo "Exim is already configured. Skipping"; sleep 3
 else
-	
+
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
 	curl -O $fluxlabs_git/config/exim/exim.conf
 	curl -O $fluxlabs_git/config/exim/exim_out.conf
@@ -1198,7 +1198,7 @@ function_pyzor_razor_dcc () {
 ### SECTION INCOMPLETE !!! SECTION INCOMPLETE !!! SECTION INCOMPLETE !!!
 
 # +---------------------------------------------------+
-# RabbitMQ Cluster 
+# RabbitMQ Cluster
 # +---------------------------------------------------+
 
 # Master
@@ -1241,7 +1241,7 @@ function_rabbit_slave () {
 	echo ''
 	done
 	clear 2>/dev/null
-	
+
 rabbitmqctl add_user baruwa $baruwap1
 rabbitmqctl add_vhost $cluster2a
 rabbitmqctl set_permissions -p $cluster2a baruwa ".*" ".*" ".*"
