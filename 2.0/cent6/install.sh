@@ -1035,14 +1035,10 @@ yum update -y
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
-chown apache: -R /var/lib/baruwa/data/cache
-chown apache: -R /var/lib/baruwa/data/uploads
-chown baruwa: -R /var/lib/baruwa/data/templates
-chown apache: -R /var/lib/baruwa/data/sessions
+chown apache:baruwa -R /var/lib/baruwa
 chown baruwa: /var/run/baruwa
 chown baruwa: /var/log/baruwa
 usermod -G exim baruwa
-usermod -G exim clam
 
 service httpd start
 chkconfig --level 345 httpd on
@@ -1071,9 +1067,11 @@ echo ""; sleep 3
 touch /var/log/freshclam.log
 chown clamav /var/log/freshclam.log
 chmod 660 /var/log/freshclam.log
-freshclam
-chkconfig --level 345 clamd on
 service clamd start
+freshclam
+service clamd restart
+chkconfig --level 345 clamd on
+usermod -G exim clamav
 }
 
 # +---------------------------------------------------+
