@@ -112,15 +112,15 @@ pyzorver="0.5.0"						# Pyzor Version
 
 baruwa_git="https://raw.github.com/akissa/baruwa2/2.0.1/"			# Extras from Baruwa
 fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
-hosts=$(hostname -s)
-hostf=$(hostname -f)
-eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
-track="/tmp/tracking"					# Trackign Directory
+track="/tmp/tracking"					# Tracking Directory
 logs="/tmp/baruwa2"						# Logs Directory
 builddir="/usr/src/b2build/"			# Build Directory
+hosts=$(hostname -s)
+hostf=$(hostname -f)
+eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
 
 # +---------------------------------------------------+
 # Functions
