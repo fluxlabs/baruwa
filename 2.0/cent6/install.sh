@@ -155,7 +155,7 @@ function_cleanup(){
 	echo "Cleaning up Installer files."; sleep 5
 	rm -f $home/*.patch
 	rm -rf {$track,$logs}
-	rm -rf $builddir/libmemcached-$libmem
+	rm -rf $builddir
 }
 
 # +---------------------------------------------------+
