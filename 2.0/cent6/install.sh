@@ -1060,7 +1060,6 @@ chkconfig --level 345 MailScanner on
 service spamassassin start
 chkconfig --level 345 spamassassin on
 
-
 clear 2>/dev/null
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
@@ -1075,6 +1074,12 @@ chkconfig --level 345 clamd on
 service exim restart
 chkconfig --level 345 exim on
 }
+
+function function_generate_key () {
+	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$bdomain1" -keyout baruwa.key -out baruwa.pem -nodes
+	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
+}
+
 
 # +---------------------------------------------------+
 # Finish Up
@@ -1194,96 +1199,6 @@ function_pyzor_razor_dcc () {
 	function_show_complete
 }
 
-# ---------------------------------------------------
-### SECTION INCOMPLETE !!! SECTION INCOMPLETE !!! SECTION INCOMPLETE !!!
-
-# +---------------------------------------------------+
-# RabbitMQ Cluster
-# +---------------------------------------------------+
-
-# Master
-function_rabbit_master () {
-while :
-do
-echo ""
-echo "What would you like your baruwa vhost password to be?"
-echo "ie: B4ruw$"
-IFS= read -p "Primary Server: " baruwap1
-IFS= read -p "Primary Server Again: " baruwap2
-[[ $baruwap1 = "$baruwap2" ]] && break
-echo ''
-echo 'Password does not match.'
-echo ''
-done
-clear 2>/dev/null
-
-rabbitmqctl add_user baruwa $baruwap1
-rabbitmqctl add_vhost $cluster1a
-rabbitmqctl set_permissions -p $cluster1a baruwa ".*" ".*" ".*"
-rabbitmqctl list_vhosts
-rabbitmqctl stop_app
-rabbitmqctl start_app
-
-}
-
-# Slave
-function_rabbit_slave () {
-	while :
-	do
-	echo ""
-	echo "What is the hostname of your primary server?"
-	echo "ie: mailsrv01"
-	IFS= read -p "Primary Server: " cluster2a
-	IFS= read -p "Primary Server Again: " cluster2b
-	[[ $cluster2a = "$cluster2b" ]] && break
-	echo ''
-	echo 'Name does not match, please try again.'
-	echo ''
-	done
-	clear 2>/dev/null
-
-rabbitmqctl add_user baruwa $baruwap1
-rabbitmqctl add_vhost $cluster2a
-rabbitmqctl set_permissions -p $cluster2a baruwa ".*" ".*" ".*"
-rabbitmqctl list_vhosts
-rabbitmqctl stop_app
-rabbitmqctl join_cluster --disk rabbit@$cluster2a
-rabbitmqctl start_app
-
-}
-
-function_rabbit_erlang () {
-	clear
-	get_key=$(cat /var/lib/rabbitmq/.erlang.cookie | awk '{ print $1 }';)
-	echo ""
-	echo "Your erlang KEY is : $get_key";
-	echo ""
-	function_show_confirm
-}
-
-function_rabbit_status () {
-	clear 2>/dev/null
-	echo "RabbitMQ Status:"
-	echo "----------------"
-	echo ""
-	rabbitmqctl status
-	echo ""
-	echo "----------------"
-	echo ""
-	function_show_confirm
-}
-
-function_cluster_status () {
-	clear 2>/dev/null
-	echo "RabbitMQ Cluster Status:"
-	echo "----------------"
-	echo ""
-	rabbitmqctl cluster_status
-	echo ""
-	echo "----------------"
-	echo ""
-	function_show_confirm
-}
 
 
 # +---------------------------------------------------+
@@ -1300,7 +1215,6 @@ menu_main() {
 	echo "a) Install Baruwa"
 	echo "b) Install Pyzor, Razor & DCC"
 	echo "c) Cleanup Installer"
-	echo "d) Setup a Cluster"
 	echo " "
 	echo "x) Exit"
 }
@@ -1330,49 +1244,10 @@ read_main() {
 			function_finish ;;
 		b) function_pyzor_razor_dcc ;;
 		c) function_cleanup ;;
-		d) menu_cluster ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
 }
-
-menu_cluster(){
-	menu=0
-	clustermenu=1
-	while [ $clustermenu == "1" ]
-		do
-			clear
-	echo "------------------------------"
-	echo "THIS IS STILL IN BUILD STAGE"
-	echo "DOES NOT WORK 100%"
-	echo "RabbitMQ Cluster Options"
-	echo ""
-	echo "Please make a choice:"
-	echo ""
-	echo "a) Create Master"
-	echo "b) Setup Slave"
-	echo "c) Show ERLANG Key"
-	echo "d) RabbitMQ Status"
-	echo "e) Cluster Status"
-	echo " "
-	echo "x) Exit"
-
-			local choice
-			read -p "Enter Choice: " choice
-			case $choice in
-				a) function_rabbit_master ;;
-				b) function_rabbit_slave ;;
-				c) function_rabbit_erlang ;;
-				d) function_rabbit_status ;;
-				e) function_cluster_status ;
-					clustermenu=1
-					;;
-				x) menu=1 && return ;;
-				*) echo -e "Error \"$choice\" is not an option..." && sleep 2
-			esac
-	done
-}
-
 
 # +---------------------------------------------------+
 # Be sure we're root
