@@ -101,8 +101,8 @@ sslemail=$adminemail1
 # Version Tracking
 # +---------------------------------------------------+
 
-date="4-24-2013"						# Date
-version="2.1"							# Version
+date="4-26-2013"						# Date
+version="2.2"							# Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwa="2.0.1"							# Baruwa Version
 centalt="6-1"							# CenAlt Version
