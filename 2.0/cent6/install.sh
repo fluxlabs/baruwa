@@ -143,6 +143,7 @@ fn_clear () {
 
 fn_complete (){
 	if [ $pause == 1 ];
+		then
 		fn_usepause
 	else
 		fn_clear
