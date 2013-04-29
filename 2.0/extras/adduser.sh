@@ -14,10 +14,6 @@ cd /home/baruwa/px/lib/python2.6/site-packages/baruwa/
 curl -O $fluxlabs_git/extras/websetup.py
 cd /home/baruwa
 virtualenv --distribute px
-source px/bin/activate
-pip install -U distribute
-export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-/home/baruwa/px/bin/paster setup-app /etc/baruwa/production.ini
 
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
