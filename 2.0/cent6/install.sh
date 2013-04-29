@@ -32,7 +32,7 @@
 useauto=0
 
 # Set 1 to pause after every step. (Debug)
-usepause=1
+usepause=0
 
 # Postgresql Password
 pssqlpass1=passw0rd123!
@@ -1109,7 +1109,7 @@ sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.repo
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$bdomain1':' /etc/httpd/conf.d/baruwa.conf
 sed -i 's:email_to = baruwa@localhost:email_to = '$admemail1':' $etcdir/production.ini
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
-sed -i 's:baruwa.default.url = http:\/\/localhost:baruwa.default.url = http:\/\/'${hosts}':' $etcdir/production.ini
+sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$bdomain1'|' $etcdir/production.ini
 
 fn_clear
 # +---------------------------------------------------+
