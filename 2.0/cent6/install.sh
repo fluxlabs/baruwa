@@ -142,9 +142,9 @@ fn_clear () {
 }
 
 fn_complete (){
-	if [ $pause == 1 ];
+	if [ $usepause == 1 ];
 		then
-		fn_usepause
+		fn_pause
 	else
 		fn_clear
 		echo "------------------------------------------------------------------------------";
