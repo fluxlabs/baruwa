@@ -657,7 +657,7 @@ if rpm -q --quiet mailscanner;
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabs_git/config/mailscanner/MailScanner.conf
+	curl -O $fluxlabs_git/extras/config/mailscanner/MailScanner.conf
 	curl -O $baruwa_git/extras/config/mailscanner/scan.messages.rules
 	curl -O $baruwa_git/extras/config/mailscanner/nonspam.actions.rules
 	curl -O $baruwa_git/extras/config/mailscanner/filename.rules
@@ -739,15 +739,15 @@ if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
 else
 
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabs_git/config/exim/exim.conf
-	curl -O $fluxlabs_git/config/exim/exim_out.conf
-	curl -O $baruwa_git/config/exim/macros.conf
-	curl -O $baruwa_git/config/exim/trusted-configs
+	curl -O $fluxlabs_git/extras/config/exim/exim.conf
+	curl -O $fluxlabs_git/extras/config/exim/exim_out.conf
+	curl -O $baruwa_git/extras/config/exim/macros.conf
+	curl -O $baruwa_git/extras/config/exim/trusted-configs
 #	sed -i -e 's/spf/#spf = /' $eximdir/exim.conf
 #	sed -i -e 's/dbl_/#dbl_/' $eximdir/exim_out.conf
 	sed -i -e 's/verysecretpw/'$pssqlpass1'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $baruwa_git/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $baruwa_git/extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
 fn_complete
 fi
@@ -890,7 +890,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabs_git/websetup.py
+	curl -O $fluxlabs_git/extra/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
