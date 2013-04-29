@@ -56,7 +56,7 @@ bdomain1=mx01.fluxlabs.net
 adminuser1=admin
 
 # Baruwa Admin Password - Must be Secure
-adminpass1=p4Ssw0rd123!
+adminpass1=M0nk3ym4n123$
 
 # Baruwa Admin Email
 adminemail1=jeremy@fluxlabs.net
