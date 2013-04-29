@@ -896,7 +896,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabs_git/extra/websetup.py
+	curl -O $fluxlabs_git/extras/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
