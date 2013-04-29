@@ -664,13 +664,13 @@ if rpm -q --quiet mailscanner;
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
 	curl -O $fluxlabs_git/extras/config/mailscanner/MailScanner.conf
+	curl -O $fluxlabs_git/extras/config/mailscanner/spam.assassin.prefs.conf
 	curl -O $baruwa_git/extras/config/mailscanner/scan.messages.rules
 	curl -O $baruwa_git/extras/config/mailscanner/nonspam.actions.rules
 	curl -O $baruwa_git/extras/config/mailscanner/filename.rules
 	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules
 	curl -O $baruwa_git/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules.allowall.conf
-	curl -O $baruwa_git/extras/config/mailscanner/spam.assassin.prefs.conf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
@@ -682,6 +682,7 @@ if rpm -q --quiet mailscanner;
 	echo EXIM=/usr/sbin/exim >> /etc/sysconfig/MailScanner
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
 fn_complete
@@ -1115,6 +1116,9 @@ fn_clear
 # +---------------------------------------------------+
 # Display Results
 # +---------------------------------------------------+
+echo "Ok, We are all done! It looks like you now have an installed"
+echo "version of Baruwa $baruwaver up and running."
+echo ""
 echo "Your Postgres Password is : $pssqlpass1"
 echo "Your RabbitMQ Password is : $rabbpass1"
 echo ""
@@ -1136,8 +1140,10 @@ fn_confirm
 # +---------------------------------------------------+
 
 cat >> /tmp/message << EOF
-Thanks for installing Baruwa 2.0
+Thanks for installing Baruwa $baruwaver
 ----------------------------------
+We have successfully installed Baruwa $baruwaver onto $bdomain1.
+
 Your Postgres Password is : $pssqlpass1
 Your Rabbit-MQ Password is : $rabbpass1
 
@@ -1145,28 +1151,27 @@ Your Reports will be sent from : $repemail1
 Your Errors wil be sent from : $erremail1
 
 You can now login at http://$bdomain1
-You can login at http://$bdomain1
 If you do not have DNS setup yet, you can use
 http://$eth0ip
 
 Username: $adminuser1
 Password: $adminpass1
 
+When you add this node. Please use $hosts as the hostname.
+
 Please visit http://baruwa.org/docs/2.0/guide/admin/index.html
 and follow the guide on how to configure your install.
 
-When you add this node. Please use $hosts as the hostname.
-
 --
-Baruwa 2.0 Installer
+Baruwa $baruwaver Installer by Jeremy McSpadden (jeremy at fluxlabs dot net)
 
 Please support the Baruwa project by donating at
 http://pledgie.com/campaigns/12056
 
 EOF
 
-/bin/mail -s "Baruwa 2.0 Install for ${HOSTNAME}" < /tmp/message $admemail1
-cp /tmp/message $logs/setup.log
+/bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail1
+cp /tmp/message ~/baruwa2_install.log
 rm /tmp/message
 
 fn_clear
