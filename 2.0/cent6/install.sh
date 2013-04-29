@@ -860,7 +860,7 @@ if [ -x /etc/init.d/baruwa ];
 	echo "Skipping, as I already detect a baruwa init file." ; sleep 3
 else
 	cd $home
-	curl -O $baruwa_git/scripts/init/centos/baruwa.init
+	curl -O $baruwa_git/extras/scripts/init/centos/baruwa.init
 	mv baruwa.init /etc/init.d/baruwa
 	chmod +x /etc/init.d/baruwa
 fi
@@ -913,7 +913,7 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 	then
 	echo "It looks as though you already have a baruwa.conf file for Apache, Skipping."; sleep 3
 else
-	curl -O $baruwa_git/config/mod_wsgi/apache.conf
+	curl -O $baruwa_git/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
 	fn_clear
 	fn_complete
