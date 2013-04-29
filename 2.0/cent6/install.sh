@@ -137,8 +137,9 @@ fn_confirm (){
 fn_pause (){
 	echo ""
 	echo "------------------------------------------------------------------------------";
-	read -p "You are walking through the script. Press [Enter] to Continue" fackEnterKey
+	read -p "You are walking through the script. Press [Enter] to Continue" 
 	echo "------------------------------------------------------------------------------";
+	fackEnterKey
 }
 
 fn_clear () {
