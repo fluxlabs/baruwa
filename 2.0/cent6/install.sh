@@ -31,6 +31,9 @@
 # Set 1 to Use the autocomplete. 0 to do prompts.
 useauto=0
 
+# Set 1 to pause after every step. (Debug)
+usepause=1
+
 # Postgresql Password
 pssqlpass1=passw0rd123!
 
@@ -130,16 +133,24 @@ fn_confirm (){
 	read -p "Press [Enter] key to continue..." fackEnterKey
 }
 
+fn_pause (){
+	read -p "You are walking through the script. Press [Enter] to Continue" fackEnterKey
+}
+
 fn_clear () {
 	clear 2>/dev/null
 }
 
 fn_complete (){
-	fn_clear
-	echo "------------------------------------------------------------------------------";
-	echo "C O M P L E T E";
-	echo "------------------------------------------------------------------------------";
-	sleep 2
+	if [ $pause == 1 ];
+		fn_usepause
+	else
+		fn_clear
+		echo "------------------------------------------------------------------------------";
+		echo "C O M P L E T E";
+		echo "------------------------------------------------------------------------------";
+		sleep 2
+	fi
 }
 
 fn_cleanup (){
@@ -485,8 +496,8 @@ else
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident -y
 	touch $track/dependencies
-	fn_clear
-fn_complete
+	
+	fn_complete
 fi
 }
 
