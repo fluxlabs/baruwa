@@ -1075,16 +1075,16 @@ chkconfig --level 345 spamassassin on
 fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
-touch /var/log/freshclam.log
-chown clamav /var/log/freshclam.log
-chmod 660 /var/log/freshclam.log
-usermod -G exim clamav
-service clamd start
 freshclam
 service clamd restart
 chkconfig --level 345 clamd on
 service exim restart
 chkconfig --level 345 exim on
+touch /var/log/freshclam.log
+chown clamav /var/log/freshclam.log
+chmod 660 /var/log/freshclam.log
+usermod -G exim clamav
+service clamd start
 }
 
 fn_generate_key () {
