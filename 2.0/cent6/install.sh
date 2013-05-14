@@ -533,7 +533,7 @@ pip install -U distribute
 pip install python-memcached
 pip install --timeout 60 -r requirements.txt
 cd $home
-curl https://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
+curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
