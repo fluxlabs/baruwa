@@ -31,44 +31,44 @@
 # Set 1 to Use the autocomplete. 0 to do prompts.
 useauto=0
 
-# Set 1 to pause after every step. (Debug)
+# Set 1 to pause after every step. (semi-debug?)
 usepause=0
 
 # Postgresql Password
-pssqlpass1=passw0rd123!
+pssqlpass=passw0rd123!
 
 # RabbitMQ Password
-rabbpass1=passw0rd321!
+rabbpass=passw0rd321!
 
 # Baruwa Admin Email
-admemail1=jeremy@fluxlabs.net
+admemail=admin@domain.net
 
 # Baruwa Reports From Email
-repemail1=reports@fluxlabs.net
+repemail=reports@domain.net
 
 # Baruwa Error Reports From Email
-erremail1=jeremy@fluxlabs.net
+erremail=errors@domain.net
 
 # Baruwa URL
-bdomain1=mx01.fluxlabs.net
+baruwadomain=mx01.fluxlabs.net
 
 # Baruwa Admin Username
-adminuser1=admin
+baruwaadmin=admin
 
 # Baruwa Admin Password - Must be Secure
-adminpass1=M0nk3ym4n123$
+adminpass=Passw0rd123!
 
 # Baruwa Admin Email
-adminemail1=jeremy@fluxlabs.net
+adminemail=admin@domain.net
 
 # Time Zone
 timezone=America/Chicago
 
 # MailScanner Organization Name - Long
-msorgname='Flux Labs'
+msorgname='Your Organization'
 
-# MailScanner Organization Name - Short
-msorgnamelong='FluxLabs'
+# MailScanner Organization Name - Short (No Spaces)
+msorgnamelong='YourOrganization'
 
 # SSL Country Code
 sslcountry='US'
@@ -80,13 +80,13 @@ sslprovince='Illinois'
 sslcity='Chicago'
 
 # SSL Organization Name
-sslorg='Flux Labs'
+sslorg='Your Organization'
 
 # SSL Common Name
-sslcommon=$bdomain1
+sslcommon=$baruwadomain
 
 # SSL Email
-sslemail=$adminemail1
+sslemail=$adminemail
 
 
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
@@ -113,8 +113,8 @@ pyzorver="0.5.0"						# Pyzor Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwa_git="https://raw.github.com/akissa/baruwa2/master/"			# Extras from Baruwa
-fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
+baruwagit="https://raw.github.com/akissa/baruwa2/master/"			# Extras from Baruwa
+fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -303,9 +303,9 @@ do
 echo ""
 echo "What email would you like Administrative Emails sent to?"
 echo "ie: you@domain.com"
-IFS= read -p "Email: " admemail1
+IFS= read -p "Email: " admemail
 IFS= read -p "Email Again: " admemail2
-[[ $admemail1 = "$admemail2" ]] && break
+[[ $admemail = "$admemail2" ]] && break
 echo ''
 echo 'Email does not match. Please try again.'
 echo ''
@@ -316,9 +316,9 @@ do
 echo ""
 echo "What email would you like Report Emails sent from?"
 echo "ie: reports@domain.com"
-IFS= read -p "Email: " repemail1
+IFS= read -p "Email: " repemail
 IFS= read -p "Email Again: " repemail2
-[[ $repemail1 = "$repemail2" ]] && break
+[[ $repemail = "$repemail2" ]] && break
 echo ''
 echo 'Email does not match. Please try again.'
 echo ''
@@ -329,9 +329,9 @@ do
 echo ""
 echo "What email would you like Error Emails sent from?"
 echo "ie: errors@domain.com"
-IFS= read -p "Email: " erremail1
+IFS= read -p "Email: " erremail
 IFS= read -p "Email Again: " erremail2
-[[ $erremail1 = "$erremail2" ]] && break
+[[ $erremail = "$erremail2" ]] && break
 echo ''
 echo 'Email does not match. Please try again.'
 echo ''
@@ -342,9 +342,9 @@ do
 echo ""
 echo "What hostname would you like Apache to listen on for Baruwa requests?"
 echo "ie: baruwa.domain.com"
-IFS= read -p "Domain: " bdomain1
+IFS= read -p "Domain: " baruwadomain
 IFS= read -p "Domain Again: " bdomain2
-[[ $bdomain1 = "$bdomain2" ]] && break
+[[ $baruwadomain = "$bdomain2" ]] && break
 echo ''
 echo 'Domain does not match. Please try again.'
 echo ''
@@ -358,9 +358,9 @@ echo "B A R U W A  A D M I N  U S E R";
 echo "------------------------------------------------------------------------------";
 echo ""
 echo "What would you like your username to be?"
-IFS= read -p "Username: " adminuser1
+IFS= read -p "Username: " baruwaadmin
 IFS= read -p "Username Again: " adminuser2
-[[ $adminuser1 = "$adminuser2" ]] && break
+[[ $baruwaadmin = "$adminuser2" ]] && break
 echo ''
 echo 'Username deos not match. Please try again.'
 echo ''
@@ -371,9 +371,9 @@ do
 echo ""
 echo "What password would you like to use?"
 echo "This must be a complex password!"
-IFS= read -p "Password: " adminpass1
+IFS= read -p "Password: " adminpass
 IFS= read -p "Password Again: " adminpass2
-[[ $adminpass1 = "$adminpass2" ]] && break
+[[ $adminpass = "$adminpass2" ]] && break
 echo ''
 echo 'Passwords do not match. Please try again.'
 echo ''
@@ -383,9 +383,9 @@ while :
 do
 echo ""
 echo "What email would you like to use?"
-IFS= read -p "Email: " adminemail1
+IFS= read -p "Email: " adminemail
 IFS= read -p "Email Again: " adminemail2
-[[ $adminemail1 = "$adminemail2" ]] && break
+[[ $adminemail = "$adminemail2" ]] && break
 echo ''
 echo 'Passwords do not match. Please try again.'
 echo ''
@@ -404,15 +404,15 @@ if [ -f $track/pssql ];
 		echo "Lets set a password for Postgres."
 		echo "What would you like this super secret"
 		echo "password to be?"
-	    IFS= read -r -p "Password: " pssqlpass1
+	    IFS= read -r -p "Password: " pssqlpass
 	    IFS= read -r -p "Password Again: " pssqlpass2
 	    echo ""
-	    [[ $pssqlpass1 = "$pssqlpass2" ]] && break
+	    [[ $pssqlpass = "$pssqlpass2" ]] && break
 		echo ''
 		echo 'Passwords did not match. Please try again.'
 		echo ''
 	done
-	echo $pssqlpass1 > $track/pssqlp
+	echo $pssqlpass > $track/pssqlp
 fi
 
 fn_clear
@@ -428,15 +428,15 @@ if [ -f $track/rabbit ];
 		echo "Lets set a password for RabbitMQ."
 		echo "What would you like this super secret"
 		echo "password to be?"
-	    IFS= read -r -p "Password: " rabbpass1
+	    IFS= read -r -p "Password: " rabbpass
 	    IFS= read -r -p "Password Again: " rabbpass2
 	    echo ""
-	    [[ $rabbpass1 = "$rabbpass2" ]] && break
+	    [[ $rabbpass = "$rabbpass2" ]] && break
 		echo ''
 		echo 'Passwords did not match. Please try again.'
 		echo ''
 	done
-	echo $rabbpass1 > $track/rabbitp
+	echo $rabbpass > $track/rabbitp
 fi
 
 	fn_clear
@@ -445,7 +445,7 @@ fi
 	echo "for you in a bit. The process from here on out is automated. I will prompt you"
 	echo "shortly for some perl mod confirmations."
 	echo "------------------------------------------------------------------------------";
-	echo $admemail1 $repemail1 $erremail1 $bdomain1 $adminuser1 $adminpass1 $adminemail1 $pssqlpass1 $rabbpass1 > $track/answers
+	echo $admemail $repemail $erremail $baruwadomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
 	fn_confirm
 fi
 }
@@ -534,13 +534,13 @@ pip install python-memcached
 pip install --timeout 60 -r requirements.txt
 cd $home
 curl https://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
-curl -O $baruwa_git/extras/patches/repoze.who-friendly-form.patch
-curl -O $baruwa_git/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
+curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
+curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
 patch -p3 -i $home/repoze.who-friendly-form.patch
 patch -p4 -i $home/repoze-who-fix-auth_tkt-tokens.patch
 cd $home
-curl -O $baruwa_git/extras/patches/subprocess_timeout.patch
+curl -O $baruwagit/extras/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
@@ -575,18 +575,18 @@ EOF
 sed -e "s/^#timezone = \(.*\)$/timezone = 'UTC'/" -i /var/lib/pgsql/data/postgresql.conf
 service postgresql restart
 cd $home
-su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$pssqlpass1';\""
+su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$pssqlpass';\""
 su - postgres -c 'createdb -E UTF8 -O baruwa -T template1 baruwa'
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
-curl -O $baruwa_git/baruwa/config/sql/admin-functions.sql
+curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 service postgresql restart
 cd /etc/sphinx; mv /etc/sphinx/sphinx.conf /etc/sphinx/sphinx.conf.orig
-curl -O $baruwa_git/extras/config/sphinx/sphinx.conf
+curl -O $baruwagit/extras/config/sphinx/sphinx.conf
 sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_user =:sql_user = baruwa:' \
--e 's:sql_pass =:sql_pass = '$pssqlpass1':' \
+-e 's:sql_pass =:sql_pass = '$pssqlpass':' \
 -e 's:sql_db =:sql_db = baruwa:' sphinx.conf
 touch $track/pssql
 fn_complete
@@ -619,7 +619,7 @@ if [ -a $track/rabbit ];
 else
 	service rabbitmq-server start
 	rabbitmqctl delete_user guest
-	rabbitmqctl add_user baruwa $rabbpass1
+	rabbitmqctl add_user baruwa $rabbpass
 	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
@@ -651,33 +651,33 @@ if rpm -q --quiet mailscanner;
 		echo "Now let's patch it up."; sleep 3
 		echo ""
 	cd $home
-	curl -O $baruwa_git/extras/patches/mailscanner-baruwa-iwantlint.patch
-	curl -O $baruwa_git/extras/patches/mailscanner-baruwa-sql-config.patch
+	curl -O $baruwagit/extras/patches/mailscanner-baruwa-iwantlint.patch
+	curl -O $baruwagit/extras/patches/mailscanner-baruwa-sql-config.patch
 	cd /usr/sbin
 	patch -i $home/mailscanner-baruwa-iwantlint.patch
 	cd /usr/lib/MailScanner/MailScanner
 	patch -p3 -i $home/mailscanner-baruwa-sql-config.patch
 	cd $home
-	curl -O $baruwa_git/extras/perl/BS.pm
+	curl -O $baruwagit/extras/perl/BS.pm
 	mv BS.pm /usr/lib/MailScanner/MailScanner/CustomFunctions
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabs_git/extras/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabs_git/extras/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $baruwa_git/extras/config/mailscanner/scan.messages.rules
-	curl -O $baruwa_git/extras/config/mailscanner/nonspam.actions.rules
-	curl -O $baruwa_git/extras/config/mailscanner/filename.rules
-	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules
-	curl -O $baruwa_git/extras/config/mailscanner/filename.rules.allowall.conf
-	curl -O $baruwa_git/extras/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxlabsgit/extras/config/mailscanner/MailScanner.conf
+	curl -O $fluxlabsgit/extras/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
+	curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
+	curl -O $baruwagit/extras/config/mailscanner/filename.rules
+	curl -O $baruwagit/extras/config/mailscanner/filetype.rules
+	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
+	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
 
 	sed -i 's:/usr/local:/usr/:' /usr/lib/MailScanner/clamav-autoupdate
 	sed -i 's:use_auto_whitelist 0:#use_auto_whitelist 0:' /etc/mail/spamassassin/mailscanner.cf
-	sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass1':' /etc/MailScanner/MailScanner.conf
+	sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass':' /etc/MailScanner/MailScanner.conf
 	sed -i 's:EXIM:#EXIM:' /etc/sysconfig/MailScanner
 	echo EXIM=/usr/sbin/exim >> /etc/sysconfig/MailScanner
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
@@ -746,15 +746,15 @@ if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
 else
 
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabs_git/extras/config/exim/exim.conf
-	curl -O $fluxlabs_git/extras/config/exim/exim_out.conf
-	curl -O $baruwa_git/extras/config/exim/macros.conf
-	curl -O $baruwa_git/extras/config/exim/trusted-configs
+	curl -O $fluxlabsgit/extras/config/exim/exim.conf
+	curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
+	curl -O $baruwagit/extras/config/exim/macros.conf
+	curl -O $baruwagit/extras/config/exim/trusted-configs
 #	sed -i -e 's/spf/#spf = /' $eximdir/exim.conf
 #	sed -i -e 's/dbl_/#dbl_/' $eximdir/exim_out.conf
-	sed -i -e 's/verysecretpw/'$pssqlpass1'/' $eximdir/macros.conf
+	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $baruwa_git/extras/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $baruwagit/extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
 fn_complete
 fi
@@ -849,8 +849,8 @@ if [ -f $track/baruwaconfig ];
 	mkdir $etcdir
 	mv $home/production.ini $etcdir/production.ini
 	sed -i -e 's/sqlalchemy.url/#sqlalchemy.url/' $etcdir/production.ini
-	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass1@127.0.0.1:5432/baruwa" $etcdir/production.ini
-	sed -i -e 's:broker.password =:broker.password = '$rabbpass1':' \
+	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass@127.0.0.1:5432/baruwa" $etcdir/production.ini
+	sed -i -e 's:broker.password =:broker.password = '$rabbpass':' \
 		   -e 's:broker.vhost = baruwa:broker.vhost = '$hosts':' \
 		   -e "s:snowy.local:$(hostname):g" \
 	       -e 's:^#celery.queues:celery.queues:' $etcdir/production.ini
@@ -878,7 +878,7 @@ if [ -x /etc/init.d/baruwa ];
 	echo "Skipping, as I already detect a baruwa init file." ; sleep 3
 else
 	cd $home
-	curl -O $baruwa_git/extras/scripts/init/centos/baruwa.init
+	curl -O $baruwagit/extras/scripts/init/centos/baruwa.init
 	mv baruwa.init /etc/init.d/baruwa
 	chmod +x /etc/init.d/baruwa
 fi
@@ -897,13 +897,13 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabs_git/extras/websetup.py
+	curl -O $fluxlabsgit/extras/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
 	export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
 	$home/px/bin/paster setup-app $etcdir/production.ini
-	$home/px/bin/paster create-admin-user -u "$adminuser1" -p "$adminpass1" -e "$adminemail1" -t UTC $etcdir/production.ini
+	$home/px/bin/paster create-admin-user -u "$baruwaadmin" -p "$adminpass" -e "$adminemail" -t UTC $etcdir/production.ini
 	rm -f $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py; mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py
 	touch $track/baruwaadmin
 fi
@@ -931,7 +931,7 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 	then
 	echo "It looks as though you already have a baruwa.conf file for Apache, Skipping."; sleep 3
 else
-	curl -O $baruwa_git/extras/config/mod_wsgi/apache.conf
+	curl -O $baruwagit/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
 	fn_clear
 	fn_complete
@@ -1090,7 +1090,7 @@ chkconfig --level 345 clamd on
 fn_generate_key () {
 if [ $useauto == 1 ];
 		then
-	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$bdomain1" -keyout baruwa.key -out baruwa.pem -nodes
+	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
 	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
 else
 	openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
@@ -1105,12 +1105,12 @@ fn_clear
 # +---------------------------------------------------+
 
 fn_finish (){
-sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail1':' $etcdir/production.ini
-sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail1':' $etcdir/production.ini
-sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$bdomain1':' /etc/httpd/conf.d/baruwa.conf
-sed -i 's:email_to = baruwa@localhost:email_to = '$admemail1':' $etcdir/production.ini
+sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail':' $etcdir/production.ini
+sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail':' $etcdir/production.ini
+sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$baruwadomain':' /etc/httpd/conf.d/baruwa.conf
+sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/production.ini
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
-sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$bdomain1'|' $etcdir/production.ini
+sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
 
 fn_clear
 # +---------------------------------------------------+
@@ -1119,20 +1119,20 @@ fn_clear
 echo "Ok, We are all done! It looks like you now have an installed"
 echo "version of Baruwa $baruwaver up and running."
 echo ""
-echo "Your Postgres Password is : $pssqlpass1"
-echo "Your RabbitMQ Password is : $rabbpass1"
+echo "Your Postgres Password is : $pssqlpass"
+echo "Your RabbitMQ Password is : $rabbpass"
 echo ""
-echo "Your Reports will be sent from: $repemail1"
-echo "Your Errors wil be sent from: $erremail1"
+echo "Your Reports will be sent from: $repemail"
+echo "Your Errors wil be sent from: $erremail"
 echo ""
-echo "You can login at http://$bdomain1"
+echo "You can login at http://$baruwadomain"
 echo "If you do not have DNS setup yet, you can use"
 echo "http://$eth0ip"
 echo  ""
-echo "Username: $adminuser1"
-echo "Password: $adminpass1"
+echo "Username: $baruwaadmin"
+echo "Password: $adminpass"
 echo ""
-echo "Let's send an email to $admemail1 with these instructions."
+echo "Let's send an email to $admemail with these instructions."
 fn_confirm
 
 # +---------------------------------------------------+
@@ -1142,20 +1142,20 @@ fn_confirm
 cat >> /tmp/message << EOF
 Thanks for installing Baruwa $baruwaver
 ----------------------------------
-We have successfully installed Baruwa $baruwaver onto $bdomain1.
+We have successfully installed Baruwa $baruwaver onto $baruwadomain.
 
-Your Postgres Password is : $pssqlpass1
-Your Rabbit-MQ Password is : $rabbpass1
+Your Postgres Password is : $pssqlpass
+Your Rabbit-MQ Password is : $rabbpass
 
-Your Reports will be sent from : $repemail1
-Your Errors wil be sent from : $erremail1
+Your Reports will be sent from : $repemail
+Your Errors wil be sent from : $erremail
 
-You can now login at http://$bdomain1
+You can now login at http://$baruwadomain
 If you do not have DNS setup yet, you can use
 http://$eth0ip
 
-Username: $adminuser1
-Password: $adminpass1
+Username: $baruwaadmin
+Password: $adminpass
 
 When you add this node. Please use $hosts as the hostname.
 
@@ -1170,13 +1170,13 @@ http://pledgie.com/campaigns/12056
 
 EOF
 
-/bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail1
+/bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail
 cp /tmp/message ~/baruwa2_install.log
 rm /tmp/message
 
 fn_clear
 echo ""
-echo "An email has been sent to "$admemail1"."
+echo "An email has been sent to "$admemail"."
 echo ""
 echo "Please visit http://baruwa.org/docs/2.0/guide/admin/index.html"
 echo "and follow the guide on how to configure your install."
