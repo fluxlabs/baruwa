@@ -50,7 +50,7 @@ repemail=reports@domain.net
 erremail=errors@domain.net
 
 # Baruwa URL
-baruwadomain=mx01.fluxlabs.net
+baruwadomain=baruwa.domain.net
 
 # Baruwa Admin Username
 baruwaadmin=admin
@@ -73,7 +73,7 @@ msorgnamelong='YourOrganization'
 # SSL Country Code
 sslcountry='US'
 
-# SSL Province Name
+# SSL Province/State Name
 sslprovince='Illinois'
 
 # SSL City Name
