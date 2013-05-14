@@ -1077,10 +1077,10 @@ fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
 freshclam
-service clamav restart
+service clamd restart
 service exim restart
 touch /var/log/freshclam.log
-chown clamav /var/log/freshclam.log
+chown clam /var/log/freshclam.log
 chmod 660 /var/log/freshclam.log
 usermod -G exim clam
 chkconfig --level 345 clamd on
