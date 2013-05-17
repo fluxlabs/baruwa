@@ -1051,6 +1051,8 @@ mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,up
 chown apache:baruwa -R /var/lib/baruwa
 chown baruwa: /var/run/baruwa
 chown baruwa: /var/log/baruwa
+chown -R baruwa.baruwa /var/lock/baruwa
+chmod o+w,g+w /var/lock/baruwa
 usermod -G exim baruwa
 
 service httpd start
