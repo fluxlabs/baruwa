@@ -725,12 +725,12 @@ else
 cat > /etc/sudoers.d/baruwa << 'EOF'
 Defaults:baruwa   !requiretty, visiblepw
 
-baruwa ALL=(exim) NOPASSWD: /usr/sbin/exim -C $eximdir/exim_out.conf -M *, \
-        /usr/sbin/exim -C $eximdir/exim_out.conf -Mf *, \
-        /usr/sbin/exim -C $eximdir/exim_out.conf -Mrm *, \
-        /usr/sbin/exim -C $eximdir/exim_out.conf -Mg *, \
-        /usr/sbin/exim -C $eximdir/exim_out.conf -Mar *, \
-        /usr/sbin/exim -C $eximdir/exim_out.conf -qff, \
+baruwa ALL=(exim) NOPASSWD: /usr/sbin/exim -C /etc/exim/exim_out.conf -M *, \
+        /usr/sbin/exim -C /etc/exim/exim_out.conf -Mf *, \
+        /usr/sbin/exim -C /etc/exim/exim_out.conf -Mrm *, \
+        /usr/sbin/exim -C /etc/exim/exim_out.conf -Mg *, \
+        /usr/sbin/exim -C /etc/exim/exim_out.conf -Mar *, \
+        /usr/sbin/exim -C /etc/exim/exim_out.conf -qff, \
                 /usr/sbin/exim -Mrm *, \
                 /usr/sbin/exim -Mg *, \
                 /usr/sbin/exim -Mar *
