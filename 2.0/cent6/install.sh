@@ -492,7 +492,7 @@ else
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
     freetype-devel libjpeg-devel zlib-devel openldap-devel openssl-devel swig multitail perl-DBD-Pg perl-DBD-MySQL \
     cracklib-devel GeoIP-devel mysql-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
-    gcc zip tar nano sudo kernel-headers ntp sed perl-DBD-Pg sphinx mlocate postgresql-server postgresql-plpython  \
+    gcc zip tar nano sudo kernel-headers ntp sed perl-DBD-Pg sphinx libsphinxclient mlocate postgresql-server postgresql-plpython  \
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
@@ -533,7 +533,8 @@ pip install -U distribute
 pip install python-memcached
 pip install --timeout 60 -r requirements.txt
 cd $home
-curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
+#curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py 
+cp /usr/share/doc/libsphinxclient-2.0.8/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
