@@ -95,14 +95,14 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="5-14-2013"						# Latest Date
-version="2.3"							# Script Version
+date="5-21-2013"						# Latest Date
+version="2.3.1"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.1.0"						# Rabbit MQ Version
+rabbitmq="3.1.1"						# Rabbit MQ Version
 msver="4.84.5-3"						# MailScanner Version
 msver1="4.84.5"							# MS Config Version
 libmem="1.0.17"                      	# LIB MEM Cache Version
