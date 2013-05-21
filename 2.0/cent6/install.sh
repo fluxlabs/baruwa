@@ -672,6 +672,8 @@ if rpm -q --quiet mailscanner;
 	curl -O $baruwagit/extras/config/mailscanner/filetype.rules
 	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
@@ -1056,6 +1058,10 @@ chown -R baruwa.baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
 usermod -G exim baruwa
 
+sed -i -e '20 s:usr/local:usr/bin:' /etc/MailScanner/virus.scanners.conf
+cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+yum install clamav-unofficial-sigs -y
+
 service httpd start
 chkconfig --level 345 httpd on
 service memcached start
@@ -1075,11 +1081,11 @@ chkconfig --level 345 MailScanner on
 service spamassassin start
 chkconfig --level 345 spamassassin on
 
-
 fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
 freshclam
+/usr/bin/clamav-unofficial-sigs.sh
 service clamd restart
 service exim restart
 touch /var/log/freshclam.log
@@ -1160,7 +1166,7 @@ http://$eth0ip
 Username: $baruwaadmin
 Password: $adminpass
 
-When you add this node. Please use $hosts as the hostname.
+When you add this node. Please use $hostf as the hostname.
 
 Please visit http://baruwa.org/docs/2.0/guide/admin/index.html
 and follow the guide on how to configure your install.
