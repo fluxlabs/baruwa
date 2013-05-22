@@ -1243,8 +1243,8 @@ menu_main() {
 	echo "Please make a choice:"
 	echo ""
 	echo "a) Install Baruwa"
-	echo "b) Install Pyzor, Razor & DCC"
-	echo "c) Cleanup Installer"
+	#echo "b) Install Pyzor, Razor & DCC"
+	echo "b) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
 }
@@ -1270,12 +1270,12 @@ read_main() {
 			fn_configuration
 			fn_administrator
 			fn_apache
+			fn_pyzor_razor_dcc
 			fn_cronjobs
 			fn_services
 			fn_generate_key
 			fn_finish ;;
-		b) fn_pyzor_razor_dcc ;;
-		c) fn_cleanup ;;
+		b) fn_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
