@@ -685,6 +685,7 @@ if rpm -q --quiet mailscanner;
 	echo EXIM=/usr/sbin/exim >> /etc/sysconfig/MailScanner
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
+	rm -f /etc/mail/spamassassin/mailscanner.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
