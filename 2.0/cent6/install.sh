@@ -673,7 +673,7 @@ if rpm -q --quiet mailscanner;
 	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
 	curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
@@ -1059,6 +1059,7 @@ chown -R baruwa.baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
 usermod -G exim baruwa
 
+sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 sed -i -e '20 s:usr/local:usr/bin:' /etc/MailScanner/virus.scanners.conf
 cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
 yum install clamav-unofficial-sigs -y
@@ -1213,9 +1214,11 @@ fn_pyzor_razor_dcc () {
 	yum install pyzor razor-agents dcc -y
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
+	mkdir /var/lib/{pyzor, razor}; cd /var/lib/pyzor
 	pyzor discover
 	razor-admin -create
 	razor-admin -register
+	mv /root/.razor/* /var/lib/razor; chown -R exim: /var/lib/razor
 	yum update -y
 	fn_clear
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
