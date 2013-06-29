@@ -108,6 +108,7 @@ msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
+postgresver="9.1"											# PostgreSQL Version
 
 # +---------------------------------------------------+
 # More Stuff
