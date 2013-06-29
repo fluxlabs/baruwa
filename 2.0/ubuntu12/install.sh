@@ -66,6 +66,7 @@ timezone=America/New_York
 
 # MailScanner Organization Name - Long
 msorgname='Your Organization'
+
 # MailScanner Organization Name - Short (No Spaces)
 msorgnamelong='YourOrganization'
 
@@ -94,15 +95,16 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="6-13-2013"                                        	# Latest Date
-version="2.3.1"                                            	# Script Version
+date="6-29-2013"                                        	# Latest Date
+version="2.3.2"                                            	# Script Version
 ubuntuver="12.04"                                           # Script ID
 baruwaver="2.0.1"                            				# Baruwa Version
 rabbitmq="3.1.1"                                        	# Rabbit MQ Version
-msver="4.84.5-3"                                        	# MailScanner Version
-msver1="4.84.5"                                         	# MS Config Version
+msver="4.84.6-1"                                        	# MailScanner Version
+msver1="4.84.6"                                         	# MS Config Version
 libmem="1.0.17"                                         	# LIB MEM Cache Version
 pythonver="2.7"                                         	# Python Version
+postgresver="9.1"											# PostgreSQL Version
 
 # +---------------------------------------------------+
 # More Stuff
@@ -576,11 +578,9 @@ pip install distribute
 pip install -U distribute
 pip install --timeout 60 -r requirements.txt
 fn_clear
-echo "Copying sphinxapi.py to sites-packages directory"
 cd $home
 curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py
 fn_clear
-echo "Patching repoze.who"
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd px/lib/python$pythonver/site-packages/repoze/who/plugins/
@@ -649,14 +649,14 @@ if [ -a $track/pssql ];
         then
         echo "PostgreSQL is already setup. Skipping."
 else
-cat > /etc/postgresql/9.1/main/pg_hba.conf << 'EOF'
+cat > /etc/postgresql/$postgresver/main/pg_hba.conf << 'EOF'
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 local   all         postgres                          trust
 host    all         all         127.0.0.1/32          md5
 host    all         all         ::1/128               md5
 EOF
 
-sed -e "s/^#timezone = \(.*\)$/timezone = 'UTC'/" -i /etc/postgresql/9.1/main/postgresql.conf
+sed -e "s/^#timezone = \(.*\)$/timezone = 'UTC'/" -i /etc/postgresql/$postgresver/main/postgresql.conf
 
 # restart the service
 service postgresql restart
@@ -904,7 +904,7 @@ if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
         echo "It looks as though libmemcached was already compiled from source. Skipping."; sleep 3
 else
         cd $builddir/
-        wget https://launchpad.net/libmemcached/1.0/1.0.17/+download/libmemcached-1.0.17.tar.gz
+        wget https://launchpad.net/libmemcached/1.0/$libmem/+download/libmemcached-$libmem.tar.gz
         tar -zxvf libmemcached*.tar.gz && cd libmemcached*
         ./configure --with-memcached
         make && make install
