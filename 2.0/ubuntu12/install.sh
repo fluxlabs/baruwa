@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+chsh -s /bin/bash
 # +--------------------------------------------------------------------+
 # Install for Barwua 2.0 for Ubuntu 12.04 x86_64
 # +--------------------------------------------------------------------+
@@ -255,7 +255,7 @@ fn_directories (){
 
 fn_requirements () {
 
-if [ $useauto = 1 ];
+if [[ $useauto = 1 ]];
         then
         :
 else
