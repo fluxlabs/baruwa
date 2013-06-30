@@ -532,10 +532,10 @@ curl -O https://raw.github.com/akissa/baruwa2/$baruwaver/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
-pip install --timeout 60 -r requirements.txt
+pip install --timeout 120 -r requirements.txt
 cd $home
 #curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py 
-cp /usr/share/doc/libsphinxclient-2.0.8/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
+cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
@@ -611,8 +611,8 @@ if rpm -q --quiet rabbitmq-server-$rabbitmq;
 	echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
 	else
 		rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-		cd $builddir; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmq/rabbitmq-server-$rabbitmq-1.noarch.rpm
-		yum install rabbitmq-server-$rabbitmq-1.noarch.rpm -y
+		cd $builddir; wget http://www.rabbitmq.com/releases/rabbitmq-server/current/rabbitmq-server-$rabbitmq.noarch.rpm
+		yum install rabbitmq-server-$rabbitmq.noarch.rpm -y
 fi
 
 if [ -a $track/rabbit ];
