@@ -1090,7 +1090,8 @@ echo ""; sleep 3
 usermod -G exim clam
 rm -rf /var/lib/clamav
 mkdir /var/lib/clamav
-chown clam: /var/lib/clamavtouch /var/log/freshclam.log
+chown clam: /var/lib/clamav
+touch /var/log/freshclam.log
 chown clam /var/log/freshclam.log
 chmod 660 /var/log/freshclam.log
 cd /var/lib; rm -f clamav
