@@ -11,7 +11,7 @@ CENT OS 6.4
 =========
 curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/cent6/install.sh
 
-Ubuntu 12.04
+Ubuntu 12.04 (BETA)
 =========
 curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/ubuntu12/install.sh
 
