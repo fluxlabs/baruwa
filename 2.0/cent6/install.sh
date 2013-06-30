@@ -1087,14 +1087,18 @@ chkconfig --level 345 spamassassin on
 fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
+usermod -G exim clam
+rm -rf /var/lib/clamav
+mkdir /var/lib/clamav
+chown clam: /var/lib/clamavtouch /var/log/freshclam.log
+chown clam /var/log/freshclam.log
+chmod 660 /var/log/freshclam.log
+cd /var/lib; rm -f clamav
+ln -s /var/clamav /var/lib/clamav
 freshclam
 /usr/bin/clamav-unofficial-sigs.sh
 service clamd restart
 service exim restart
-touch /var/log/freshclam.log
-chown clam /var/log/freshclam.log
-chmod 660 /var/log/freshclam.log
-usermod -G exim clam
 chkconfig --level 345 clamd on
 
 }
