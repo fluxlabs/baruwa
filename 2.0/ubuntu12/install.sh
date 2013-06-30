@@ -1,5 +1,5 @@
 #!/bin/bash
-#sh
+#
 # +--------------------------------------------------------------------+
 # Install for Barwua 2.0 for Ubuntu 12.04 x86_64
 # +--------------------------------------------------------------------+
@@ -144,7 +144,7 @@ fn_clear () {
 }
 
 fn_complete (){
-        if [ $usepause == 1 ];
+        if [ $usepause = 1 ];
                 then
                 fn_pause
         else
@@ -241,7 +241,7 @@ fn_confirm
 
 fn_directories (){
 
-        if [[ -d $track && -d $logs && -d $builddir ]];
+        if [ -d $track && -d $logs && -d $builddir ];
                 then
                 :
         else
@@ -255,7 +255,7 @@ fn_directories (){
 
 fn_requirements () {
 
-if [ $useauto == 1 ];
+if [ $useauto = 1 ];
         then
         :
 else
@@ -663,7 +663,7 @@ service postgresql restart
 cd $home
 su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$pssqlpass';\""
 su - postgres -c 'createdb -E UTF8 -O baruwa -T template1 baruwa'
-su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
+#su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
 curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
@@ -1227,7 +1227,7 @@ freshclam
 service clamav-daemon restart
 }
 fn_generate_key () {
-if [ $useauto == 1 ];
+if [ $useauto = 1 ];
                 then
         openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
         mkdir /etc/pki{baruwa} && mv baruwa.* /etc/pki/baruwa/.
@@ -1397,8 +1397,7 @@ read_main() {
 # +---------------------------------------------------+
 # Be sure we're root
 # +---------------------------------------------------+
-# Be sure we're root
-if [ `whoami` == "root" ]; then
+if [ `whoami` = root ]; then
         menu="1"
                 while [ $menu = "1" ]
                 do
