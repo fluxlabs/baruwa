@@ -144,7 +144,7 @@ fn_clear () {
 }
 
 fn_complete (){
-        if [ $usepause = 1 ];
+        if [[ $usepause = 1 ]];
                 then
                 fn_pause
         else
@@ -171,7 +171,7 @@ fn_cleanup (){
 # +---------------------------------------------------+
 
 OS=`uname -s`
-if [ ${OS} = "Linux" ]; then
+if [[ ${OS} = "Linux" ]]; then
     :
 else
     echo "Sorry, but this installer does not support the ${OS} platform."
@@ -179,7 +179,7 @@ else
 fi
 
 DISTRO=`cat /etc/lsb-release | grep ID | head -n 1 | awk -F'=' {'print $2'}`
-if [ ${DISTRO} = "Ubuntu" ]; then
+if [[ ${DISTRO} = "Ubuntu" ]]; then
     :
 else
     echo "Sorry, but this installer does not support the ${DISTRO}
@@ -187,7 +187,7 @@ distribution."
     exit 1
 fi
 RELEASE=`cat /etc/lsb-release  | grep DISTRIB_RELEASE | awk -F'=' {'print $2'}`
-if [ ${RELEASE} = "${ubuntuver}" ]; then
+if [[ ${RELEASE} = "${ubuntuver}" ]]; then
     :
 else
     echo "Sorry, but this installer does not support the ${RELEASE} release."
@@ -241,7 +241,7 @@ fn_confirm
 
 fn_directories (){
 
-        if [ -d $track && -d $logs && -d $builddir ];
+        if [[ -d $track && -d $logs && -d $builddir ]];
                 then
                 :
         else
@@ -255,7 +255,7 @@ fn_directories (){
 
 fn_requirements () {
 
-if [[ $useauto = 1 ]];
+if [[ $useauto = 1 ]]];
         then
         :
 else
@@ -406,7 +406,7 @@ done
 
 fn_clear
 
-if [ -f $track/pssql ];
+if [[ -f $track/pssql ]];
         then
                 echo "PostgreSQL seems to already be configured. Skipping." ; sleep 3
        	 else
@@ -431,7 +431,7 @@ if [ -f $track/pssql ];
 fi
 	fn_clear
 
-if [ -f $track/rabbit ];
+if [[ -f $track/rabbit ]];
         then
         echo " This section has already been completed. Skipping."; sleep 3
         else
@@ -479,7 +479,7 @@ echo "R E Q U I R E D  D E P E N D E N C I E S";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [ -f $track/dependencies ];
+if [[ -f $track/dependencies ]];
         then
         echo "Dependencies already been installed. Skipping."; sleep 3
 else
@@ -523,7 +523,7 @@ echo "--------------------------------------------------------------------------
 echo "D E F A U L T  S H E L L   C O N F I G U R A T I O N";
 echo "------------------------------------------------------------------------------";
 sleep 3
-if [ -a $track/shell ];
+if [[ -a $track/shell ]];
         then
         echo "Shell is already configured. Skipping."
 else
@@ -532,7 +532,7 @@ ln -s /usr/bin/bash /usr/bin/sh
 touch $track/shell
 fi
 
-if [ -a $track/dnsmasq ];
+if [[ -a $track/dnsmasq ]];
         then
         echo "Dnsmasq is already configured. Skipping."
 else
@@ -561,7 +561,7 @@ echo "--------------------------------------------------------------------------
 echo "V I R T U A L  P Y T H O N  E N V I R O N M E N T";
 echo "------------------------------------------------------------------------------";
 sleep 3
-if [ -f $track/python ];
+if [[ -f $track/python ]];
         then
                 echo "It looks as though the virtual environment already exists. Skipping."; sleep 3
         else
@@ -645,7 +645,7 @@ echo "P O S T G R E S Q L";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [ -a $track/pssql ];
+if [[ -a $track/pssql ]];
         then
         echo "PostgreSQL is already setup. Skipping."
 else
@@ -703,7 +703,7 @@ if dpkg --list | grep rabbitmq-server;
                 apt-get install rabbitmq-server -y
 fi
 
-if [ -a $track/rabbit ];
+if [[ -a $track/rabbit ]];
         then
         echo "RabbitMQ has already been configured. Skipping."
 else
@@ -817,7 +817,7 @@ else
         apt-get install exim4-daemon-heavy -y
 fi
 
-if [ -f /etc/sudoers.d/baruwa ];
+if [[ -f /etc/sudoers.d/baruwa ]];
         then
         echo "Baruwa sudoers file exists, skipping."; sleep 3
 else
@@ -839,7 +839,7 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
+if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]]];
         then
         echo "Exim is already configured. Skipping"; sleep 3
 else
@@ -875,7 +875,7 @@ echo "--------------------------------------------------------------------------
 echo "P E R L  M O D S  I N S T A L L";
 echo "------------------------------------------------------------------------------";
 sleep 3
-if [ -f $track/perlmods ];
+if [[ -f $track/perlmods ]];
         then
         echo "Perl modules were previously installed. Skipping."; sleep 3
 else
@@ -899,7 +899,7 @@ echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
+if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]]];
         then
         echo "It looks as though libmemcached was already compiled from source. Skipping."; sleep 3
 else
@@ -923,7 +923,7 @@ echo "--------------------------------------------------------------------------
 echo "B U I L D I N G  B A R U W A";
 echo "------------------------------------------------------------------------------";
 sleep 3
-if [ -f $track/baruwa-build ];
+if [[ -f $track/baruwa-build ]];
         then
                 echo "It seems Baruwa 2 has already been built. Skipping." ; sleep 3
         else
@@ -941,7 +941,7 @@ echo "--------------------------------------------------------------------------
 echo "C O N F I G U R I N G  B A R U W A";
 echo "------------------------------------------------------------------------------";
 sleep 3
-if [ -f $track/baruwaconfig ];
+if [[ -f $track/baruwaconfig ]];
         then
                 echo "This section has been completed. Skipping. " ; sleep 3
         else
@@ -960,7 +960,7 @@ if [ -f $track/baruwaconfig ];
 
 fi
 
-if [ -f /etc/default/baruwa ];
+if [[ -f /etc/default/baruwa ]];
 then
         echo "I see you already have an /etc/default/baruwa file. Skipping." ; sleep 3
 else
@@ -987,7 +987,7 @@ EOF
 
 fi
 
-if [ -x /etc/init.d/baruwa ];
+if [[ -x /etc/init.d/baruwa ]];
         then
         echo "Skipping, as I already detect a baruwa init file." ; sleep 3
 else
@@ -1007,7 +1007,7 @@ fn_complete
 
 fn_administrator (){
         fn_clear
-if [ -a $track/baruwaadmin ];
+if [[ -a $track/baruwaadmin ]];
         then
         echo "I believe you have already created an admin-user. Skipping."
 else
@@ -1040,7 +1040,7 @@ else
         apt-get install nginx -y
 fi
 
-if [ -f /etc/nginx/sites-enabled/baruwa ];
+if [[ -f /etc/nginx/sites-enabled/baruwa ]];
         then
         echo "It looks like nginx is already configured. Skipping."; sleep 3
 else
@@ -1060,7 +1060,7 @@ if dpkg --list | grep uwsgi;
         echo "Installing Uwsgi."
         apt-get install uwsgi uwsgi-plugin-python -y
 fi
-if [ -f /etc/uwsgi/apps-enabled/production.ini ];
+if [[ -f /etc/uwsgi/apps-enabled/production.ini ]];
         then
         echo "It looks like uwsgi is already configured. Skipping."; sleep 3
         else
@@ -1119,7 +1119,7 @@ echo "--------------------------------------------------------------------------
 # +---------------------------------------------------+
 fn_cronjobs (){
 fn_clear
-if [ -f /etc/cron.hourly/baruwa-updateindex ];
+if [[ -f /etc/cron.hourly/baruwa-updateindex ]];
         then
         echo "Hourly Cronjob exists. Skipping."; sleep 3
 else
@@ -1131,7 +1131,7 @@ EOF
 chmod +x /etc/cron.hourly/baruwa-updateindex
 fi
 
-if [ -f /etc/cron.d/baruwa ];
+if [[ -f /etc/cron.d/baruwa ]];
         then
         echo "Baruwa Cronjobs exists. Skipping." ; sleep 3
 else
@@ -1146,7 +1146,7 @@ cat > /etc/cron.d/baruwa << 'EOF'
 0 6 1 * * baruwa /home/baruwa/px/bin/paster send-pdf-reports /etc/baruwa/production.ini >/dev/null 2>&1
 EOF
 fi
-if [ -f /etc/cron.d/mailscanner ];
+if [[ -f /etc/cron.d/mailscanner ]];
         then
         echo "MailScanner Cronjob Exists. Skipping." ; sleep 3
 else
@@ -1159,7 +1159,7 @@ cat > /etc/cron.d/mailscanner << 'EOF'
 EOF
 fi
 
-if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
+if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]]];
         then
 fn_clear
 
@@ -1196,7 +1196,7 @@ echo "--------------------------------------------------------------------------
 echo "Restarting necessary services for final time."
 echo "We are also adding services to startup."
 echo ""; sleep 3
-if [ -f $track/service ];
+if [[ -f $track/service ]];
         then
         echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
 else
@@ -1227,7 +1227,7 @@ freshclam
 service clamav-daemon restart
 }
 fn_generate_key () {
-if [ $useauto = 1 ];
+if [[ $useauto = 1 ]];
                 then
         openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
         mkdir /etc/pki{baruwa} && mv baruwa.* /etc/pki/baruwa/.
@@ -1397,7 +1397,7 @@ read_main() {
 # +---------------------------------------------------+
 # Be sure we're root
 # +---------------------------------------------------+
-if [ `whoami` = root ]; then
+if [[ `whoami` = root ]]; then
         menu="1"
                 while [ $menu = "1" ]
                 do
