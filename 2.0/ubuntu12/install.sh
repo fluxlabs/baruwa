@@ -241,11 +241,11 @@ fn_confirm
 
 fn_directories (){
 
-        if [ -d $track && -d $logs && -d $builddir ];
+        if [[ -d $track && -d $logs && -d $builddir ]];
                 then
                 :
         else
-                mkdir {$track,$logs,$builddir}
+                mkdir {$track $logs $builddir}
         fi
 }
 
@@ -255,7 +255,7 @@ fn_directories (){
 
 fn_requirements () {
 
-if [[ $useauto = 1 ]];
+if [ $useauto = 1 ];
         then
         :
 else
