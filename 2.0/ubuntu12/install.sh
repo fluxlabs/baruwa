@@ -239,9 +239,12 @@ echo "--------------------------------------------------------------------------
 echo ""
 fn_confirm
 
+fn_directories () {
 mkdir $track
 mkdir $logs
 mkdir $builddir
+}
+
 
 # +---------------------------------------------------+
 # User Prompt Function
@@ -523,7 +526,7 @@ sed -i s/"#listen-address="/"listen-address=127.0.0.1"/ /etc/dnsmasq.conf
 echo "Disabling IPV6"
 entries="# IPv6 \nnet.ipv6.conf.all.disable_ipv6 = 1 \nnet.ipv6.conf.default.disable_ipv6 = 1 \nnet.ipv6.conf.lo.disable_ipv6 = 1"
 echo -e $entries >> /etc/sysctl.conf
-sysctl -p
+sysctl -
 /etc/init.d/dnsmasq restart
 touch $track/dnsmasq
        fn_complete
