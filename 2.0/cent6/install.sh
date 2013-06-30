@@ -1061,7 +1061,7 @@ chmod o+w,g+w /var/lock/baruwa
 usermod -G exim baruwa
 
 sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-sed -i -e '20 s:usr/local:usr/bin:' /etc/MailScanner/virus.scanners.conf
+sed -i -e '19 s:usr/local:usr/bin:' /etc/MailScanner/virus.scanners.conf
 cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
 yum install clamav-unofficial-sigs -y
 
