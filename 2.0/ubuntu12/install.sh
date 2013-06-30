@@ -239,15 +239,9 @@ echo "--------------------------------------------------------------------------
 echo ""
 fn_confirm
 
-fn_directories (){
-
-        if [[ -d $track && -d $logs && -d $builddir ]];
-                then
-                :
-        else
-                mkdir {$track $logs $builddir}
-        fi
-}
+mkdir $track
+mkdir $logs
+mkdir $builddir
 
 # +---------------------------------------------------+
 # User Prompt Function
@@ -513,24 +507,11 @@ fi
 }
 
 # +---------------------------------------------------+
-# Default Shell and Dnsmasq configuration
+# Dnsmasq configuration
 # +---------------------------------------------------+
 
 fn_dnsmasq (){
 fn_clear
-
-echo "------------------------------------------------------------------------------";
-echo "D E F A U L T  S H E L L   C O N F I G U R A T I O N";
-echo "------------------------------------------------------------------------------";
-sleep 3
-if [[ -a $track/shell ]];
-        then
-        echo "Shell is already configured. Skipping."
-else
-      echo "Reconfiguring default shell."; sleep 3
-ln -s /usr/bin/bash /usr/bin/sh
-touch $track/shell
-fi
 
 if [[ -a $track/dnsmasq ]];
         then
@@ -543,7 +524,6 @@ echo "Disabling IPV6"
 entries="# IPv6 \nnet.ipv6.conf.all.disable_ipv6 = 1 \nnet.ipv6.conf.default.disable_ipv6 = 1 \nnet.ipv6.conf.lo.disable_ipv6 = 1"
 echo -e $entries >> /etc/sysctl.conf
 sysctl -p
-/etc/init.d/networking restart
 /etc/init.d/dnsmasq restart
 touch $track/dnsmasq
        fn_complete
