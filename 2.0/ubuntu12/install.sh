@@ -97,27 +97,27 @@ sslemail=$adminemail
 
 date="6-29-2013"                                        	# Latest Date
 version="2.3.2"                                            	# Script Version
-ubuntuver="12.04"                                           # Script ID
-baruwaver="2.0.1"                            				# Baruwa Version
+ubuntuver="12.04"                                            	# Script ID
+baruwaver="2.0.1"                            			# Baruwa Version
 rabbitmq="3.1.1"                                        	# Rabbit MQ Version
 msver="4.84.6-1"                                        	# MailScanner Version
 msver1="4.84.6"                                         	# MS Config Version
 libmem="1.0.17"                                         	# LIB MEM Cache Version
 pythonver="2.7"                                         	# Python Version
-postgresver="9.1"											# PostgreSQL Version
+postgresver="9.1"						# PostgreSQL Version
 
 # +---------------------------------------------------+
 # More Stuff
 # +---------------------------------------------------+
 
-baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"       		# Extras from Baruwa
+baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"       	# Extras from Baruwa
 fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"     # Extras from Flux Labs
-home="/home/baruwa" 												# Home Directory
-etcdir="/etc/baruwa"                                   				# Baruwa etc
-eximdir="/etc/exim4"                                   				# Exim Directory
-track="/tmp/tracking"   											# Tracking Directory
-logs="/tmp/baruwa2" 												# Logs Directory
-builddir="/usr/src/b2build/"										# Build Directory
+home="/home/baruwa" 							# Home Directory
+etcdir="/etc/baruwa"                                   			# Baruwa etc
+eximdir="/etc/exim4"                                   			# Exim Directory
+track="/tmp/tracking"   						# Tracking Directory
+logs="/tmp/baruwa2" 							# Logs Directory
+builddir="/usr/src/b2build/"						# Build Directory
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
@@ -328,7 +328,7 @@ IFS= read -p "Username: " baruwaadmin
 IFS= read -p "Username Again: " adminuser2
 [[ $baruwaadmin = "$adminuser2" ]] && break
 echo ''
-echo 'Username deos not match. Please try again.'
+echo 'Username does not match. Please try again.'
 echo ''
 done
 while :
@@ -410,7 +410,7 @@ if [[ -f $track/pssql ]];
             	while :
            	 do
                
-	echo "------------------------------------------------------------------------------";
+		echo "------------------------------------------------------------------------------";
                 echo "P O S T G R E S Q L  P A S S W O R D";
                 echo "------------------------------------------------------------------------------";
                 echo "Lets set a password for BaruwaDB in Postgres."
