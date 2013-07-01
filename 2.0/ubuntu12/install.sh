@@ -762,8 +762,6 @@ if dpkg --list | grep  mailscanner;
         sed -i s/"#run_mailscanner"/"run_mailscanner"/ /etc/default/mailscanner
         sed -i s/"\/var\/lock\/MailScanner.off"/"\/var\/lock\/MailScanner\/MailScanner.off"/ /etc/init.d/mailscanner
         sed -i s/"\/var\/lock\/subsys\/mailscanner"/"\/var\/lock\/MailScanner\/mailscanner"/ /etc/init.d/mailscanner
-        sed -i s/"&BaruwaLog"/"no"/ /etc/MailScanner/MailScanner.conf
-        # Above line added because of 'Config: calling custom init function BaruwaLog' found in log.
         sed -i 's:%org-name% = BARUWA:%org-name% = '$orgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%org-long-name% = BARUWA MAILFW:%org-long-name% = '$lorgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%web-site% = hosted.baruwa.net:%web-site% = '$web':' /etc/MailScanner/MailScanner.conf
@@ -774,7 +772,13 @@ if dpkg --list | grep  mailscanner;
         sed -i 's:bayes_ignore_header X-Baruwa-Information:bayes_ignore_header X-'$orgname'-BaruwaFW-Information:' /etc/MailScanner/spam.assassin.prefs.conf         
         mkdir -p /var/spool/exim.in/input
         chown -R Debian-exim:Debian-exim /var/spool/exim.in
-        
+        #Add '20i{clamd} to virus.scanners.conf
+	sed -i '20i{clamd}\         /bin/false\                              /usr/local ' /etc/MailScanner/virus.scanners.conf
+	#Fix file-command path to /usr/bin/file in MailScanner.conf
+	sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
+	#Change clamd.socket to clamd.ctl in MailScanner.conf
+	sed -i 's:clamd.socket:clamd.ctl:' /etc/MailScanner/MailScanner.conf
+   
         #Setup Bayes Database
 	echo "Creating role sa_user"
 	su - postgres -c "psql -c\"create role sa_user login;\""
@@ -859,12 +863,17 @@ else
         curl -O $baruwagit/extras/config/exim/trusted-configs
         mv /etc/exim4/exim.conf /etc/exim4/exim4.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim4.conf
+        #Comment out tls_advertise_hosts
+        sed -i 's:tls_advertise:#tls_advertise:' /etc/exim4/exim4.conf
+        #Comment out SPF Checks
+        sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
         sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
         sed -i s/"user = exim"/"user = Debian-exim"/ /etc/exim4/exim4.conf
         sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
         sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
+        #Update Clamd socket in exim4.conf
         sed -i s/"clamd.sock"/"clamd.ctl"/ /etc/exim4/exim4.conf
         
         mkdir $eximdir/baruwa
@@ -1107,7 +1116,7 @@ echo "--------------------------------------------------------------------------
         razor-admin -home=/var/lib/MailScanner/.razor -create
         razor-admin -home=/var/lib/MailScanner/.razor -discover
         razor-admin -home=/var/lib/MailScanner/.razor -register
-        echo razorhome          = /var/lib/MailScanner/.razor/ >> /var/lib/MailScanner/.razor/razor-agent.conf
+        sed -i '/razor-whitelist/arazorhome\              = /var/lib/MailScanner/.razor/' /var/lib/MailScanner/.razor/razor-agent.conf
         fn_clear
         echo "Updating spam.assassin.prefs.conf with settings."; sleep 3
         sed -i 's:= 3:= 0:' /var/lib/MailScanner/.razor/razor-agent.conf
@@ -1333,6 +1342,11 @@ and follow the guide on how to configure your install.
 Please support the Baruwa project by donating at
 http://pledgie.com/campaigns/12056
 
+Baruwa $baruwaver Installer by Jeremy McSpadden (jeremy at fluxlabs dot net)
+
+This version by - Mohammed Alli
+Contact - roc1479 at yahoo dot com
+
 EOF
 
 /usr/bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail
@@ -1395,7 +1409,7 @@ read_main() {
                      fn_pyzor_razor_dcc
                      fn_cronjobs
                      fn_services
-	     fn_generate_key
+	     	     fn_generate_key
                      fn_finish ;;
                 b) fn_cleanup ;;
                 x) exit 0;;
