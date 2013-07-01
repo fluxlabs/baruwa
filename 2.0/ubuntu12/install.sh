@@ -110,8 +110,8 @@ postgresver="9.1"						# PostgreSQL Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"       	# Extras from Baruwa
-fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"     # Extras from Flux Labs
+baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"       		# Extras from Baruwa
+fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"     	# Extras from Flux Labs
 home="/home/baruwa" 							# Home Directory
 etcdir="/etc/baruwa"                                   			# Baruwa etc
 eximdir="/etc/exim4"                                   			# Exim Directory
@@ -328,7 +328,7 @@ IFS= read -p "Username: " baruwaadmin
 IFS= read -p "Username Again: " adminuser2
 [[ $baruwaadmin = "$adminuser2" ]] && break
 echo ''
-echo 'Username does not match. Please try again.'
+echo 'Usernames do not match. Please try again.'
 echo ''
 done
 while :
@@ -353,7 +353,7 @@ IFS= read -p "Email: " adminemail
 IFS= read -p "Email Again: " adminemail2
 [[ $adminemail = "$adminemail2" ]] && break
 echo ''
-echo 'Passwords do not match. Please try again.'
+echo 'Emails do not match. Please try again.'
 echo ''
 done
 
