@@ -413,7 +413,7 @@ if [[ -f $track/pssql ]];
 		echo "------------------------------------------------------------------------------";
                 echo "P O S T G R E S Q L  P A S S W O R D";
                 echo "------------------------------------------------------------------------------";
-                echo "Lets set a password for BaruwaDB in Postgres."
+                echo "Lets set a password for BaruwaDB/BayesDB in Postgres."
                 echo "What would you like this super secret"
                 echo "password to be?"
                  IFS= read -r -p "Password: " pssqlpass
@@ -635,6 +635,7 @@ else
 cat > /etc/postgresql/$postgresver/main/pg_hba.conf << 'EOF'
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 local   all         postgres                          trust
+local   all         sa_user                           trust
 host    all         all         127.0.0.1/32          md5
 host    all         all         ::1/128               md5
 EOF
@@ -773,6 +774,31 @@ if dpkg --list | grep  mailscanner;
         sed -i 's:bayes_ignore_header X-Baruwa-Information:bayes_ignore_header X-'$orgname'-BaruwaFW-Information:' /etc/MailScanner/spam.assassin.prefs.conf         
         mkdir -p /var/spool/exim.in/input
         chown -R Debian-exim:Debian-exim /var/spool/exim.in
+        
+        #Setup Bayes Database
+	echo "Creating role sa_user"
+	su - postgres -c "psql -c\"create role sa_user login;\""
+	echo "Setting password"
+	su - postgres -c "psql -c\"alter role sa_user password '$pssqlpass';\""
+	echo "Creating database sa_bayes"
+	su - postgres -c "psql -c\"create database sa_bayes owner sa_user;\""
+	echo "Importing tables"
+	su - postgres -c "psql -d sa_bayes -U sa_user -c \"\i /usr/share/doc/spamassassin/sql/bayes_pg.sql;\""
+	echo "Initializing sa_bayes database"
+	sa-learn --sync
+	echo "Restarting postgresql"
+	service postgresql restart
+	fn_clear
+	echo "Updating spam.assassin.prefs.conf for sa_bayes."
+	sed -i 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:6432:5432:' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:bayes_sql_override_username bayes:bayes_sql_override_username root:' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:bayes_sql_username bayes:bayes_sql_username sa_user:' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:baruwa:sa_bayes:' /etc/MailScanner/spam.assassin.prefs.conf
+	#Comment out bayes awl whitelist entries in spam.assassin.prefs.conf
+	sed -i 's:auto_whitelist:#auto_whitelist:' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i 's:user_:#user_:' /etc/MailScanner/spam.assassin.prefs.conf
+        
         touch $track/mailscanner
 fn_complete
 fi
