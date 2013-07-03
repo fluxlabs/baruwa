@@ -628,11 +628,13 @@ chmod +x m2crypto.sh
 ./m2crypto.sh
 fn_clear
 
-echo "Patching subprocess"
-cd $home
-curl -O $baruwagit/extras/patches/subprocess_timeout.patch
-cd $home/px/lib/python$pythonver/site-packages/
-patch -p1 -i $home/subprocess_timeout.patch
+# This patch is now included.
+#echo "Patching subprocess"
+#cd $home
+#curl -O $baruwagit/extras/patches/subprocess_timeout.patch
+#cd $home/px/lib/python$pythonver/site-packages/
+#patch -p1 -i $home/subprocess_timeout.patch
+
 touch $track/python
 fn_complete
 fi
