@@ -572,7 +572,7 @@ if [[ -f $track/python ]];
                 echo "I am going to setup your Virtual Python Environment for Baruwa."
                 echo "This process could take a while."; sleep 3
                 mkdir -p $home && cd $home
-virtualenv --no-site-packages --distribute px
+virtualenv --distribute px
 source px/bin/activate
 export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
 curl -O $baruwagit/requirements.txt
