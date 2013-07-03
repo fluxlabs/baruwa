@@ -800,8 +800,8 @@ if dpkg --list | grep  mailscanner;
 	#Fix file-command path to /usr/bin/file in MailScanner.conf
 	sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
 	#Change clamd.socket to clamd.ctl in MailScanner.conf
-	sed -i 's:clamd.socket:clamd.ctl:' /etc/MailScanner/MailScanner.conf
-   
+	sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
+	   
         #Setup Bayes Database
 	echo "Creating role sa_user"
 	su - postgres -c "psql -c\"create role sa_user login;\""
