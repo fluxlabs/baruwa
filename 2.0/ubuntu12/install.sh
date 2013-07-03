@@ -177,7 +177,7 @@ fn_cleanup (){
 # +---------------------------------------------------+
 
 OS=`uname -s`
-if [ ${OS} = "Linux" ]]; then
+if [ ${OS} = "Linux" ]; then
     :
 else
     echo "Sorry, but this installer does not support the ${OS} platform."
@@ -923,7 +923,7 @@ echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]]];
+if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
         then
         echo "It looks as though libmemcached was already compiled from source. Skipping."; sleep 3
 else
@@ -1194,7 +1194,7 @@ chmod +x /usr/sbin/check_mailscanner
 fi
 
 #Check if update_bad_phishing_sites exists, if not create it.
-if [[ -f /usr/sbin/ update_bad_phishing_sites ]];
+if [[ -f /usr/sbin/update_bad_phishing_sites ]];
         then
         echo " update_bad_phishing_sites exists Skipping." ; sleep 3
 else
@@ -1203,7 +1203,7 @@ chmod +x /usr/sbin/update_bad_phishing_sites
 fi
 
 #Check if update_bad_phishing_emails exists, if not create it.
-if [[ -f /usr/sbin/ update_bad_phishing_emails ]];
+if [[ -f /usr/sbin/update_bad_phishing_emails ]];
         then
         echo " update_bad_phishing_emails exists Skipping." ; sleep 3
 else
@@ -1211,7 +1211,7 @@ curl $fluxlabsgit/ubuntu12/update_bad_phishing_emails -o /usr/sbin/update_bad_ph
 chmod +x /usr/sbin/update_bad_phishing_emails
 fi
 
-if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]]];
+if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
         then
 fn_clear
 
