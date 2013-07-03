@@ -1108,6 +1108,8 @@ if [[ -f /etc/uwsgi/apps-enabled/production.ini ]];
         sed -i '/home/apaste = config:/etc/baruwa/production.ini' /etc/baruwa/production.ini
         sed -i '/paste/achmod-socket = 666' /etc/baruwa/production.ini
         ln -s /etc/baruwa/production.ini /etc/uwsgi/apps-enabled/
+        # Baruwa run perm fix
+        chmod 765 /var/run/baruwa
 
         fn_clear
         fn_complete
