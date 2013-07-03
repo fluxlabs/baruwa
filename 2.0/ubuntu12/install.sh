@@ -51,10 +51,13 @@ repemail=reports@domain.net
 
 # Baruwa Error Reports From Email
 erremail=errors@domain.net
+
 # Baruwa URL
 baruwadomain=baruwa.domain.net
+
 # Baruwa Admin Username
 baruwaadmin=admin
+
 # Baruwa Admin Password - Must be Secure
 adminpass=password123!
 
@@ -64,11 +67,14 @@ adminemail=admin@domain.net
 # Time Zone
 timezone=America/New_York
 
-# MailScanner Organization Name - Long
-msorgname='Your Organization'
+# MailScanner Organization Name - Short
+orgname='Organization'
 
-# MailScanner Organization Name - Short (No Spaces)
-msorgnamelong='YourOrganization'
+# MailScanner Organization Name - Long (No Spaces)
+lorgname='YourOrganization'
+
+# MailScanner Organization Website
+web='www.domain.com'
 
 # SSL Country Code
 sslcountry='US'
@@ -901,7 +907,7 @@ else
         echo "Please press Yes/Enter throughout the questions."
         fn_confirm
 
-       cpan -i Encoding::FixLatin AnyEvent::Handle EV IP::Country::Fast Encode::Detect Crypt::OpenSSL::RSA
+        cpan -i Encoding::FixLatin AnyEvent::Handle EV IP::Country::Fast Encode::Detect Crypt::OpenSSL::RSA
         touch $track/perlmods
 fn_complete
 fi
@@ -1171,7 +1177,7 @@ else
 cat > /etc/cron.d/mailscanner << 'EOF'
 37 5 * * * /usr/sbin/update_phishing_sites
 07 * * * * /usr/sbin/update_bad_phishing_sites
-07 * * * * /usr/sbin/update_bad_phishing_emails
+15 * * * * /usr/sbin/update_bad_phishing_emails
 #58 23 * * * /usr/sbin/clean.quarantine
 42 * * * * /usr/sbin/update_virus_scanners
 3,23,43 * * * * /usr/sbin/check_mailscanner
