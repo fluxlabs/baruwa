@@ -811,8 +811,6 @@ if dpkg --list | grep  mailscanner;
 	su - postgres -c "psql -c\"create database sa_bayes owner sa_user;\""
 	echo "Importing tables"
 	su - postgres -c "psql -d sa_bayes -U sa_user -c \"\i /usr/share/doc/spamassassin/sql/bayes_pg.sql;\""
-	echo "Initializing sa_bayes database"
-	sa-learn --sync
 	echo "Restarting postgresql"
 	service postgresql restart
 	fn_clear
@@ -1150,6 +1148,8 @@ echo "--------------------------------------------------------------------------
         sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
+        echo "Initializing sa_bayes database"
+	sa-learn --sync
 
         service mailscanner restart
         fn_complete
