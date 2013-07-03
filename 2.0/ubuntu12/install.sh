@@ -1211,7 +1211,7 @@ curl $fluxlabsgit/ubuntu12/update_bad_phishing_emails -o /usr/sbin/update_bad_ph
 chmod +x /usr/sbin/update_bad_phishing_emails
 fi
 
-if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]]];
+if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
         then
 fn_clear
 
