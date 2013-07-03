@@ -1171,10 +1171,38 @@ else
 cat > /etc/cron.d/mailscanner << 'EOF'
 37 5 * * * /usr/sbin/update_phishing_sites
 07 * * * * /usr/sbin/update_bad_phishing_sites
-58 23 * * * /usr/sbin/clean.quarantine
+07 * * * * /usr/sbin/update_bad_phishing_emails
+#58 23 * * * /usr/sbin/clean.quarantine
 42 * * * * /usr/sbin/update_virus_scanners
 3,23,43 * * * * /usr/sbin/check_mailscanner
 EOF
+fi
+
+#Check if check_mailscanner exists, if not create it.
+if [[ -f /usr/sbin/check_mailscanner ]];
+        then
+        echo "check_mailscanner exists Skipping." ; sleep 3
+else
+curl $fluxlabsgit/ubuntu12/check_mailscanner -o /usr/sbin/check_mailscanner
+chmod +x /usr/sbin/check_mailscanner
+fi
+
+#Check if update_bad_phishing_sites exists, if not create it.
+if [[ -f /usr/sbin/ update_bad_phishing_sites ]];
+        then
+        echo " update_bad_phishing_sites exists Skipping." ; sleep 3
+else
+curl $fluxlabsgit/ubuntu12/update_bad_phishing_sites -o /usr/sbin/update_bad_phishing_sites
+chmod +x /usr/sbin/update_bad_phishing_sites
+fi
+
+#Check if update_bad_phishing_emails exists, if not create it.
+if [[ -f /usr/sbin/ update_bad_phishing_emails ]];
+        then
+        echo " update_bad_phishing_emails exists Skipping." ; sleep 3
+else
+curl $fluxlabsgit/ubuntu12/update_bad_phishing_emails -o /usr/sbin/update_bad_phishing_emails
+chmod +x /usr/sbin/update_bad_phishing_emails
 fi
 
 if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]]];
