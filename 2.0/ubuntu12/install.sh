@@ -871,7 +871,7 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
+if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
         then
         echo "Exim is already configured. Skipping"; sleep 3
 else
