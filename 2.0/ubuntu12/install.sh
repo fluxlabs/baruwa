@@ -1148,7 +1148,7 @@ echo "--------------------------------------------------------------------------
         sed -i 's:razor_config /var/lib/razor/razor-agent.conf:razor_config /var/lib/MailScanner/.razor/razor-agent.conf:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:envelope_sender_header X-Baruwa-Envelope-From:envelope_sender_header X-BaruwaFW-Envelope-From:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/sbin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
+        sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
 
         service mailscanner restart
