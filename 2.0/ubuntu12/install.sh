@@ -94,6 +94,12 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
+# Or, you can put your variables (as set above) in a file called local_vars
+# And we'll try to load it here.
+if [ -f ./local_vars ];
+    then
+    . ./local_vars
+fi
 
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
@@ -865,7 +871,7 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]]];
+if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
         then
         echo "Exim is already configured. Skipping"; sleep 3
 else
