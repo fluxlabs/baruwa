@@ -94,6 +94,13 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
+# Thanks Xaroth
+# When testing we'll want to store the install vars elsewhere. That way, when the install script is updated, we don't have to re-set all our
+# You can put your variables (as set above) in a file called local_vars and we'll try to load it here.
+if [ -f ./local_vars ];
+    then
+    . ./local_vars
+fi
 
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
@@ -177,7 +184,7 @@ fn_cleanup (){
 # +---------------------------------------------------+
 
 OS=`uname -s`
-if [ ${OS} = "Linux" ]]; then
+if [ ${OS} = "Linux" ]; then
     :
 else
     echo "Sorry, but this installer does not support the ${OS} platform."
@@ -509,7 +516,15 @@ echo "Installing mailscanner dependencies."
 apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl -y
 fn_clear
 
-wget http://launchpadlibrarian.net/85191561/libdigest-sha1-perl_2.13-2build2_$(uname -m | sed -e 's/x86_64/amd64/' -e 's/i686/i386/').deb && dpkg -i libdigest-sha1-perl_2.13-2build2_$(uname -m | sed -e 's/x86_64/amd64/' -e 's/i686/i386/').deb
+# Thanks Xaroth for this
+LIBDIGEST_URL="http://launchpadlibrarian.net/85191561/libdigest-sha1-perl_2.13-2build2_i386.deb"
+LIBDIGEST_FILE="libdigest-sha1-perl_2.13-2build2_i386.deb"
+if [ "$(uname -m)" = x86_64 ];
+    then
+    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_2.13-2build2_amd64.deb"
+    LIBDIGEST_FILE="libdigest-sha1-perl_2.13-2build2_amd64.deb"
+fi
+wget $LIBDIGEST_URL && dpkg -i $LIBDIGEST_FILE
 touch $track/dependencies
 fn_complete
 fi
@@ -532,7 +547,7 @@ sed -i s/"#listen-address="/"listen-address=127.0.0.1"/ /etc/dnsmasq.conf
 echo "Disabling IPV6"
 entries="# IPv6 \nnet.ipv6.conf.all.disable_ipv6 = 1 \nnet.ipv6.conf.default.disable_ipv6 = 1 \nnet.ipv6.conf.lo.disable_ipv6 = 1"
 echo -e $entries >> /etc/sysctl.conf
-sysctl -
+sysctl -p
 /etc/init.d/dnsmasq restart
 touch $track/dnsmasq
        fn_complete
@@ -858,7 +873,7 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]]];
+if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
         then
         echo "Exim is already configured. Skipping"; sleep 3
 else
@@ -923,7 +938,7 @@ echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
-if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]]];
+if [[ -d $builddir/libmemcached-$libmem && -f $track/libmem ]];
         then
         echo "It looks as though libmemcached was already compiled from source. Skipping."; sleep 3
 else
@@ -1194,7 +1209,7 @@ chmod +x /usr/sbin/check_mailscanner
 fi
 
 #Check if update_bad_phishing_sites exists, if not create it.
-if [[ -f /usr/sbin/ update_bad_phishing_sites ]];
+if [[ -f /usr/sbin/update_bad_phishing_sites ]];
         then
         echo " update_bad_phishing_sites exists Skipping." ; sleep 3
 else
@@ -1203,7 +1218,7 @@ chmod +x /usr/sbin/update_bad_phishing_sites
 fi
 
 #Check if update_bad_phishing_emails exists, if not create it.
-if [[ -f /usr/sbin/ update_bad_phishing_emails ]];
+if [[ -f /usr/sbin/update_bad_phishing_emails ]];
         then
         echo " update_bad_phishing_emails exists Skipping." ; sleep 3
 else
