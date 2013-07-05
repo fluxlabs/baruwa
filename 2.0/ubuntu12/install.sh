@@ -97,6 +97,8 @@ sslemail=$adminemail
 # Thanks Xaroth
 # When testing we'll want to store the install vars elsewhere. That way, when the install script is updated, we don't have to re-set all our
 # You can put your variables (as set above) in a file called local_vars and we'll try to load it here.
+#
+# Answers are saved to $track/answers .. could/should expand on this. See line #477
 if [ -f ./local_vars ];
     then
     . ./local_vars
@@ -110,14 +112,15 @@ fi
 
 date="6-29-2013"                                        	# Latest Date
 version="2.3.2"                                            	# Script Version
-ubuntuver="12.04"                                            	# Script ID
-baruwaver="2.0.1"                            			# Baruwa Version
+ubuntuver="12.04"                                           # Script ID
+baruwaver="2.0.1"                            				# Baruwa Version
 rabbitmq="3.1.1"                                        	# Rabbit MQ Version
 msver="4.84.6-1"                                        	# MailScanner Version
 msver1="4.84.6"                                         	# MS Config Version
 libmem="1.0.17"                                         	# LIB MEM Cache Version
 pythonver="2.7"                                         	# Python Version
-postgresver="9.1"						# PostgreSQL Version
+postgresver="9.1"											# PostgreSQL Version
+libdigestver="2.13-2build2"									# LIB Digest Version
 
 # +---------------------------------------------------+
 # More Stuff
@@ -516,14 +519,17 @@ echo "Installing mailscanner dependencies."
 apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl -y
 fn_clear
 
-# Thanks Xaroth for this
-LIBDIGEST_URL="http://launchpadlibrarian.net/85191561/libdigest-sha1-perl_2.13-2build2_i386.deb"
-LIBDIGEST_FILE="libdigest-sha1-perl_2.13-2build2_i386.deb"
+# Thanks Xaroth for this 
+# // Replaced with proper if/else
 if [ "$(uname -m)" = x86_64 ];
     then
-    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_2.13-2build2_amd64.deb"
-    LIBDIGEST_FILE="libdigest-sha1-perl_2.13-2build2_amd64.deb"
+    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_"$libdigestver_amd64".deb"
+    LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver_amd64".deb"
+else
+	LIBDIGEST_URL="http://launchpadlibrarian.net/85191561/libdigest-sha1-perl_"$libdigestver_i386".deb"
+	LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver_i386".deb" 
 fi
+cd $builddir
 wget $LIBDIGEST_URL && dpkg -i $LIBDIGEST_FILE
 touch $track/dependencies
 fn_complete
@@ -536,7 +542,7 @@ fi
 
 fn_dnsmasq (){
 fn_clear
-
+# Need to add nameserver 127.0.0.1 to line1 of /etc/resolv.conf 
 if [[ -a $track/dnsmasq ]];
         then
         echo "Dnsmasq is already configured. Skipping."
