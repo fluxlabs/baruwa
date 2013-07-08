@@ -1040,6 +1040,10 @@ else
         curl -O $baruwagit/extras/scripts/init/debian/baruwa.init
         mv baruwa.init /etc/init.d/baruwa
         chmod +x /etc/init.d/baruwa
+        # Baruwa Run script fix
+        sed -i s/"0760"/"0765"/ /etc/init.d/baruwa
+        sed -i s/"/var/log/celeryd.log"/"/var/log/baruwa/celeryd.log"/ /etc/init.d/baruwa
+        sed -i s/"/var/run/celeryd.pid"/"/var/run/baruwa/celeryd.pid"/ /etc/init.d/baruwa
         update-rc.d baruwa defaults
         service baruwa start
 fi
@@ -1114,9 +1118,7 @@ if [[ -f /etc/uwsgi/apps-enabled/production.ini ]];
         sed -i '/home/apaste = config:/etc/baruwa/production.ini' /etc/baruwa/production.ini
         sed -i '/paste/achmod-socket = 666' /etc/baruwa/production.ini
         ln -s /etc/baruwa/production.ini /etc/uwsgi/apps-enabled/
-        # Baruwa run perm fix
-        chmod 765 /var/run/baruwa
-
+        
         fn_clear
         fn_complete
 fi
