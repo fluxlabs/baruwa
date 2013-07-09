@@ -786,7 +786,7 @@ if dpkg --list | grep  mailscanner;
         sed -i s/"Incoming Work Group = clam"/"Incoming Work Group = clamav"/ /etc/MailScanner/MailScanner.conf
         sed -i 's:Virus Scanners = none:Virus Scanners = clamd:' /etc/MailScanner/MailScanner.conf
         sed -i 's:Custom Functions Dir = /usr/share/MailScanner/MailScanner/CustomFunctions:Custom Functions Dir = /etc/MailScanner/CustomFunctions:' /etc/MailScanner/MailScanner.conf
-        #sed -i s/"4.84.3"/"4.84.5"/ /etc/MailScanner/MailScanner.conf
+        sed -i s/"4.84.3"/"4.84.5"/ /etc/MailScanner/MailScanner.conf
         sed -i s/"\/var\/spool\/exim\/input"/"\/var\/spool\/exim4\/input"/ /etc/MailScanner/MailScanner.conf
         sed -i s/"#run_mailscanner"/"run_mailscanner"/ /etc/default/mailscanner
         sed -i s/"\/var\/lock\/MailScanner.off"/"\/var\/lock\/MailScanner\/MailScanner.off"/ /etc/init.d/mailscanner
@@ -884,24 +884,25 @@ if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
         echo "Exim is already configured. Skipping"; sleep 3
 else
         cd /etc/exim4
-        curl -O $baruwagit/extras/config/exim/exim.conf
-        curl -O $baruwagit/extras/config/exim/exim_out.conf
+        curl -O $fluxlabsgit/extras/config/exim/exim.conf
+        curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
         curl -O $baruwagit/extras/config/exim/macros.conf
         curl -O $baruwagit/extras/config/exim/trusted-configs
         mv /etc/exim4/exim.conf /etc/exim4/exim4.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim4.conf
         #Comment out tls_advertise_hosts
         sed -i 's:tls_advertise:#tls_advertise:' /etc/exim4/exim4.conf
-        #Comment out SPF Checks
-        sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
-        sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
-        sed -i s/"user = exim"/"user = Debian-exim"/ /etc/exim4/exim4.conf
-        sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
-        sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
         #Update Clamd socket in exim4.conf
         sed -i s/"clamd.sock"/"clamd.ctl"/ /etc/exim4/exim4.conf
+        sed -i s/"user = exim"/"user = Debian-exim"/ /etc/exim4/exim4.conf
+        #Comment out SPF Checks
+        #sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
+        #sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
+      	sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
+        #sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
+        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
+        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
+        sed -i s/"exim.conf"/"exim4.conf"/ /etc/exim4/trusted-configs
         
         mkdir $eximdir/baruwa
         cd $eximdir/baruwa
