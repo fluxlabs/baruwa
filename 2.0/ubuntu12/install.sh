@@ -762,7 +762,7 @@ if dpkg --list | grep  mailscanner;
         cd /etc/MailScanner
         mv MailScanner.conf MailScanner.conf.orig
         cd $home
-        curl -O $baruwagit/extras/config/mailscanner/MailScanner.conf
+        curl -O $fluxlabsgit/ubuntu12/MailScanner.conf
         curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
         curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
         curl -O $baruwagit/extras/config/mailscanner/filename.rules
@@ -770,7 +770,7 @@ if dpkg --list | grep  mailscanner;
         curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
         curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
         mv /etc/MailScanner/spam.assassin.prefs.conf /etc/MailScanner/spam.assassin.prefs.conf.orig
-        curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
+        curl -O $fluxlabsgit/ubuntu12/spam.asassin.prefs.conf
         mv *.rules /etc/MailScanner/rules/
         mv *.conf /etc/MailScanner/
         chmod -R 777 /var/spool/MailScanner/
@@ -778,23 +778,22 @@ if dpkg --list | grep  mailscanner;
 
         sed -i 's:/usr/local:/usr/:' /etc/MailScanner/autoupdate/clamav-autoupdate
         sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass':' /etc/MailScanner/MailScanner.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Run As User = exim"/"Run As User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Run As Group = exim"/"Run As Group = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Quarantine User = exim"/"Quarantine User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Incoming Work User = exim"/"Incoming Work User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Incoming Work Group = clam"/"Incoming Work Group = clamav"/ /etc/MailScanner/MailScanner.conf
-        sed -i 's:Virus Scanners = none:Virus Scanners = clamd:' /etc/MailScanner/MailScanner.conf
-        sed -i 's:Custom Functions Dir = /usr/share/MailScanner/MailScanner/CustomFunctions:Custom Functions Dir = /etc/MailScanner/CustomFunctions:' /etc/MailScanner/MailScanner.conf
-        sed -i s/"4.84.3"/"4.84.5"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"\/var\/spool\/exim\/input"/"\/var\/spool\/exim4\/input"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Run As User = exim"/"Run As User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Run As Group = exim"/"Run As Group = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Quarantine User = exim"/"Quarantine User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Incoming Work User = exim"/"Incoming Work User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Incoming Work Group = clam"/"Incoming Work Group = clamav"/ /etc/MailScanner/MailScanner.conf
+        #sed -i 's:Virus Scanners = none:Virus Scanners = clamd:' /etc/MailScanner/MailScanner.conf
+        #sed -i 's:Custom Functions Dir = /usr/share/MailScanner/MailScanner/CustomFunctions:Custom Functions Dir = /etc/MailScanner/CustomFunctions:' /etc/MailScanner/MailScanner.conf
+        #sed -i s/"4.84.3"/"4.84.5"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"\/var\/spool\/exim\/input"/"\/var\/spool\/exim4\/input"/ /etc/MailScanner/MailScanner.conf
         sed -i s/"#run_mailscanner"/"run_mailscanner"/ /etc/default/mailscanner
         sed -i s/"\/var\/lock\/MailScanner.off"/"\/var\/lock\/MailScanner\/MailScanner.off"/ /etc/init.d/mailscanner
         sed -i s/"\/var\/lock\/subsys\/mailscanner"/"\/var\/lock\/MailScanner\/mailscanner"/ /etc/init.d/mailscanner
         sed -i 's:%org-name% = BARUWA:%org-name% = '$orgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%org-long-name% = BARUWA MAILFW:%org-long-name% = '$lorgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%web-site% = hosted.baruwa.net:%web-site% = '$web':' /etc/MailScanner/MailScanner.conf
-        sed -i 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa:bayes_ignore_header X-'$orgname'-BaruwaFW:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamCheck:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamCheck:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamScore:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamScore:' /etc/MailScanner/spam.assassin.prefs.conf
@@ -804,9 +803,9 @@ if dpkg --list | grep  mailscanner;
         #Add '20i{clamd} to virus.scanners.conf
 	sed -i '20i{clamd}\         /bin/false\                              /usr/local ' /etc/MailScanner/virus.scanners.conf
 	#Fix file-command path to /usr/bin/file in MailScanner.conf
-	sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
+	#sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
 	#Change clamd.socket to clamd.ctl in MailScanner.conf
-	sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
+	#sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
 	   
         #Setup Bayes Database
 	echo "Creating role sa_user"
@@ -822,13 +821,13 @@ if dpkg --list | grep  mailscanner;
 	fn_clear
 	echo "Updating spam.assassin.prefs.conf for sa_bayes."
 	sed -i 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:6432:5432:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:bayes_sql_override_username bayes:bayes_sql_override_username root:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:bayes_sql_username bayes:bayes_sql_username sa_user:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:baruwa:sa_bayes:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:6432:5432:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:bayes_sql_override_username bayes:bayes_sql_override_username root:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:bayes_sql_username bayes:bayes_sql_username sa_user:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:baruwa:sa_bayes:' /etc/MailScanner/spam.assassin.prefs.conf
 	#Comment out bayes awl whitelist entries in spam.assassin.prefs.conf
-	sed -i 's:auto_whitelist:#auto_whitelist:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:user_:#user_:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:auto_whitelist:#auto_whitelist:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:user_:#user_:' /etc/MailScanner/spam.assassin.prefs.conf
         
         touch $track/mailscanner
 fn_complete
@@ -1153,12 +1152,12 @@ echo "--------------------------------------------------------------------------
         echo "Updating spam.assassin.prefs.conf with settings."; sleep 3
         sed -i 's:= 3:= 0:' /var/lib/MailScanner/.razor/razor-agent.conf
         sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
-        sed -i 's:pyzor_options --homedir /var/lib/pyzor:pyzor_options --homedir /var/lib/MailScanner/:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:razor_config /var/lib/razor/razor-agent.conf:razor_config /var/lib/MailScanner/.razor/razor-agent.conf:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:envelope_sender_header X-Baruwa-Envelope-From:envelope_sender_header X-BaruwaFW-Envelope-From:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:pyzor_options --homedir /var/lib/pyzor:pyzor_options --homedir /var/lib/MailScanner/:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:razor_config /var/lib/razor/razor-agent.conf:razor_config /var/lib/MailScanner/.razor/razor-agent.conf:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:envelope_sender_header X-Baruwa-Envelope-From:envelope_sender_header X-BaruwaFW-Envelope-From:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
         echo "Initializing sa_bayes database"
 	sa-learn --sync
 
