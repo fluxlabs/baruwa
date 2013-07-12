@@ -417,6 +417,50 @@ echo 'Websites do not match. Please try again.'
 echo ''
 done
 
+while :
+do
+fn_clear
+
+echo "------------------------------------------------------------------------------";
+echo "S S L  K E Y  G E N E R A T I O N";
+echo "------------------------------------------------------------------------------";
+
+echo ""
+echo "What would you like to use for your SSL Country?"
+echo "ie: US"
+IFS= read -p "SSL Country: " sslcountry
+IFS= read -p "SSL Country Again: " sslcountry2
+[[ $sslcountry = "$sslcountry2" ]] && break
+echo ''
+echo 'SSL Country does not match. Please try again.'
+echo ''
+done
+while :
+do
+echo ""
+echo "What would you like to use for your SSL Province?"
+echo "ie: New York"
+IFS= read -p "SSL Province: " sslprovince
+IFS= read -p "SSL Province Again: " sslprovince2
+[[ $lsslprovince = "$sslpronvice2" ]] && break
+echo ''
+echo 'SSL Province does not match. Please try again.'
+echo ''
+done
+
+while :
+do
+echo ""
+echo "What would you like to use for your SSL City?"
+echo "ie: NYC"
+IFS= read -p "SSL City: " sslcity
+IFS= read -p "SSL City Again: " sslcity2
+[[ $sslcity = "$sslcity2" ]] && break
+echo ''
+echo 'SSL City does not match. Please try again.'
+echo ''
+done
+
 fn_clear
 
 if [[ -f $track/pssql ]];
@@ -1306,15 +1350,10 @@ freshclam
 /usr/sbin/clamav-unofficial-sigs
 service clamav-daemon restart
 }
+
 fn_generate_key () {
-if [[ $useauto = 1 ]];
-                then
-        openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
-        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/.
-else
-        openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
-        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/.
-fi
+        openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$orgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
+        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/
 fn_clear
 }
 
