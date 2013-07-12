@@ -584,6 +584,7 @@ export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/
 curl -O $baruwagit/requirements.txt
 sed -i -e 's:pyparsing<2.0:pyparsing==1.5.7:' /home/baruwa/requirements.txt
 sed -i -e 's:SQLAlchemy:SQLAlchemy==0.7:' /home/baruwa/requirements.txt
+sed -i -e 's:psutil:psutil==0.7.1:' /home/baruwa/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install --timeout 60 -r requirements.txt
