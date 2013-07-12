@@ -770,7 +770,7 @@ if dpkg --list | grep  mailscanner;
         curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
         curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
         mv /etc/MailScanner/spam.assassin.prefs.conf /etc/MailScanner/spam.assassin.prefs.conf.orig
-        curl -O $fluxlabsgit/ubuntu12/spam.asassin.prefs.conf
+        curl -O $fluxlabsgit/ubuntu12/spam.assassin.prefs.conf
         mv *.rules /etc/MailScanner/rules/
         mv *.conf /etc/MailScanner/
         chmod -R 777 /var/spool/MailScanner/
