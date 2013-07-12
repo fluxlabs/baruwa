@@ -88,12 +88,6 @@ sslcity='Your City'
 # SSL Organization Name
 sslorg='Your Organization'
 
-# SSL Common Name
-sslcommon=$baruwadomain
-
-# SSL Email
-sslemail=$adminemail
-
 # Thanks Xaroth
 # When testing we'll want to store the install vars elsewhere. That way, when the install script is updated, we don't have to re-set all our
 # You can put your variables (as set above) in a file called local_vars and we'll try to load it here.
