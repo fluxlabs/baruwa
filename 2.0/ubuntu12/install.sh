@@ -88,12 +88,6 @@ sslcity='Your City'
 # SSL Organization Name
 sslorg='Your Organization'
 
-# SSL Common Name
-sslcommon=$baruwadomain
-
-# SSL Email
-sslemail=$adminemail
-
 # Thanks Xaroth
 # When testing we'll want to store the install vars elsewhere. That way, when the install script is updated, we don't have to re-set all our
 # You can put your variables (as set above) in a file called local_vars and we'll try to load it here.
@@ -417,6 +411,50 @@ echo 'Websites do not match. Please try again.'
 echo ''
 done
 
+while :
+do
+fn_clear
+
+echo "------------------------------------------------------------------------------";
+echo "S S L  K E Y  G E N E R A T I O N";
+echo "------------------------------------------------------------------------------";
+
+echo ""
+echo "What would you like to use for your SSL Country?"
+echo "ie: US"
+IFS= read -p "SSL Country: " sslcountry
+IFS= read -p "SSL Country Again: " sslcountry2
+[[ $sslcountry = "$sslcountry2" ]] && break
+echo ''
+echo 'SSL Country does not match. Please try again.'
+echo ''
+done
+while :
+do
+echo ""
+echo "What would you like to use for your SSL Province?"
+echo "ie: New York"
+IFS= read -p "SSL Province: " sslprovince
+IFS= read -p "SSL Province Again: " sslprovince2
+[[ $lsslprovince = "$sslpronvice2" ]] && break
+echo ''
+echo 'SSL Province does not match. Please try again.'
+echo ''
+done
+
+while :
+do
+echo ""
+echo "What would you like to use for your SSL City?"
+echo "ie: NYC"
+IFS= read -p "SSL City: " sslcity
+IFS= read -p "SSL City Again: " sslcity2
+[[ $sslcity = "$sslcity2" ]] && break
+echo ''
+echo 'SSL City does not match. Please try again.'
+echo ''
+done
+
 fn_clear
 
 if [[ -f $track/pssql ]];
@@ -516,7 +554,7 @@ apt-get install python-setuptools python-virtualenv postgresql postgresql-plpyth
 fn_clear
 
 echo "Installing mailscanner dependencies."
-apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl -y
+apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl libtest-pod-perl libbusiness-isbn-perl libdata-dump-perl libinline-perl libnet-dns-resolver-programmable-perl -y
 fn_clear
 
 # Thanks Xaroth for this 
@@ -584,6 +622,7 @@ export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/
 curl -O $baruwagit/requirements.txt
 sed -i -e 's:pyparsing<2.0:pyparsing==1.5.7:' /home/baruwa/requirements.txt
 sed -i -e 's:SQLAlchemy:SQLAlchemy==0.7:' /home/baruwa/requirements.txt
+sed -i -e 's:psutil:psutil==0.7.1:' /home/baruwa/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install --timeout 60 -r requirements.txt
@@ -762,7 +801,7 @@ if dpkg --list | grep  mailscanner;
         cd /etc/MailScanner
         mv MailScanner.conf MailScanner.conf.orig
         cd $home
-        curl -O $baruwagit/extras/config/mailscanner/MailScanner.conf
+        curl -O $fluxlabsgit/ubuntu12/MailScanner.conf
         curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
         curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
         curl -O $baruwagit/extras/config/mailscanner/filename.rules
@@ -770,7 +809,7 @@ if dpkg --list | grep  mailscanner;
         curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
         curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
         mv /etc/MailScanner/spam.assassin.prefs.conf /etc/MailScanner/spam.assassin.prefs.conf.orig
-        curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
+        curl -O $fluxlabsgit/ubuntu12/spam.assassin.prefs.conf
         mv *.rules /etc/MailScanner/rules/
         mv *.conf /etc/MailScanner/
         chmod -R 777 /var/spool/MailScanner/
@@ -778,23 +817,22 @@ if dpkg --list | grep  mailscanner;
 
         sed -i 's:/usr/local:/usr/:' /etc/MailScanner/autoupdate/clamav-autoupdate
         sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass':' /etc/MailScanner/MailScanner.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Run As User = exim"/"Run As User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Run As Group = exim"/"Run As Group = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Quarantine User = exim"/"Quarantine User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Incoming Work User = exim"/"Incoming Work User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"Incoming Work Group = clam"/"Incoming Work Group = clamav"/ /etc/MailScanner/MailScanner.conf
-        sed -i 's:Virus Scanners = none:Virus Scanners = clamd:' /etc/MailScanner/MailScanner.conf
-        sed -i 's:Custom Functions Dir = /usr/share/MailScanner/MailScanner/CustomFunctions:Custom Functions Dir = /etc/MailScanner/CustomFunctions:' /etc/MailScanner/MailScanner.conf
+        #sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Run As User = exim"/"Run As User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Run As Group = exim"/"Run As Group = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Quarantine User = exim"/"Quarantine User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Incoming Work User = exim"/"Incoming Work User = Debian-exim"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"Incoming Work Group = clam"/"Incoming Work Group = clamav"/ /etc/MailScanner/MailScanner.conf
+        #sed -i 's:Virus Scanners = none:Virus Scanners = clamd:' /etc/MailScanner/MailScanner.conf
+        #sed -i 's:Custom Functions Dir = /usr/share/MailScanner/MailScanner/CustomFunctions:Custom Functions Dir = /etc/MailScanner/CustomFunctions:' /etc/MailScanner/MailScanner.conf
         #sed -i s/"4.84.3"/"4.84.5"/ /etc/MailScanner/MailScanner.conf
-        sed -i s/"\/var\/spool\/exim\/input"/"\/var\/spool\/exim4\/input"/ /etc/MailScanner/MailScanner.conf
+        #sed -i s/"\/var\/spool\/exim\/input"/"\/var\/spool\/exim4\/input"/ /etc/MailScanner/MailScanner.conf
         sed -i s/"#run_mailscanner"/"run_mailscanner"/ /etc/default/mailscanner
         sed -i s/"\/var\/lock\/MailScanner.off"/"\/var\/lock\/MailScanner\/MailScanner.off"/ /etc/init.d/mailscanner
         sed -i s/"\/var\/lock\/subsys\/mailscanner"/"\/var\/lock\/MailScanner\/mailscanner"/ /etc/init.d/mailscanner
         sed -i 's:%org-name% = BARUWA:%org-name% = '$orgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%org-long-name% = BARUWA MAILFW:%org-long-name% = '$lorgname':' /etc/MailScanner/MailScanner.conf
         sed -i 's:%web-site% = hosted.baruwa.net:%web-site% = '$web':' /etc/MailScanner/MailScanner.conf
-        sed -i 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa:bayes_ignore_header X-'$orgname'-BaruwaFW:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamCheck:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamCheck:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamScore:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamScore:' /etc/MailScanner/spam.assassin.prefs.conf
@@ -804,9 +842,9 @@ if dpkg --list | grep  mailscanner;
         #Add '20i{clamd} to virus.scanners.conf
 	sed -i '20i{clamd}\         /bin/false\                              /usr/local ' /etc/MailScanner/virus.scanners.conf
 	#Fix file-command path to /usr/bin/file in MailScanner.conf
-	sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
+	#sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
 	#Change clamd.socket to clamd.ctl in MailScanner.conf
-	sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
+	#sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
 	   
         #Setup Bayes Database
 	echo "Creating role sa_user"
@@ -822,13 +860,13 @@ if dpkg --list | grep  mailscanner;
 	fn_clear
 	echo "Updating spam.assassin.prefs.conf for sa_bayes."
 	sed -i 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:6432:5432:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:bayes_sql_override_username bayes:bayes_sql_override_username root:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:bayes_sql_username bayes:bayes_sql_username sa_user:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:baruwa:sa_bayes:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:6432:5432:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:bayes_sql_override_username bayes:bayes_sql_override_username root:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:bayes_sql_username bayes:bayes_sql_username sa_user:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:baruwa:sa_bayes:' /etc/MailScanner/spam.assassin.prefs.conf
 	#Comment out bayes awl whitelist entries in spam.assassin.prefs.conf
-	sed -i 's:auto_whitelist:#auto_whitelist:' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i 's:user_:#user_:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:auto_whitelist:#auto_whitelist:' /etc/MailScanner/spam.assassin.prefs.conf
+	#sed -i 's:user_:#user_:' /etc/MailScanner/spam.assassin.prefs.conf
         
         touch $track/mailscanner
 fn_complete
@@ -884,24 +922,25 @@ if [[-f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
         echo "Exim is already configured. Skipping"; sleep 3
 else
         cd /etc/exim4
-        curl -O $baruwagit/extras/config/exim/exim.conf
-        curl -O $baruwagit/extras/config/exim/exim_out.conf
+        curl -O $fluxlabsgit/extras/config/exim/exim.conf
+        curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
         curl -O $baruwagit/extras/config/exim/macros.conf
         curl -O $baruwagit/extras/config/exim/trusted-configs
         mv /etc/exim4/exim.conf /etc/exim4/exim4.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim4.conf
         #Comment out tls_advertise_hosts
         sed -i 's:tls_advertise:#tls_advertise:' /etc/exim4/exim4.conf
-        #Comment out SPF Checks
-        sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
-        sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
-        sed -i s/"user = exim"/"user = Debian-exim"/ /etc/exim4/exim4.conf
-        sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
-        sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
-        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
         #Update Clamd socket in exim4.conf
         sed -i s/"clamd.sock"/"clamd.ctl"/ /etc/exim4/exim4.conf
+        sed -i s/"user = exim"/"user = Debian-exim"/ /etc/exim4/exim4.conf
+        #Comment out SPF Checks
+        #sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
+        #sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
+      	sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
+        #sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
+        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
+        sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
+        sed -i s/"exim.conf"/"exim4.conf"/ /etc/exim4/trusted-configs
         
         mkdir $eximdir/baruwa
         cd $eximdir/baruwa
@@ -928,7 +967,7 @@ else
         echo "Please press Yes/Enter throughout the questions."
         fn_confirm
 
-        cpan -i Encoding::FixLatin AnyEvent::Handle EV IP::Country::Fast Encode::Detect Crypt::OpenSSL::RSA
+	perl -MCPAN -e "CPAN::Shell->force(qw(install Mail::SPF::Query Digest::SHA1 Parse::RecDescent SAVI Test::Manifest YAML Business::ISBN Data::Dump Encoding::FixLatin AnyEvent::Handle EV IP::Country::Fast Encode::Detect Crypt::OpenSSL::RSA));"
         touch $track/perlmods
 fn_complete
 fi
@@ -1040,6 +1079,10 @@ else
         curl -O $baruwagit/extras/scripts/init/debian/baruwa.init
         mv baruwa.init /etc/init.d/baruwa
         chmod +x /etc/init.d/baruwa
+        # Baruwa Run script fix
+        sed -i s/"0760"/"0765"/ /etc/init.d/baruwa
+        sed -i s/"/var/log/celeryd.log"/"/var/log/baruwa/celeryd.log"/ /etc/init.d/baruwa
+        sed -i s/"/var/run/celeryd.pid"/"/var/run/baruwa/celeryd.pid"/ /etc/init.d/baruwa
         update-rc.d baruwa defaults
         service baruwa start
 fi
@@ -1114,9 +1157,7 @@ if [[ -f /etc/uwsgi/apps-enabled/production.ini ]];
         sed -i '/home/apaste = config:/etc/baruwa/production.ini' /etc/baruwa/production.ini
         sed -i '/paste/achmod-socket = 666' /etc/baruwa/production.ini
         ln -s /etc/baruwa/production.ini /etc/uwsgi/apps-enabled/
-        # Baruwa run perm fix
-        chmod 765 /var/run/baruwa
-
+        
         fn_clear
         fn_complete
 fi
@@ -1150,12 +1191,12 @@ echo "--------------------------------------------------------------------------
         echo "Updating spam.assassin.prefs.conf with settings."; sleep 3
         sed -i 's:= 3:= 0:' /var/lib/MailScanner/.razor/razor-agent.conf
         sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
-        sed -i 's:pyzor_options --homedir /var/lib/pyzor:pyzor_options --homedir /var/lib/MailScanner/:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:razor_config /var/lib/razor/razor-agent.conf:razor_config /var/lib/MailScanner/.razor/razor-agent.conf:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:envelope_sender_header X-Baruwa-Envelope-From:envelope_sender_header X-BaruwaFW-Envelope-From:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:pyzor_options --homedir /var/lib/pyzor:pyzor_options --homedir /var/lib/MailScanner/:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:razor_config /var/lib/razor/razor-agent.conf:razor_config /var/lib/MailScanner/.razor/razor-agent.conf:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:envelope_sender_header X-Baruwa-Envelope-From:envelope_sender_header X-BaruwaFW-Envelope-From:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i '25i ifplugin Mail::SpamAssassin::Plugin::DCC' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i 's:dcc_home /etc/dcc/:dcc_path /usr/bin/dccproc:' /etc/MailScanner/spam.assassin.prefs.conf
+        #sed -i '27i endif' /etc/MailScanner/spam.assassin.prefs.conf
         echo "Initializing sa_bayes database"
 	sa-learn --sync
 
@@ -1303,15 +1344,10 @@ freshclam
 /usr/sbin/clamav-unofficial-sigs
 service clamav-daemon restart
 }
+
 fn_generate_key () {
-if [[ $useauto = 1 ]];
-                then
-        openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
-        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/.
-else
-        openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
-        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/.
-fi
+        openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$orgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
+        mkdir /etc/pki && mkdir /etc/pki/baruwa && mv baruwa.* /etc/pki/baruwa/
 fn_clear
 }
 
