@@ -95,8 +95,8 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="6-29-2013"						# Latest Date
-version="2.3.2"							# Script Version
+date="8-5-2013"						# Latest Date
+version="2.3.3"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
@@ -138,9 +138,9 @@ fn_confirm (){
 fn_pause (){
 	echo ""
 	echo "------------------------------------------------------------------------------";
-	read -p "You are walking through the script. Press [Enter] to Continue" 
+	read -p "You are walking through the script. Press [Enter] to Continue" fackEnterKey
 	echo "------------------------------------------------------------------------------";
-	fackEnterKey
+	
 }
 
 fn_clear () {
@@ -687,7 +687,6 @@ if rpm -q --quiet mailscanner;
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	rm -f /etc/mail/spamassassin/mailscanner.cf
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
 fn_complete
@@ -1217,11 +1216,12 @@ fn_pyzor_razor_dcc () {
 	yum install pyzor razor-agents dcc -y
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
-	mkdir /var/lib/{pyzor, razor}; cd /var/lib/pyzor
+	mkdir /var/lib/pyzor; mkdir /var/lib/razor; cd /var/lib/pyzor
 	pyzor discover
 	razor-admin -create
 	razor-admin -register
-	mv /root/.razor/* /var/lib/razor; chown -R exim: /var/lib/razor
+	#mv /root/.razor/* /var/lib/razor
+	chown -R exim: /var/lib/razor
 	yum update -y
 	fn_clear
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
