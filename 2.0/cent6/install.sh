@@ -533,6 +533,7 @@ pip install distribute
 pip install -U distribute
 pip install python-memcached
 pip install --timeout 120 -r requirements.txt
+pip install babel==0.9.6
 cd $home
 #curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py 
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
