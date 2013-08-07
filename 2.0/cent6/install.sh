@@ -579,7 +579,7 @@ sed -e "s/^#timezone = \(.*\)$/timezone = 'UTC'/" -i /var/lib/pgsql/data/postgre
 service postgresql restart
 cd $home
 su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$pssqlpass';\""
-su - postgres -c 'createdb -E UTF8 -O baruwa -T template1 baruwa'
+su - postgres -c 'createdb -E UTF8 -O baruwa -T template0 baruwa'
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
 curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
@@ -918,13 +918,24 @@ fi
 # Apache2 Function
 # +---------------------------------------------------+
 
-fn_apache (){
+fn_http (){
 fn_clear
 echo "------------------------------------------------------------------------------";
-echo "A P A C H E  I N S T A L L A T I O N";
+echo "H T T P  I N S T A L L A T I O N";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
+if [ $vps == 1 ];
+	then
+	yum install python-pip
+	pip install uwqsgi
+	mkdir -p /var/log/uwsgi; touch /var/log/uwsgi/uwsgi-baruwa.log
+	curl -O https://raw.github.com/akissa/baruwa2/2.0.0/extras/config/uwsgi/nginx.conf
+	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
+	sed -i -e 's:ms.home.topdog-software.com:'$baruwadomain':' /etc/nginx/conf.d/baruwa.conf
+	service nginx restart
+else
+	
 if rpm -q --quiet httpd;
 	then
 	echo "It looks like Apache is already installed. Skipping."; sleep 3
@@ -1048,6 +1059,7 @@ else
 	touch $track/sphinx
 fi
 
+yum remove bind-chroot -y
 yum update -y
 
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
@@ -1221,8 +1233,16 @@ fn_pyzor_razor_dcc () {
 	pyzor discover
 	razor-admin -create
 	razor-admin -register
-	#mv /root/.razor/* /var/lib/razor
+	mv /root/.razor/* /var/lib/razor
 	chown -R exim: /var/lib/razor
+	
+	cd /usr/src
+	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
+	gzip -d dcc.tar.Z
+	tar -xf dcc.tar*
+	cd dcc-*
+	./configure && make && make install
+	
 	yum update -y
 	fn_clear
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
@@ -1277,7 +1297,7 @@ read_main() {
 			fn_libmem
 			fn_configuration
 			fn_administrator
-			fn_apache
+			fn_http
 			fn_pyzor_razor_dcc
 			fn_cronjobs
 			fn_services
