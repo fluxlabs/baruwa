@@ -1,0 +1,5 @@
+urirhssub SEM_URI uribl.spameatingmonkey.net. A 2
+body SEM_URI eval:check_uridnsbl('SEM_URI')
+describe SEM_URI Contains a URI listed by SEM-URI
+tflags SEM_URI net
+score SEM_URI 5.0
