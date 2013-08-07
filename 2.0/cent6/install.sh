@@ -1246,7 +1246,6 @@ fn_pyzor_razor_dcc () {
 	yum update -y
 	fn_clear
 	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
-	sed -i 's:dcc_path /usr/local/bin/dccproc:dcc_path /usr/bin/dccproc:' /etc/mail/spamassassin/mailscanner.cf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
