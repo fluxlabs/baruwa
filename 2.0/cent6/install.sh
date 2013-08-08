@@ -1073,9 +1073,11 @@ chmod o+w,g+w /var/lock/baruwa
 usermod -G exim baruwa
 
 sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-sed -i -e '19 s:usr/local:usr/bin:' /etc/MailScanner/virus.scanners.conf
+sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
 cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-yum install clamav-unofficial-sigs -y
+wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 
 service httpd start
 chkconfig --level 345 httpd on
