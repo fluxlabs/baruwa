@@ -584,7 +584,15 @@ su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
 curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
+
+# Bayes/AWL DB
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/bayes-postgresq.sql
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgresql.sql 
+su - postgres -c 'psql baruwa -f /tmp/bayes-postgresq.sql'
+su - postgres -c 'psql baruwa -f /tmp/awl-postgresql.sql'
+
 service postgresql restart
+
 cd /etc/sphinx; mv /etc/sphinx/sphinx.conf /etc/sphinx/sphinx.conf.orig
 curl -O $baruwagit/extras/config/sphinx/sphinx.conf
 sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
@@ -675,7 +683,7 @@ if rpm -q --quiet mailscanner;
 	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
 	curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
@@ -925,6 +933,7 @@ echo "H T T P  I N S T A L L A T I O N";
 echo "------------------------------------------------------------------------------";
 sleep 3
 
+# Work in Progress - Still need to tweak the NGINX/WSGI configs .. no variable defined for $vps
 if [ $vps == 1 ];
 	then
 	yum install python-pip
@@ -952,6 +961,53 @@ else
 	fn_clear
 	fn_complete
 fi
+}
+
+# +---------------------------------------------------+
+# Pyzor, Razor & DCC Install from Atomic Repo
+# +---------------------------------------------------+
+
+fn_pyzor_razor_dcc () {
+	fn_clear
+	echo "------------------------------------------------------------------------------";
+	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
+	echo "------------------------------------------------------------------------------";
+	echo ""; sleep 3
+	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
+	sed -i "31,83d #" atomic
+	sh atomic
+	yum install pyzor razor-agents -y
+	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
+	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
+	mkdir /var/lib/pyzor; mkdir /var/lib/razor; cd /var/lib/pyzor
+	pyzor discover
+	razor-admin -home=/etc/mail/spamassassin/.razor -register
+	razor-admin -home=/etc/mail/spamassassin/.razor -create
+	razor-admin -home=/etc/mail/spamassassin/.razor -discover
+	mv /root/.razor/* /var/lib/razor
+	chown -R exim: /var/lib/razor
+	
+	cd /usr/src
+	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
+	gzip -d dcc.tar.Z
+	tar -xf dcc.tar*
+	cd dcc-*
+	./configure && make && make install
+	
+	yum update -y
+	fn_clear
+	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
+	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
+	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::AWL/loadplugin Mail::SpamAssassin::Plugin::AWL/\" /etc/mail/spamassassin/v310.pre
+	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody/loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody/\" /etc/mail/spamassassin/v320.pre
+	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::RelayCountry/loadplugin Mail::SpamAssassin::Plugin::RelayCountry/\" /etc/mail/spamassassin/init.pre
+	chown -R exim: /var/spool/MailScanner/
+	chown -R exim: /var/lib/MailScanner/
+	service MailScanner restart
+	fn_complete
 }
 
 # +---------------------------------------------------+
@@ -1060,7 +1116,6 @@ else
 fi
 
 yum remove bind-chroot -y
-yum update -y
 
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
@@ -1078,6 +1133,7 @@ cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassi
 wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+yum update -y
 
 service httpd start
 chkconfig --level 345 httpd on
@@ -1215,50 +1271,6 @@ echo ""
 fn_confirm
 }
 
-# +---------------------------------------------------+
-# Pyzor, Razor & DCC Install from Atomic Repo
-# +---------------------------------------------------+
-
-fn_pyzor_razor_dcc () {
-	fn_clear
-	echo "------------------------------------------------------------------------------";
-	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
-	echo "------------------------------------------------------------------------------";
-	echo ""; sleep 3
-	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
-	sed -i "31,83d #" atomic
-	sh atomic
-	yum install pyzor razor-agents dcc -y
-	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
-	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
-	mkdir /var/lib/pyzor; mkdir /var/lib/razor; cd /var/lib/pyzor
-	pyzor discover
-	razor-admin -create
-	razor-admin -register
-	mv /root/.razor/* /var/lib/razor
-	chown -R exim: /var/lib/razor
-	
-	cd /usr/src
-	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
-	gzip -d dcc.tar.Z
-	tar -xf dcc.tar*
-	cd dcc-*
-	./configure && make && make install
-	
-	yum update -y
-	fn_clear
-	sed -i 's:= 3:= 0:' /root/.razor/razor-agent.conf
-	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
-	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
-	cp -R /root/.pyzor /var/lib/MailScanner
-	cp -R /root/.razor /var/lib/MailScanner
-	chown -R exim: /var/spool/MailScanner/
-	chown -R exim: /var/lib/MailScanner/
-	service MailScanner restart
-	fn_complete
-}
 
 # +---------------------------------------------------+
 # Display menus
