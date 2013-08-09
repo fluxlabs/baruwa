@@ -1116,7 +1116,7 @@ else
 fi
 
 yum remove bind-chroot -y
-
+sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
