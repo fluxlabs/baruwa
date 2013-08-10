@@ -934,16 +934,16 @@ echo "--------------------------------------------------------------------------
 sleep 3
 
 # Work in Progress - Still need to tweak the NGINX/WSGI configs .. no variable defined for $vps
-if [ $vps == 1 ];
-	then
-	yum install python-pip
-	pip install uwqsgi
-	mkdir -p /var/log/uwsgi; touch /var/log/uwsgi/uwsgi-baruwa.log
-	curl -O https://raw.github.com/akissa/baruwa2/2.0.0/extras/config/uwsgi/nginx.conf
-	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
-	sed -i -e 's:ms.home.topdog-software.com:'$baruwadomain':' /etc/nginx/conf.d/baruwa.conf
-	service nginx restart
-else
+#if [ $vps == 1 ];
+#	then
+#	yum install python-pip
+#	pip install uwqsgi
+#	mkdir -p /var/log/uwsgi; touch /var/log/uwsgi/uwsgi-baruwa.log
+#	curl -O https://raw.github.com/akissa/baruwa2/2.0.0/extras/config/uwsgi/nginx.conf
+#	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
+#	sed -i -e 's:ms.home.topdog-software.com:'$baruwadomain':' /etc/nginx/conf.d/baruwa.conf
+#	service nginx restart
+#else
 	
 if rpm -q --quiet httpd;
 	then
