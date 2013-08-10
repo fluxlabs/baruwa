@@ -95,8 +95,8 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-6-2013"						# Latest Date
-version="2.3.4"							# Script Version
+date="8-10-2013"						# Latest Date
+version="2.3.5"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
@@ -108,7 +108,8 @@ msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
-postgresver="9.1"											# PostgreSQL Version
+postgresver="9.1"						# PostgreSQL Version
+spamassver="3.3.1"						# Spamasassin Version
 
 # +---------------------------------------------------+
 # More Stuff
@@ -571,6 +572,7 @@ service postgresql start
 cat > /var/lib/pgsql/data/pg_hba.conf << 'EOF'
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 local   all         postgres                          trust
+local	all	    	baruwa			      			  trust
 host    all         all         127.0.0.1/32          md5
 host    all         all         ::1/128               md5
 EOF
@@ -683,6 +685,7 @@ if rpm -q --quiet mailscanner;
 	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
 	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
 	curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
+	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
 	mv *.conf /etc/MailScanner/
@@ -974,18 +977,17 @@ fn_pyzor_razor_dcc () {
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
-	sed -i "31,83d #" atomic
+	sed -i "48,93d #" atomic
 	sh atomic
-	yum install pyzor razor-agents -y
+	yum install pyzor razor-agents perl-Razor-Agent -y
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
 	mkdir /var/lib/pyzor; mkdir /var/lib/razor; cd /var/lib/pyzor
 	pyzor discover
+	mkdir /etc/mail/spamassassin/.razor
 	razor-admin -home=/etc/mail/spamassassin/.razor -register
 	razor-admin -home=/etc/mail/spamassassin/.razor -create
 	razor-admin -home=/etc/mail/spamassassin/.razor -discover
-	mv /root/.razor/* /var/lib/razor
-	chown -R exim: /var/lib/razor
 	
 	cd /usr/src
 	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
@@ -1001,9 +1003,10 @@ fn_pyzor_razor_dcc () {
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::AWL/loadplugin Mail::SpamAssassin::Plugin::AWL/\" /etc/mail/spamassassin/v310.pre
-	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody/loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody/\" /etc/mail/spamassassin/v320.pre
-	sed -i -e \"s/^#loadplugin Mail::SpamAssassin::Plugin::RelayCountry/loadplugin Mail::SpamAssassin::Plugin::RelayCountry/\" /etc/mail/spamassassin/init.pre
+	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
+	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
+	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
+	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 	chown -R exim: /var/spool/MailScanner/
 	chown -R exim: /var/lib/MailScanner/
 	service MailScanner restart
