@@ -1120,6 +1120,7 @@ sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
 /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
 /etc/MailScanner/baruwa/rules
+mkdir /var/lib/baruwa/.spamassassin
 chown apache:baruwa -R /var/lib/baruwa
 chown baruwa: /var/run/baruwa
 chown baruwa: /var/log/baruwa
@@ -1158,8 +1159,9 @@ fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
 usermod -G exim clam
+rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 touch /var/log/clamav/freshclam.log
-chown clam /var/logclamav//freshclam.log
+chown clam /var/log/clamav/freshclam.log
 chown -R clam:clamav /var/lib/clamav
 sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 freshclam
