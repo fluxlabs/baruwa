@@ -102,7 +102,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.1.3-1"						# Rabbit MQ Version
+rabbitmq="3.1.4-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"                      	# LIB MEM Cache Version
@@ -586,10 +586,10 @@ curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 
 # Bayes/AWL DB
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/bayes-postgresq.sql
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgresql.sql 
-su - postgres -c 'psql baruwa -f /tmp/bayes-postgresq.sql'
-su - postgres -c 'psql baruwa -f /tmp/awl-postgresql.sql'
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/bayes-postgres.sql
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgres.sql 
+su - postgres -c 'psql baruwa -f /tmp/bayes-postgres.sql'
+su - postgres -c 'psql baruwa -f /tmp/awl-postgres.sql'
 
 service postgresql restart
 
