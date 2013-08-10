@@ -765,8 +765,6 @@ else
 	curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
 	curl -O $baruwagit/extras/config/exim/macros.conf
 	curl -O $baruwagit/extras/config/exim/trusted-configs
-#	sed -i -e 's/spf/#spf = /' $eximdir/exim.conf
-#	sed -i -e 's/dbl_/#dbl_/' $eximdir/exim_out.conf
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
 	curl -0 $baruwagit/extras/config/exim/baruwa/exim-bcrypt.pl
@@ -1160,9 +1158,9 @@ fn_clear
 echo -n "Let's update our Clam Definitions real quick."
 echo ""; sleep 3
 usermod -G exim clam
-touch /var/log/freshclam.log
-chown clam /var/log/freshclam.log
-chmod 660 /var/log/freshclam.log
+touch /var/log/clamav/freshclam.log
+chown clam /var/logclamav//freshclam.log
+chown -R clam:clamav /var/lib/clamav
 sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 freshclam
 /usr/bin/clamav-unofficial-sigs.sh
