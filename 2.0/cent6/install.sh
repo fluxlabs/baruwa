@@ -109,7 +109,7 @@ libmem="1.0.17"                      	# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
 postgresver="9.1"						# PostgreSQL Version
-spamassver="3.3.1"						# Spamasassin Version
+spamassver="3.3.2"						# Spamasassin Version
 
 # +---------------------------------------------------+
 # More Stuff
@@ -260,8 +260,7 @@ echo "You still need to know linux basics and have an understanding of how Baruw
 echo "It is a complete re-write from 1.0 branch. Alot of changes were made to the code and how it"
 echo "works."
 echo ""
-echo "Please take the time to review the code that I am using below so you understand what"
-echo "it is doing. This script will prompt you for the minimal amount of questions needed "
+echo "This script will prompt you for the minimal amount of questions needed "
 echo "to get Baruwa $baruwaver installed and running. You will need to configure baruwa, your firewall,"
 echo "spamassassin rules, greylisting, RBL, SPF .. etc on your own."
 echo ""
@@ -1001,15 +1000,15 @@ fn_pyzor_razor_dcc () {
 	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i '2i razor_config /var/lib/MailScanner/.razor/razor-agent.conf' /etc/MailScanner/spam.assassin.prefs.conf
 	sed -i '92i bayes_path /var/spool/MailScanner/spamassassin/bayes' /etc/MailScanner/spam.assassin.prefs.conf
 	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
 	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 	chown -R exim: /var/spool/MailScanner/
-	chown -R exim: /var/lib/MailScanner/
 	service MailScanner restart
+	echo "root $adminemail" >> /etc/aliases
+	newaliases
 	fn_complete
 }
 
@@ -1164,8 +1163,7 @@ usermod -G exim clam
 touch /var/log/freshclam.log
 chown clam /var/log/freshclam.log
 chmod 660 /var/log/freshclam.log
-cd /var/lib; rm -f clamav
-ln -s /var/clamav /var/lib/clamav
+sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 freshclam
 /usr/bin/clamav-unofficial-sigs.sh
 service clamd restart
