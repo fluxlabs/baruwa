@@ -3,6 +3,9 @@ Installers for Baruwa 2.0.1
 
 -
 These installers assume that you have added your hostname to hosts.conf.
+Example : 55.57.18.3 mx01.domain.com mx01
+
+You must have FQDN and Shortname in your hosts file.
 
 Your hostname must match the domain you choose in this script.
 
