@@ -675,13 +675,13 @@ if rpm -q --quiet mailscanner;
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
 	curl -O $fluxlabsgit/extras/config/mailscanner/MailScanner.conf
-	curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
-	curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
-	curl -O $baruwagit/extras/config/mailscanner/filename.rules
-	curl -O $baruwagit/extras/config/mailscanner/filetype.rules
-	curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
-	curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
-	curl -O $fluxlabsgit/extras/config/spamassassin/spam.assassin.prefs.conf
+	curl -O $fluxlabsgit/extras/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $fluxlabsgit/extras/config/mailscanner/scan.messages.rules
+	curl -O $fluxlabsgit/extras/config/mailscanner/nonspam.actions.rules
+	curl -O $fluxlabsgit/extras/config/mailscanner/filename.rules
+	curl -O $fluxlabsgit/extras/config/mailscanner/filetype.rules
+	curl -O $fluxlabsgit/extras/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fluxlabsgit/extras/config/mailscanner/filetype.rules.allowall.conf
 	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
@@ -689,7 +689,6 @@ if rpm -q --quiet mailscanner;
 	chmod -R 777 /var/spool/MailScanner/
 
 	sed -i 's:/usr/local:/usr/:' /usr/lib/MailScanner/clamav-autoupdate
-	sed -i 's:use_auto_whitelist 0:#use_auto_whitelist 0:' /etc/mail/spamassassin/mailscanner.cf
 	sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass':' /etc/MailScanner/MailScanner.conf
 	sed -i 's:EXIM:#EXIM:' /etc/sysconfig/MailScanner
 	echo EXIM=/usr/sbin/exim >> /etc/sysconfig/MailScanner
