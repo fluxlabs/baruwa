@@ -112,7 +112,7 @@ sleep 5
 }
 
 # Update Search Index
-fn_update_sa_rules (){
+fn_update_search_index (){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	U P D A T E  S A  R U L E S";
