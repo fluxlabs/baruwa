@@ -45,6 +45,7 @@ echo "What email would you like to use?"
 read -p "Email: " ADMINEMAIL
 echo ""
 $home/paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
+sleep 8
 }
 
 # Change User Password
@@ -59,6 +60,7 @@ echo "What user would you like to change the password for?"
 read -p "Username: " USERNAME
 echo ""
 $home/paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
+sleep 8
 }
 
 # Clean Quarantine
@@ -70,6 +72,7 @@ echo "--------------------------------------------------------------------------
 echo "We are now going to prune your Quarantine."
 echo ""
 $home/paster prune-quarantine /etc/baruwa/production.ini
+sleep 8
 }
 
 # Send Reports
@@ -81,6 +84,7 @@ echo "--------------------------------------------------------------------------
 echo "We are now going to prune your Quarantine."
 echo ""
 $home/paster send-quarantine-reports /etc/baruwa/production.ini
+sleep 8
 }
 
 # Send PDF Reports
@@ -92,6 +96,7 @@ echo "--------------------------------------------------------------------------
 echo "We are now going to send PDF Reports."
 echo ""
 $home/paster send-pdf-reports /etc/baruwa/production.ini
+sleep 8
 }
 
 # Update SA Rules
@@ -103,6 +108,7 @@ echo "--------------------------------------------------------------------------
 echo "We are now going to update your spamasasssin rules."
 echo ""
 $home/paster update-sa-rules /etc/baruwa/production.ini
+sleep 8
 }
 
 # Update Search Index
@@ -114,7 +120,9 @@ echo "--------------------------------------------------------------------------
 echo "We are now going to update your spamasasssin rules."
 echo ""
 $home/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
+sleep 8
 $home/paster update-delta-index --index archive /etc/baruwa/production.ini
+sleep 8
 }
 
 # +---------------------------------------------------+
