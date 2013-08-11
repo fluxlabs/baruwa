@@ -675,7 +675,6 @@ if rpm -q --quiet mailscanner;
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
 	curl -O $fluxlabsgit/extras/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabsgit/extras/config/mailscanner/spam.assassin.prefs.conf
 	curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
 	curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
 	curl -O $baruwagit/extras/config/mailscanner/filename.rules
