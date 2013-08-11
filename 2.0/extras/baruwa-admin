@@ -1,0 +1,178 @@
+#!/bin/sh
+# +--------------------------------------------------------------------+
+# Baruwa Admin Commands
+# +--------------------------------------------------------------------+
+#
+# Author - Jeremy McSpadden
+# Contact - jeremy@fluxlabs.net
+# Copyright (C) 2013  http://www.fluxlabs.net
+#
+# Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/extras/baruwa-admin
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# +--------------------------------------------------------------------+
+
+# Create Admin Account
+
+fn_admin_account (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	A D D  B A R U W A  A D M I N  A C C O U N T";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to add an admin user to Baruwa."
+echo ""
+echo "What would you like your username to be?"
+read -p "Username: " ADMINUSER
+echo ""
+echo "What password would you like to use?"
+echo "This must be a complex password!"
+read -p "Password: " ADMINPASS
+echo ""
+echo "What email would you like to use?"
+read -p "Email: " ADMINEMAIL
+echo ""
+paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
+}
+
+# Change User Password
+fn_reset_password (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	C H A N G E  U S E R  P A S S W O R D";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to change a users password."
+echo ""
+echo "What user would you like to change the password for?"
+read -p "Username: " USERNAME
+echo ""
+paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
+}
+
+# Clean Quarantine
+fn_prune_quarantine (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	P R U N E  Q U A R A N T I N E";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to prune your Quarantine."
+echo ""
+paster prune-quarantine /etc/baruwa/production.ini
+}
+
+# Send Reports
+fn_send_reports (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	S E N D  R E P O R T S";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to prune your Quarantine."
+echo ""
+paster send-quarantine-reports /etc/baruwa/production.ini
+}
+
+# Send PDF Reports
+fn_send_pdf_reports (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	S E N D  P D F  R E P O R T S";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to send PDF Reports."
+echo ""
+paster send-pdf-reports /etc/baruwa/production.ini
+}
+
+# Update SA Rules
+fn_update_sa_rules (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	U P D A T E  S A  R U L E S";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to update your spamasasssin rules."
+echo ""
+paster update-sa-rules /etc/baruwa/production.ini
+}
+
+# Update Search Index
+fn_update_sa_rules (){
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "	U P D A T E  S A  R U L E S";
+echo "------------------------------------------------------------------------------";
+echo "We are now going to update your spamasasssin rules."
+echo ""
+paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
+paster update-delta-index --index archive /etc/baruwa/production.ini
+}
+
+# +---------------------------------------------------+
+# Display menus
+# +---------------------------------------------------+
+
+menu_main() {
+	clear
+	echo "------------------------------"
+	echo "Baruwa Admin"
+	echo ""
+	echo "Please make a choice:"
+	echo ""
+	echo "a) Create Admin Account"
+	echo "b) Reset User Password"
+	echo "c) Clean Quarantine"
+	echo "d) Send Reports"
+	echo "e) Send PDF Reports"
+	echo "f) Update SA Rules"
+	echo "g) Update Search Index"
+	echo " "
+	echo "x) Exit"
+}
+
+# +---------------------------------------------------+
+# Choices
+# +---------------------------------------------------+
+
+read_main() {
+	local choice
+	read -p "Enter Choice: " choice
+	case $choice in
+		a) fn_admin_account ;;
+		b) fn_reset_password ;;
+		c) fn_prune_quarantine ;;
+		d) fn_send_reports ;;
+		e) fn_send_pdf_reports ;;
+		f) fn_update_sa_rules
+		g) fn_update_search_index ;;
+		x) exit 0;;
+		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+	esac
+}
+
+# +---------------------------------------------------+
+# Be sure we're root
+# +---------------------------------------------------+
+
+if [ `whoami` == root ]
+	then
+		menu="1"
+		while [ $menu == "1" ]
+		do
+			menu_main
+			read_main
+		done
+	else
+		echo "Sorry, but you are not root."
+		echo "Please su - then try again."
+		exit 0
+	fi
+# +---------------------------------------------------+
+
