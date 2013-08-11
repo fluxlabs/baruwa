@@ -5,9 +5,10 @@
 # Jeremy McSpadden
 # jeremy@fluxlabs.net
 #
+# Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/extras/adduser.sh
+# 
 #########################
 
-fluxlabs_git="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
 
 mv /home/baruwa/px/lib/python2.6/site-packages/baruwa/websetup.py /home/baruwa/px/lib/python2.6/site-packages/baruwa/websetup.py.orig
 cd /home/baruwa/px/lib/python2.6/site-packages/baruwa/ 
