@@ -657,7 +657,7 @@ else
 	service rabbitmq-server start
 	rabbitmqctl delete_user guest
 	rabbitmqctl add_user baruwa $rabbpass
-	rabbitmqctl add_vhost $shosts
+	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
 	fn_complete
@@ -1058,7 +1058,7 @@ cat > /etc/cron.d/baruwa << 'EOF'
 0 6 1 * * baruwa /home/baruwa/px/bin/paster send-pdf-reports /etc/baruwa/production.ini >/dev/null 2>&1
 EOF
 fi
-
+ 
 if [ -f /etc/cron.d/mailscanner ];
 	then
 	echo "MailScanner Cronjob Exists. Skipping." ; sleep 3
