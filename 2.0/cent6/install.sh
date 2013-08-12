@@ -294,102 +294,102 @@ if [ $useauto == 1 ];
 	:
 else
 fn_clear
-echo "------------------------------------------------------------------------------";
-echo "B A R U W A   S E T T I N G S";
-echo "------------------------------------------------------------------------------";
-echo -n ""
+	echo "------------------------------------------------------------------------------";
+	echo "B A R U W A   S E T T I N G S";
+	echo "------------------------------------------------------------------------------";
+	echo -n ""
+	while :
+		do
+			echo ""
+			echo "What email would you like Administrative Emails sent to?"
+			echo "ie: you@domain.com"
+			IFS= read -p "Email: " admemail
+			IFS= read -p "Email Again: " admemail2
+			[[ $admemail = "$admemail2" ]] && break
+			echo ''
+			echo 'Email does not match. Please try again.'
+			echo ''
+		done
+
 while :
-do
-echo ""
-echo "What email would you like Administrative Emails sent to?"
-echo "ie: you@domain.com"
-IFS= read -p "Email: " admemail
-IFS= read -p "Email Again: " admemail2
-[[ $admemail = "$admemail2" ]] && break
-echo ''
-echo 'Email does not match. Please try again.'
-echo ''
+	do
+		echo ""
+		echo "What email would you like Report Emails sent from?"
+		echo "ie: reports@domain.com"
+		IFS= read -p "Email: " repemail
+		IFS= read -p "Email Again: " repemail2
+		[[ $repemail = "$repemail2" ]] && break
+		echo ''
+		echo 'Email does not match. Please try again.'
+		echo ''
+	done
+
+while :
+	do
+		echo ""
+		echo "What email would you like Error Emails sent from?"
+		echo "ie: errors@domain.com"
+		IFS= read -p "Email: " erremail
+		IFS= read -p "Email Again: " erremail2
+		[[ $erremail = "$erremail2" ]] && break
+		echo ''
+		echo 'Email does not match. Please try again.'
+		echo ''
+	done
+
+while :
+	do
+		echo ""
+		echo "What hostname would you like Apache to listen on for Baruwa requests?"
+		echo "ie: baruwa.domain.com"
+		IFS= read -p "Domain: " baruwadomain
+		IFS= read -p "Domain Again: " bdomain2
+		[[ $baruwadomain = "$bdomain2" ]] && break
+		echo ''
+		echo 'Domain does not match. Please try again.'
+		echo ''
+	done
+
+while :
+	do
+		fn_clear
+		echo "------------------------------------------------------------------------------";
+		echo "B A R U W A  A D M I N  U S E R";
+		echo "------------------------------------------------------------------------------";
+		echo ""
+		echo "What would you like your username to be?"
+		IFS= read -p "Username: " baruwaadmin
+		IFS= read -p "Username Again: " adminuser2
+		[[ $baruwaadmin = "$adminuser2" ]] && break
+		echo ''
+		echo 'Username deos not match. Please try again.'
+		echo ''
+	done
+
+while :
+	do
+		echo ""
+		echo "What password would you like to use?"
+		echo "This must be a complex password!"
+		IFS= read -p "Password: " adminpass
+		IFS= read -p "Password Again: " adminpass2
+		[[ $adminpass = "$adminpass2" ]] && break
+		echo ''
+		echo 'Passwords do not match. Please try again.'
+		echo ''
 done
 
 while :
-do
-echo ""
-echo "What email would you like Report Emails sent from?"
-echo "ie: reports@domain.com"
-IFS= read -p "Email: " repemail
-IFS= read -p "Email Again: " repemail2
-[[ $repemail = "$repemail2" ]] && break
-echo ''
-echo 'Email does not match. Please try again.'
-echo ''
-done
-
-while :
-do
-echo ""
-echo "What email would you like Error Emails sent from?"
-echo "ie: errors@domain.com"
-IFS= read -p "Email: " erremail
-IFS= read -p "Email Again: " erremail2
-[[ $erremail = "$erremail2" ]] && break
-echo ''
-echo 'Email does not match. Please try again.'
-echo ''
-done
-
-while :
-do
-echo ""
-echo "What hostname would you like Apache to listen on for Baruwa requests?"
-echo "ie: baruwa.domain.com"
-IFS= read -p "Domain: " baruwadomain
-IFS= read -p "Domain Again: " bdomain2
-[[ $baruwadomain = "$bdomain2" ]] && break
-echo ''
-echo 'Domain does not match. Please try again.'
-echo ''
-done
-
-while :
-do
-fn_clear
-echo "------------------------------------------------------------------------------";
-echo "B A R U W A  A D M I N  U S E R";
-echo "------------------------------------------------------------------------------";
-echo ""
-echo "What would you like your username to be?"
-IFS= read -p "Username: " baruwaadmin
-IFS= read -p "Username Again: " adminuser2
-[[ $baruwaadmin = "$adminuser2" ]] && break
-echo ''
-echo 'Username deos not match. Please try again.'
-echo ''
-done
-
-while :
-do
-echo ""
-echo "What password would you like to use?"
-echo "This must be a complex password!"
-IFS= read -p "Password: " adminpass
-IFS= read -p "Password Again: " adminpass2
-[[ $adminpass = "$adminpass2" ]] && break
-echo ''
-echo 'Passwords do not match. Please try again.'
-echo ''
-done
-
-while :
-do
-echo ""
-echo "What email would you like to use?"
-IFS= read -p "Email: " adminemail
-IFS= read -p "Email Again: " adminemail2
-[[ $adminemail = "$adminemail2" ]] && break
-echo ''
-echo 'Passwords do not match. Please try again.'
-echo ''
-done
+	do
+		echo ""
+		echo "What email would you like to use?"
+		IFS= read -p "Email: " adminemail
+		IFS= read -p "Email Again: " adminemail2
+		[[ $adminemail = "$adminemail2" ]] && break
+		echo ''
+		echo 'Passwords do not match. Please try again.'
+		echo ''
+	done
 
 fn_clear
 if [ -f $track/pssql ];
@@ -501,6 +501,7 @@ else
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident -y
+	
 	touch $track/dependencies
 	
 	fn_complete
@@ -951,7 +952,6 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 else
 	curl -O $baruwagit/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
-	fn_clear
 	fn_complete
 fi
 }
@@ -978,16 +978,15 @@ fn_pyzor_razor_dcc () {
 	razor-admin -home=/etc/mail/spamassassin/.razor -register
 	razor-admin -home=/etc/mail/spamassassin/.razor -create
 	razor-admin -home=/etc/mail/spamassassin/.razor -discover
-	
+	fn_clear
 	cd /usr/src
 	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
 	gzip -d dcc.tar.Z
 	tar -xf dcc.tar*
 	cd dcc-*
 	./configure && make && make install
-	
-	yum update -y
 	fn_clear
+	yum update -y
 	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
 	sed -i '1i pyzor_options --homedir /var/lib/MailScanner/' /etc/MailScanner/spam.assassin.prefs.conf
@@ -1062,21 +1061,21 @@ fi
 
 if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
 	then
-fn_clear
-echo "------------------------------------------------------------------------------";
-echo "A D D E D  C R O N J O B S";
-echo "------------------------------------------------------------------------------";
-echo -n "We have created cron entries for you."
-echo ""
-echo "Your Baruwa Cronjobs are setup as:"
-echo ""
-cat /etc/cron.d/baruwa
-echo ""
-echo "Your MailScanner Cronjobs are setup as:"
-echo ""
-cat /etc/cron.d/mailscanner
-echo ""
-fn_confirm
+	fn_clear
+	echo "------------------------------------------------------------------------------";
+	echo "A D D E D  C R O N J O B S";
+	echo "------------------------------------------------------------------------------";
+	echo -n "We have created cron entries for you."
+	echo ""
+	echo "Your Baruwa Cronjobs are setup as:"
+	echo ""
+	cat /etc/cron.d/baruwa
+	echo ""
+	echo "Your MailScanner Cronjobs are setup as:"
+	echo ""
+	cat /etc/cron.d/mailscanner
+	echo ""
+	fn_confirm
 
 else
 	fn_clear
@@ -1089,13 +1088,13 @@ fi
 # +---------------------------------------------------+
 
 fn_services (){
-fn_clear
-echo "------------------------------------------------------------------------------";
-echo "S E R V I C E  R E S T A R T";
-echo "------------------------------------------------------------------------------";
-echo "Restarting necessary services for final time."
-echo "We are also adding services to startup."
-echo ""; sleep 3
+	fn_clear
+	echo "------------------------------------------------------------------------------";
+	echo "S E R V I C E  R E S T A R T";
+	echo "------------------------------------------------------------------------------";
+	echo "Restarting necessary services for final time."
+	echo "We are also adding services to startup."
+	echo ""; sleep 3
 
 if [ -f $track/sphinx ];
 	then
@@ -1210,7 +1209,8 @@ echo  ""
 echo "Username: $baruwaadmin"
 echo "Password: $adminpass"
 echo ""
-echo "Let's send an email to $admemail with these instructions."
+echo "Let's send an email to $admemail with more instructions"
+echo "on your next steps to get Baruwa up and running."
 fn_confirm
 
 # +---------------------------------------------------+
@@ -1235,10 +1235,13 @@ http://$eth0ip
 Username: $baruwaadmin
 Password: $adminpass
 
-When you add this node. Please use $hostf as the hostname.
+Lets start by adding this scanning node at http://$eth0ip/settings/node/add
+use $baruwadomain as your Hostname.
+
+Once you have added this node, you can check its status at http://$eth0ip/status/node/2
 
 Please visit http://baruwa.org/docs/2.0/guide/admin/index.html
-and follow the guide on how to configure your install.
+and follow the guide on how to start adding Organizations and Domains.
 
 --
 Baruwa $baruwaver Installer by Jeremy McSpadden (jeremy at fluxlabs dot net)
@@ -1253,15 +1256,15 @@ cp /tmp/message ~/baruwa2_install.log
 rm /tmp/message
 
 fn_clear
-echo ""
-echo "An email has been sent to "$admemail"."
-echo ""
-echo "Please visit http://baruwa.org/docs/2.0/guide/admin/index.html"
-echo "and follow the guide on how to configure your install."
-echo ""``
-echo "Please support the Baruwa project by donating at"
-echo "http://pledgie.com/campaigns/12056"
-echo ""
+	echo ""
+	echo "An email has been sent to "$admemail"."
+	echo ""
+	echo "Please visit http://baruwa.org/docs/2.0/guide/admin/index.html"
+	echo "and follow the guide on how to configure your install."
+	echo ""``
+	echo "Please support the Baruwa project by donating at"
+	echo "http://pledgie.com/campaigns/12056"
+	echo ""
 fn_confirm
 }
 
@@ -1306,9 +1309,9 @@ read_main() {
 			fn_administrator
 			fn_http
 			fn_pyzor_razor_dcc
-			fn_cronjobs
 			fn_services
 			fn_generate_key
+			fn_cronjobs
 			fn_finish ;;
 		b) fn_cleanup ;;
 		x) exit 0;;
