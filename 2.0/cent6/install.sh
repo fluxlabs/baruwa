@@ -1040,7 +1040,7 @@ if [ -f /etc/cron.daily/kam ];
 	echo "Hourly Cronjob exists. Skipping."; sleep 3
 else
 	cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
-	cd /etc/cron.hourly;; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
+	cd /etc/cron.hourly; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
 fi
 
 if [ -f /etc/cron.d/baruwa ];
