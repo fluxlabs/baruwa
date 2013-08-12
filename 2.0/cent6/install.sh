@@ -3,9 +3,15 @@
 # Install for Barwua 2.0 for Cent OS/RHEL x86_64
 # +--------------------------------------------------------------------+
 #
+
+date="8-12-2013"						# Last Updated On
+version="2.3.6"							# Script Version
+
 # Author - Jeremy McSpadden
 # Contact - jeremy@fluxlabs.net
 # Copyright (C) 2013  http://www.fluxlabs.net
+#
+# Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/cent6/install.sh
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -91,15 +97,14 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
+# +=====================================================================+
 
-# NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
+# DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
 
 # +---------------------------------------------------+
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-12-2013"						# Latest Date
-version="2.3.6"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
