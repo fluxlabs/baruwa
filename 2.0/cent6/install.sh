@@ -95,8 +95,8 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-10-2013"						# Latest Date
-version="2.3.5"							# Script Version
+date="8-12-2013"						# Latest Date
+version="2.3.6"							# Script Version
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
@@ -783,13 +783,9 @@ if [ -f $track/perlmods ];
 else
 	echo "We are now going to install a few Perl Modules"
 	echo "that are not available via Yum Repo's."
-	echo "Please press Yes/Enter throughout the questions."
-	fn_confirm
+	sleep 3
 
-	#perl -MCPAN -e  'install Encoding::FixLatin'
-	#perl -MCPAN -e  'install AnyEvent::Handle'
-	#perl -MCPAN -e  'install EV'
-	cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
+	yes, y, yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
 	touch $track/perlmods
 fn_complete
 fi
