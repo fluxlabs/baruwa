@@ -657,7 +657,7 @@ else
 	service rabbitmq-server start
 	rabbitmqctl delete_user guest
 	rabbitmqctl add_user baruwa $rabbpass
-	rabbitmqctl add_vhost $hosts
+	rabbitmqctl add_vhost $shosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
 	fn_complete
@@ -721,6 +721,8 @@ if rpm -q --quiet mailscanner;
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	rm -f /etc/mail/spamassassin/mailscanner.cf
+	sed -i '1d' /usr/sbin/MailScanner
+	sed -i '1i #!/usr/bin/perl -I/usr/lib/MailScanner -U' /usr/sbin/MailScanner
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
 fn_complete
@@ -1033,16 +1035,12 @@ fn_pyzor_razor_dcc () {
 
 fn_cronjobs (){
 fn_clear
-if [ -f /etc/cron.hourly/baruwa-updateindex ];
+if [ -f /etc/cron.daily/kam ];
 	then
 	echo "Hourly Cronjob exists. Skipping."; sleep 3
 else
-cat > /etc/cron.hourly/baruwa-updateindex << 'EOF'
-#!/bin/bash
-#
-indexer auditlog lists domains accounts organizations --rotate &>/dev/null
-EOF
-chmod +x /etc/cron.hourly/baruwa-updateindex
+	cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
+	cd /etc/cron.hourly;; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
 fi
 
 if [ -f /etc/cron.d/baruwa ];
