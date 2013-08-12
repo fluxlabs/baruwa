@@ -115,9 +115,9 @@ sleep 5
 fn_update_search_index (){
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
-echo "	U P D A T E  S A  R U L E S";
+echo "	I N D E X  S E A R C H";
 echo "------------------------------------------------------------------------------";
-echo "We are now going to update your spamasasssin rules."
+echo "We are now going to update your search index."
 echo "Processing ....."
 $home/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
 sleep 5
