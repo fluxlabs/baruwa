@@ -149,7 +149,6 @@ fn_pause (){
 	echo "------------------------------------------------------------------------------";
 	read -p "You are walking through the script. Press [Enter] to Continue" fackEnterKey
 	echo "------------------------------------------------------------------------------";
-	
 }
 
 fn_clear () {
@@ -377,18 +376,18 @@ while :
 		echo ''
 	done
 
-	while :
-		do
-			echo ""
-			echo "What hostname would you like to be used for baruwa url reports?"
-			echo "ie: spam.domain.com"
-			IFS= read -p "Domain: " baruwadomain
-			IFS= read -p "Domain Again: " bdomain2
-			[[ $baruwadomain = "$bdomain2" ]] && break
-			echo ''
-			echo 'Domain does not match. Please try again.'
-			echo ''
-		done
+while :
+	do
+		echo ""
+		echo "What hostname would you like to be used for baruwa url reports?"
+		echo "ie: spam.domain.com"
+		IFS= read -p "Domain: " baruwadomain
+		IFS= read -p "Domain Again: " bdomain2
+		[[ $baruwadomain = "$bdomain2" ]] && break
+		echo ''
+		echo 'Domain does not match. Please try again.'
+		echo ''
+	done
 		
 while :
 	do
