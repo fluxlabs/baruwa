@@ -1108,7 +1108,6 @@ fi
 # +---------------------------------------------------+
 
 fn_services () {
-
 	if [ -f $track/sphinx ];
 		then
 		echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
@@ -1155,6 +1154,7 @@ fn_services () {
 	fi
 
 	if [ -f $track/services ];
+		then
 		fn_clear
 		echo "------------------------------------------------------------------------------";
 		echo "S E R V I C E  R E S T A R T";
@@ -1189,7 +1189,9 @@ fn_services () {
 		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 		touch $track/services
 		fn_clear
-
+	else
+		:
+	fi
 }
 
 fn_generate_key () {
