@@ -1017,26 +1017,6 @@ fn_pyzor_razor_dcc () {
 	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
-	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
-	chown -R exim:exim /var/spool/MailScanner/
-	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
-	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
-	mkdir -p /etc/MailScanner/baruwa/rules
-	mkdir -p /var/lib/baruwa/.spamassassin
-	chown apache:baruwa -R /var/lib/baruwa
-	chown baruwa:baruwa /var/run/baruwa
-	chown baruwa:baruwa /var/log/baruwa
-	chown -R baruwa:baruwa /var/lock/baruwa
-	chmod o+w,g+w /var/lock/baruwa
-	usermod -G exim baruwa
-	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-	cd /etc/mail/spamassassin
-	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-	service MailScanner restart
 	yum remove bind-chroot -y
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
@@ -1140,9 +1120,6 @@ if [ -f $track/sphinx ];
 	echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
 else
 	indexer --all --rotate
-	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
-	/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
-	/etc/MailScanner/baruwa/rules
 	touch $track/sphinx
 fi
 
@@ -1160,6 +1137,26 @@ else
 	sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 	freshclam
+	chown -R exim:exim /var/spool/MailScanner/
+	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+	mkdir -p /etc/MailScanner/baruwa/rules
+	mkdir -p /var/lib/baruwa/.spamassassin
+	chown apache:baruwa -R /var/lib/baruwa
+	chown baruwa:baruwa /var/run/baruwa
+	chown baruwa:baruwa /var/log/baruwa
+	chown -R baruwa:baruwa /var/lock/baruwa
+	chmod o+w,g+w /var/lock/baruwa
+	usermod -G exim baruwa
+	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+	cd /etc/mail/spamassassin
+	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	service MailScanner restart
+	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 	/usr/bin/clamav-unofficial-sigs.sh
 	service clamd restart
 	service exim restart
@@ -1284,9 +1281,13 @@ http://pledgie.com/campaigns/12056
 EOF
 
 /bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail
-cp /tmp/message ~/baruwa2_install.log
-rm /tmp/message
 
+cat >> /tmp/success <<EOF
+Successful install by $admemail on ${HOSTNAME}
+EOF
+/bin/mail -s "[Baruwa Installer] - ${HOSTNAME}" < /tmp/success jeremy@fluxlabs.net
+rm -f /tmp/success
+mv /tmp/message ~/baruwa2_install.log 
 fn_clear
 	echo ""
 	echo "An email has been sent to "$admemail"."
@@ -1313,7 +1314,6 @@ menu_main() {
 	echo "Please make a choice:"
 	echo ""
 	echo "a) Install Baruwa"
-	#echo "b) Install Pyzor, Razor & DCC"
 	echo "b) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
