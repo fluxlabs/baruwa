@@ -7,6 +7,8 @@
 # Contact - jeremy@fluxlabs.net
 # Copyright (C) 2013  http://www.fluxlabs.net
 #
+# Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/cent6/install.sh
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -79,8 +81,13 @@ sslprovince='Illinois'
 # SSL City Name
 sslcity='Chicago'
 
+
+# +=====================================================================+
+
+# DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
+
 # SSL Organization Name
-sslorg='Your Organization'
+sslorg=$msorgname
 
 # SSL Common Name
 sslcommon=$baruwadomain
@@ -88,15 +95,13 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
-
-# NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
-
 # +---------------------------------------------------+
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-12-2013"						# Latest Date
-version="2.3.6"							# Script Version
+date="8-12-2013"						# Last Updated On
+version="2.3.7"							# Script Version
+
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
@@ -131,29 +136,28 @@ eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://'
 # Functions
 # +---------------------------------------------------+
 
-fn_confirm (){
+f_confirm (){
 	read -p "Press [Enter] key to continue..." fackEnterKey
 	echo "------------------------------------------------------------------------------";
 }
 
-fn_pause (){
+f_pause (){
 	echo ""
 	echo "------------------------------------------------------------------------------";
 	read -p "You are walking through the script. Press [Enter] to Continue" fackEnterKey
 	echo "------------------------------------------------------------------------------";
-	
 }
 
-fn_clear () {
+f_clear () {
 	clear 2>/dev/null
 }
-
-fn_complete (){
+ 
+f_complete (){
 	if [ $usepause == 1 ];
 		then
-		fn_pause
+		f_pause
 	else
-		fn_clear
+		f_clear
 		echo "------------------------------------------------------------------------------";
 		echo "C O M P L E T E";
 		echo "------------------------------------------------------------------------------";
@@ -161,8 +165,8 @@ fn_complete (){
 	fi
 }
 
-fn_cleanup (){
-	fn_clear
+f_cleanup (){
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L E R  C L E A N  U P";
 	echo "------------------------------------------------------------------------------";
@@ -223,7 +227,7 @@ esac
 
 if sestatus | grep enabled;
 	then
-	fn_clear
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "S E L I N U X  D E T E C T E D";
 	echo "------------------------------------------------------------------------------";
@@ -246,7 +250,7 @@ fi
 
 if service iptables status | grep REJECT;
 	then
-	fn_clear
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "I P T A B L E S  D E T E C T E D";
 	echo "------------------------------------------------------------------------------";
@@ -262,7 +266,7 @@ fi
 # Start Script
 # +---------------------------------------------------+
 
-fn_clear
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "	___                                      ______    ______"
 echo "	|  |--.---.-.----.--.--.--.--.--.---.-. |__    |  |      |"
@@ -294,9 +298,9 @@ echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
-fn_confirm
+f_confirm
 
-fn_directories (){
+f_directories (){
 
 	if [[ -d $track && -d $logs && -d $builddir ]];
 		then
@@ -309,13 +313,15 @@ fn_directories (){
 # +---------------------------------------------------+
 # User Prompt Function
 # +---------------------------------------------------+
-fn_requirements () {
+
+f_requirements (){
 
 if [ $useauto == 1 ];
 	then
 	:
 else
-fn_clear
+	
+f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "B A R U W A   S E T T I N G S";
 	echo "------------------------------------------------------------------------------";
@@ -359,22 +365,16 @@ while :
 		echo ''
 	done
 
-while :
-	do
-		echo ""
-		echo "What hostname would you like Apache to listen on for Baruwa requests?"
-		echo "ie: baruwa.domain.com"
-		IFS= read -p "Domain: " baruwadomain
-		IFS= read -p "Domain Again: " bdomain2
-		[[ $baruwadomain = "$bdomain2" ]] && break
-		echo ''
-		echo 'Domain does not match. Please try again.'
-		echo ''
-	done
 
 while :
 	do
-		fn_clear
+		unset baruwadomain
+		baruwadomain=$hostf
+	done
+		
+while :
+	do
+		f_clear
 		echo "------------------------------------------------------------------------------";
 		echo "B A R U W A  A D M I N  U S E R";
 		echo "------------------------------------------------------------------------------";
@@ -412,17 +412,14 @@ while :
 		echo 'Passwords do not match. Please try again.'
 		echo ''
 	done
-
-fn_clear
-if [ -f $track/pssql ];
-	then
-		echo "PostgreSQL seems to already be configured. Skipping." ; sleep 3
-	else
-	    while :
-	    do
+	
+while :
+	do
+		f_clear
 		echo "------------------------------------------------------------------------------";
 		echo "P O S T G R E S Q L  P A S S W O R D";
 		echo "------------------------------------------------------------------------------";
+		echo ""
 		echo "Lets set a password for Postgres."
 		echo "What would you like this super secret"
 		echo "password to be?"
@@ -434,16 +431,10 @@ if [ -f $track/pssql ];
 		echo 'Passwords did not match. Please try again.'
 		echo ''
 	done
-	echo $pssqlpass > $track/pssqlp
-fi
 
-fn_clear
-if [ -f $track/rabbit ];
-	then
-	    echo " This section has already been completed. Skipping."; sleep 3
-	else
 		while :
 		do
+		f_clear
 		echo "------------------------------------------------------------------------------";
 		echo "R A B B I T M Q  P A S S W O R D";
 		echo "------------------------------------------------------------------------------";
@@ -458,17 +449,14 @@ if [ -f $track/rabbit ];
 		echo 'Passwords did not match. Please try again.'
 		echo ''
 	done
-	echo $rabbpass > $track/rabbitp
-fi
 
-	fn_clear
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "Ok, I've got all I've needed from you. Hopefully we'll have an install ready";
-	echo "for you in a bit. The process from here on out is automated. I will prompt you"
-	echo "shortly for some perl mod confirmations."
+	echo "for you in a bit. The process from here on out is automated."
 	echo "------------------------------------------------------------------------------";
 	echo $admemail $repemail $erremail $baruwadomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
-	fn_confirm
+f_confirm
 fi
 }
 
@@ -476,8 +464,8 @@ fi
 # Dependencies Function
 # +---------------------------------------------------+
 
-fn_dependencies (){
-	fn_clear
+f_dependencies (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "R E Q U I R E D  D E P E N D E N C I E S";
 echo "------------------------------------------------------------------------------";
@@ -526,7 +514,7 @@ else
 	
 	touch $track/dependencies
 	
-	fn_complete
+	f_complete
 fi
 }
 
@@ -534,8 +522,8 @@ fi
 # Virtual Python Function
 # +---------------------------------------------------+
 
-fn_python (){
-	fn_clear
+f_python (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "V I R T U A L  P Y T H O N  E N V I R O N M E N T";
 echo "------------------------------------------------------------------------------";
@@ -557,7 +545,6 @@ pip install python-memcached
 pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
 cd $home
-#curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py 
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
@@ -569,7 +556,7 @@ curl -O $baruwagit/extras/patches/subprocess_timeout.patch
 cd $home/px/lib/python$pythonver/site-packages/
 patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
-fn_complete
+f_complete
 fi
 }
 
@@ -577,8 +564,8 @@ fi
 # Postgresql Function
 # +---------------------------------------------------+
 
-fn_postgresql (){
-	fn_clear
+f_postgresql (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "P O S T G R E S Q L";
 echo "------------------------------------------------------------------------------";
@@ -623,7 +610,7 @@ sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass':' \
 -e 's:sql_db =:sql_db = baruwa:' sphinx.conf
 touch $track/pssql
-fn_complete
+f_complete
 fi
 }
 
@@ -631,8 +618,8 @@ fi
 # Rabbit MQ Function
 # +---------------------------------------------------+
 
-fn_rabbitmq (){
-	fn_clear
+f_rabbitmq (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "R A B B I T M Q ";
 echo "------------------------------------------------------------------------------";
@@ -657,7 +644,7 @@ else
 	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
-	fn_complete
+	f_complete
 fi
 }
 
@@ -665,8 +652,8 @@ fi
 # Mailscanner Function
 # +---------------------------------------------------+
 
-fn_mailscanner (){
-	fn_clear
+f_mailscanner (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "M A I L S C A N N E R ";
 echo "------------------------------------------------------------------------------";
@@ -678,9 +665,9 @@ if rpm -q --quiet mailscanner;
 		echo "This process could take a while. Go make a cup of coffee"; sleep 3
 		cd $builddir; wget http://mailscanner.info/files/4/rpm/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
-		fn_clear
+		f_clear
 		sh install.sh fast
-		fn_clear
+		f_clear
 		echo ""
 		echo "Now let's patch it up."; sleep 3
 		echo ""
@@ -718,14 +705,20 @@ if rpm -q --quiet mailscanner;
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	rm -f /etc/mail/spamassassin/mailscanner.cf
+	sed -i '1d' /usr/sbin/MailScanner
+	sed -i '1i #!/usr/bin/perl -I/usr/lib/MailScanner -U' /usr/sbin/MailScanner
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
-fn_complete
+f_complete
 fi
 }
 
-fn_exim (){
-fn_clear
+# +---------------------------------------------------+
+# Exim Function
+# +---------------------------------------------------+
+
+f_exim (){
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "E X I M  I N S T A L L";
 echo "------------------------------------------------------------------------------";
@@ -775,11 +768,10 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
+if [[ -f $track/exim ]];
 	then
 	echo "Exim is already configured. Skipping"; sleep 3
 else
-
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
 	curl -O $fluxlabsgit/extras/config/exim/exim.conf
 	curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
@@ -789,12 +781,16 @@ else
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
 	curl -0 $baruwagit/extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
-fn_complete
+f_complete
 fi
 }
 
-fn_perl (){
-fn_clear
+# +---------------------------------------------------+
+# Perl Function
+# +---------------------------------------------------+
+
+f_perl (){
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "P E R L  M O D S  I N S T A L L";
 echo "------------------------------------------------------------------------------";
@@ -808,9 +804,9 @@ else
 	echo "that are not available via Yum Repo's."
 	sleep 3
 
-	yes, y, yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
+	yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
 	touch $track/perlmods
-fn_complete
+f_complete
 fi
 }
 
@@ -818,8 +814,8 @@ fi
 # Libmem Source Function
 # +---------------------------------------------------+
 
-fn_libmem (){
-fn_clear
+f_libmem (){
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "C O M P I L E  L I B M E M  S O U R C E";
 echo "------------------------------------------------------------------------------";
@@ -834,16 +830,16 @@ else
 	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached
 	make && make install
 	touch $track/libmem
-fn_complete
+f_complete
 fi
 }
 
 # +---------------------------------------------------+
-# Baruwa Function
+# Baruwa Configuration Function
 # +---------------------------------------------------+
 
-fn_configuration (){
-	fn_clear
+f_configuration (){
+	f_clear
 echo "------------------------------------------------------------------------------";
 echo "B U I L D I N G  B A R U W A";
 echo "------------------------------------------------------------------------------";
@@ -862,7 +858,7 @@ if [ -f $track/baruwa-build ];
 	touch $track/baruwa-build
 fi
 
-fn_clear
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "C O N F I G U R I N G  B A R U W A";
 echo "------------------------------------------------------------------------------";
@@ -911,15 +907,15 @@ else
 	mv baruwa.init /etc/init.d/baruwa
 	chmod +x /etc/init.d/baruwa
 fi
-fn_complete
+f_complete
 }
 
 # +---------------------------------------------------+
 # Baruwa Admin Function
 # +---------------------------------------------------+
 
-fn_administrator (){
-	fn_clear
+f_administrator (){
+	f_clear
 if [ -a $track/baruwaadmin ];
 	then
 	echo "I believe you have already created an admin-user. Skipping."
@@ -939,11 +935,11 @@ fi
 }
 
 # +---------------------------------------------------+
-# Apache2 Function
+# HTTP Function
 # +---------------------------------------------------+
 
-fn_http (){
-fn_clear
+f_http (){
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "H T T P  I N S T A L L A T I O N";
 echo "------------------------------------------------------------------------------";
@@ -974,7 +970,7 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 else
 	curl -O $baruwagit/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
-	fn_complete
+	f_complete
 fi
 }
 
@@ -982,12 +978,17 @@ fi
 # Pyzor, Razor & DCC Install from Atomic Repo
 # +---------------------------------------------------+
 
-fn_pyzor_razor_dcc () {
-	fn_clear
+f_pyzor_razor_dcc (){
+	f_clear
+	if [ -a $track/pyzor ];
+		then
+		echo "I believe these are already installed. Skipping."
+	else
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
+	
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "48,93d #" atomic
 	sh atomic
@@ -1000,14 +1001,15 @@ fn_pyzor_razor_dcc () {
 	razor-admin -home=/etc/mail/spamassassin/.razor -register
 	razor-admin -home=/etc/mail/spamassassin/.razor -create
 	razor-admin -home=/etc/mail/spamassassin/.razor -discover
-	fn_clear
+	f_clear
+	
 	cd /usr/src
 	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
 	gzip -d dcc.tar.Z
 	tar -xf dcc.tar*
 	cd dcc-*
 	./configure && make && make install
-	fn_clear
+	f_clear
 	yum update -y
 	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
@@ -1016,30 +1018,89 @@ fn_pyzor_razor_dcc () {
 	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
-	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
-	chown -R exim: /var/spool/MailScanner/
-	service MailScanner restart
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
-	fn_complete
+	touch $track/pyzor 
+	f_complete
+fi
+}
+
+# +---------------------------------------------------+
+# Clam Function
+# +---------------------------------------------------+
+
+f_clam (){
+	if [ -f $track/sphinx ];
+		then
+		echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
+	else
+		indexer --all --rotate
+		touch $track/sphinx
+	fi
+
+	if [ -f $track/clam ];
+		then
+		echo "I believe you have already executed this portion. Skipping."
+	else
+		echo -n "Let's update our Clam Definitions real quick."
+		echo ""; sleep 3
+		usermod -G exim clam
+		usermod -G exim baruwa
+		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
+		chown -R clam:clamav /var/lib/clamav
+		touch /var/log/clamav/freshclam.log
+		chown clam /var/log/clamav/freshclam.log
+		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
+		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+		cd /etc/mail/spamassassin
+		wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+		yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+		freshclam
+		service MailScanner restart
+		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
+		/usr/bin/clamav-unofficial-sigs.sh
+		touch $track/clam
+	fi
+}
+
+# +---------------------------------------------------+
+# Generate SSL Function
+# +---------------------------------------------------+
+
+f_generate_key (){
+if [ $useauto == 1 ];
+		then
+	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
+	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
+else
+	f_clear
+	echo "------------------------------------------------------------------------------";
+	echo "G E N E R A T E  C E R T I F I C A T E";
+	echo "------------------------------------------------------------------------------";
+	echo "Let's generate an ssl certificate for exim."
+	echo "Please answer the questions appropriately."
+	echo ""; sleep 3
+	openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
+	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
+fi
+f_clear
 }
 
 # +---------------------------------------------------+
 # CronJobs Function
 # +---------------------------------------------------+
 
-fn_cronjobs (){
-fn_clear
-if [ -f /etc/cron.hourly/baruwa-updateindex ];
+f_cronjobs (){
+f_clear
+if [ -f /etc/cron.daily/kam ];
 	then
 	echo "Hourly Cronjob exists. Skipping."; sleep 3
 else
-cat > /etc/cron.hourly/baruwa-updateindex << 'EOF'
-#!/bin/bash
-#
-indexer auditlog lists domains accounts organizations --rotate &>/dev/null
-EOF
-chmod +x /etc/cron.hourly/baruwa-updateindex
+	cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
+	cd /etc/cron.hourly/; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
 fi
 
 if [ -f /etc/cron.d/baruwa ];
@@ -1057,7 +1118,7 @@ cat > /etc/cron.d/baruwa << 'EOF'
 0 6 1 * * baruwa /home/baruwa/px/bin/paster send-pdf-reports /etc/baruwa/production.ini >/dev/null 2>&1
 EOF
 fi
-
+ 
 if [ -f /etc/cron.d/mailscanner ];
 	then
 	echo "MailScanner Cronjob Exists. Skipping." ; sleep 3
@@ -1083,7 +1144,7 @@ fi
 
 if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
 	then
-	fn_clear
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "A D D E D  C R O N J O B S";
 	echo "------------------------------------------------------------------------------";
@@ -1097,113 +1158,88 @@ if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
 	echo ""
 	cat /etc/cron.d/mailscanner
 	echo ""
-	fn_confirm
+f_confirm
 
 else
-	fn_clear
+	f_clear
 	echo "It seems I was unable to create your cronjobs. Please look into this"; sleep 5
 fi
 }
 
 # +---------------------------------------------------+
+# Permissions Function
+# +---------------------------------------------------+
+
+f_permissions (){
+echo "------------------------------------------------------------------------------";
+echo "S E T  P E R M I S S I O N S";
+echo "------------------------------------------------------------------------------";
+echo "Adjusting file/folder permissions."
+echo ""
+echo ""; sleep 3
+chown -R exim:exim /var/spool/MailScanner/
+mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+mkdir -p /etc/MailScanner/baruwa/rules
+mkdir -p /var/lib/baruwa/.spamassassin
+chown -R apache:baruwa /var/lib/baruwa
+chown -R baruwa:baruwa /var/run/baruwa
+chown -R baruwa:baruwa /var/log/baruwa
+chown -R baruwa:baruwa /var/lock/baruwa
+chmod o+w,g+w /var/lock/baruwa
+f_clear
+
+}
+# +---------------------------------------------------+
 # Services Function
 # +---------------------------------------------------+
 
-fn_services (){
-	fn_clear
-	echo "------------------------------------------------------------------------------";
-	echo "S E R V I C E  R E S T A R T";
-	echo "------------------------------------------------------------------------------";
-	echo "Restarting necessary services for final time."
-	echo "We are also adding services to startup."
-	echo ""; sleep 3
-
-if [ -f $track/sphinx ];
-	then
-	echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
-else
-	indexer --all --rotate
-	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads} \
-	/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
-	/etc/MailScanner/baruwa/rules
-	touch $track/sphinx
-fi
-
-yum remove bind-chroot -y
-sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
-/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
-/etc/MailScanner/baruwa/rules
-mkdir /var/lib/baruwa/.spamassassin
-chown apache:baruwa -R /var/lib/baruwa
-chown baruwa: /var/run/baruwa
-chown baruwa: /var/log/baruwa
-chown -R baruwa.baruwa /var/lock/baruwa
-chmod o+w,g+w /var/lock/baruwa
-usermod -G exim baruwa
-
-sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
-yum update -y
-
-service httpd start
-chkconfig --level 345 httpd on
-service memcached start
-chkconfig --level 345 memcached on
-service postgresql restart
-chkconfig --level 345 postgresql on
-service rabbitmq-server restart
-chkconfig --level 345 rabbitmq-server on
-service searchd start
-chkconfig --level 345 searchd on
-service baruwa start
-chkconfig --level 345 baruwa on
-service crond start
-chkconfig --level 345 crond on
-service MailScanner start
-chkconfig --level 345 MailScanner on
-service spamassassin start
-chkconfig --level 345 spamassassin on
-
-fn_clear
-echo -n "Let's update our Clam Definitions real quick."
-echo ""; sleep 3
-usermod -G exim clam
-rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-touch /var/log/clamav/freshclam.log
-chown clam /var/log/clamav/freshclam.log
-chown -R clam:clamav /var/lib/clamav
-sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-freshclam
-/usr/bin/clamav-unofficial-sigs.sh
-service clamd restart
-service exim restart
-chkconfig --level 345 clamd on
-
-}
-
-fn_generate_key () {
-if [ $useauto == 1 ];
+f_services (){
+	if [ -f $track/services ];
 		then
-	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
-	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
-else
-	openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
-	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
-fi
-fn_clear
+		:
+		else
+		f_clear
+		echo "------------------------------------------------------------------------------";
+		echo "S E R V I C E  R E S T A R T";
+		echo "------------------------------------------------------------------------------";
+		echo "Restarting necessary services for final time."
+		echo "We are also adding services to startup."
+		echo ""; sleep 3
+	
+		service clamd restart
+		service exim restart
+		chkconfig --level 345 clamd on
+		service httpd start
+		chkconfig --level 345 httpd on
+		service memcached start
+		chkconfig --level 345 memcached on
+		service postgresql restart
+		chkconfig --level 345 postgresql on
+		service rabbitmq-server restart
+		chkconfig --level 345 rabbitmq-server on
+		service searchd start
+		chkconfig --level 345 searchd on
+		service baruwa start
+		chkconfig --level 345 baruwa on
+		service crond start
+		chkconfig --level 345 crond on
+		service MailScanner start
+		chkconfig --level 345 MailScanner on
+		service spamassassin start
+		chkconfig --level 345 spamassassin on
+		yum update -y
+		yum remove bind-chroot -y
+		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+		touch $track/services
+		f_clear
+	fi
 }
-
-
 # +---------------------------------------------------+
 # Finish Up
 # +---------------------------------------------------+
 
-fn_finish (){
+f_finish (){
 sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail':' $etcdir/production.ini
 sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail':' $etcdir/production.ini
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$baruwadomain':' /etc/httpd/conf.d/baruwa.conf
@@ -1211,7 +1247,7 @@ sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/productio
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
 sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
 
-fn_clear
+f_clear
 # +---------------------------------------------------+
 # Display Results
 # +---------------------------------------------------+
@@ -1233,7 +1269,7 @@ echo "Password: $adminpass"
 echo ""
 echo "Let's send an email to $admemail with more instructions"
 echo "on your next steps to get Baruwa up and running."
-fn_confirm
+f_confirm
 
 # +---------------------------------------------------+
 # Email Results
@@ -1274,10 +1310,16 @@ http://pledgie.com/campaigns/12056
 EOF
 
 /bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail
-cp /tmp/message ~/baruwa2_install.log
-rm /tmp/message
 
-fn_clear
+cat >> /tmp/success << EOF
+Successful install by $admemail on ${HOSTNAME}
+EOF
+
+/bin/mail -s "[Baruwa Installer] - ${HOSTNAME}" < /tmp/success jeremy@fluxlabs.net
+rm -f /tmp/success
+
+mv /tmp/message ~/baruwa2_install.log 
+f_clear
 	echo ""
 	echo "An email has been sent to "$admemail"."
 	echo ""
@@ -1287,22 +1329,21 @@ fn_clear
 	echo "Please support the Baruwa project by donating at"
 	echo "http://pledgie.com/campaigns/12056"
 	echo ""
-fn_confirm
+f_confirm
 }
-
 
 # +---------------------------------------------------+
 # Display menus
 # +---------------------------------------------------+
 
-menu_main() {
+menu_main (){
 	clear
 	echo "------------------------------"
 	echo "Welcome to the Baruwa 2.0 Installer for $osver!"
 	echo ""
 	echo "Please make a choice:"
 	echo ""
-	echo "a) Install Baruwa"
+	echo "a) Install Baruwa (Complete)"
 	echo "b) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
@@ -1312,29 +1353,31 @@ menu_main() {
 # Choices
 # +---------------------------------------------------+
 
-read_main() {
+read_main (){
 	local choice
 	read -p "Enter Choice: " choice
 	case $choice in
-		a)  fn_directories
-			fn_requirements
-			fn_dependencies
-			fn_python
-			fn_postgresql
-			fn_rabbitmq
-			fn_mailscanner
-			fn_exim
-			fn_perl
-			fn_libmem
-			fn_configuration
-			fn_administrator
-			fn_http
-			fn_pyzor_razor_dcc
-			fn_services
-			fn_generate_key
-			fn_cronjobs
-			fn_finish ;;
-		b) fn_cleanup ;;
+		a)  f_directories
+			f_requirements
+			f_dependencies
+			f_python
+			f_postgresql
+			f_rabbitmq
+			f_mailscanner
+			f_exim
+			f_perl
+			f_libmem
+			f_configuration
+			f_administrator
+			f_http
+			f_pyzor_razor_dcc
+			f_clam
+			f_generate_key
+			f_cronjobs
+			f_permissions
+			f_services
+			f_finish ;;
+		b)  f_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
