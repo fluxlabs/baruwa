@@ -182,19 +182,21 @@ fn_cleanup (){
 # +---------------------------------------------------+
 # Check hosts file entry
 # +---------------------------------------------------+
-# STILL IN WORKS
-#if 
-#then
-#	echo "------------------------------------------------------------------------------";
-#	echo "M I S S I N G  H O S T  E N T R Y";
-#	echo "------------------------------------------------------------------------------";
-#	echo "It seems as though you are missing a hostname entry for $eth0ip"
-#	echo "I will go ahead and add it for you."
-#sleep 5
-	echo $eth0ip $hostdomain $hosts >> /etc/hosts
-#else
-#	:
-#fi
+
+if grep $eth0ip /etc/hosts ;
+	then
+	:
+else
+		echo "------------------------------------------------------------------------------";
+		echo "M I S S I N G  H O S T  E N T R Y";
+		echo "------------------------------------------------------------------------------";
+		echo "It seems as though you are missing a hostname entry for $eth0ip"
+		echo "I will go ahead and add it for you."
+		sleep 5
+		echo $eth0ip $hostdomain $hosts >> /etc/hosts
+		echo "I've added $eth0ip $hostf to your hosts file."
+		sleep 5
+fi
 
 # +---------------------------------------------------+
 # Check System
