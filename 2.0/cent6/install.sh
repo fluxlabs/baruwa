@@ -1017,7 +1017,6 @@ fn_pyzor_razor_dcc () {
 	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
-	yum remove bind-chroot -y
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
 	touch $track/pyzor 
@@ -1138,7 +1137,6 @@ else
 	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 	freshclam
 	chown -R exim:exim /var/spool/MailScanner/
-	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
 	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
 	mkdir -p /etc/MailScanner/baruwa/rules
@@ -1180,6 +1178,8 @@ else
 	service spamassassin start
 	chkconfig --level 345 spamassassin on
 	yum update -y
+	yum remove bind-chroot -y
+	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 	touch $track/services
 fi
 fn_clear
