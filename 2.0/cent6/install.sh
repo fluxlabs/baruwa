@@ -1037,7 +1037,7 @@ if [ -f /etc/cron.daily/kam ];
 	echo "Hourly Cronjob exists. Skipping."; sleep 3
 else
 	cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
-	cd /etc/cron.hourly; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
+	cd /etc/cron.hourly/; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
 fi
 
 if [ -f /etc/cron.d/baruwa ];
@@ -1128,24 +1128,13 @@ fn_services () {
 		chown -R clam:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
 		chown clam /var/log/clamav/freshclam.log
+		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
 		cd /etc/mail/spamassassin
 		wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
 		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-		chown -R exim:exim /var/spool/MailScanner/
-		mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
-		mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
-		mkdir -p /etc/MailScanner/baruwa/rules
-		mkdir -p /var/lib/baruwa/.spamassassin
-		chown apache:baruwa -R /var/lib/baruwa
-		chown baruwa:baruwa /var/run/baruwa
-		chown baruwa:baruwa /var/log/baruwa
-		chown -R baruwa:baruwa /var/lock/baruwa
-		chmod o+w,g+w /var/lock/baruwa
-	
 		yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 		freshclam
 		service MailScanner restart
@@ -1213,7 +1202,26 @@ fi
 fn_clear
 }
 
+fn_permissions () {
+echo "------------------------------------------------------------------------------";
+echo "S E T  P E R M I S S I O N S";
+echo "------------------------------------------------------------------------------";
+echo "Adjusting file/folder permissions."
+echo ""
+echo ""; sleep 3
+chown -R exim:exim /var/spool/MailScanner/
+mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+mkdir -p /etc/MailScanner/baruwa/rules
+mkdir -p /var/lib/baruwa/.spamassassin
+chown -R apache:baruwa /var/lib/baruwa
+chown -R baruwa:baruwa /var/run/baruwa
+chown -R baruwa:baruwa /var/log/baruwa
+chown -R baruwa:baruwa /var/lock/baruwa
+chmod o+w,g+w /var/lock/baruwa
+fn_clear
 
+}
 # +---------------------------------------------------+
 # Finish Up
 # +---------------------------------------------------+
@@ -1354,6 +1362,7 @@ read_main() {
 			fn_services
 			fn_generate_key
 			fn_cronjobs
+			fn_permissions
 			fn_finish ;;
 		b)  fn_cleanup ;;
 		x) exit 0;;
