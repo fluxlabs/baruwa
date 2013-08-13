@@ -81,11 +81,6 @@ sslprovince='Illinois'
 # SSL City Name
 sslcity='Chicago'
 
-
-# +=====================================================================+
-
-# DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
-
 # SSL Organization Name
 sslorg=$msorgname
 
@@ -95,12 +90,17 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
+# +=====================================================================+
+
+# DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
+
 # +---------------------------------------------------+
 # Version Tracking
 # +---------------------------------------------------+
 
 date="8-12-2013"						# Last Updated On
 version="2.3.7"							# Script Version
+
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -804,7 +804,7 @@ else
 	echo "that are not available via Yum Repo's."
 	sleep 3
 
-	yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
+	yes, y, yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
 	touch $track/perlmods
 f_complete
 fi
@@ -1062,6 +1062,7 @@ f_clam (){
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 		/usr/bin/clamav-unofficial-sigs.sh
+		yum update -y
 		touch $track/clam
 	fi
 }
@@ -1171,6 +1172,7 @@ fi
 # +---------------------------------------------------+
 
 f_permissions (){
+fn_clear
 echo "------------------------------------------------------------------------------";
 echo "S E T  P E R M I S S I O N S";
 echo "------------------------------------------------------------------------------";
@@ -1228,8 +1230,10 @@ f_services (){
 		chkconfig --level 345 MailScanner on
 		service spamassassin start
 		chkconfig --level 345 spamassassin on
-		yum update -y
 		yum remove bind-chroot -y
+		yum install bind -y
+		chkconfig --level 345 named on
+		service named start
 		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 		touch $track/services
 		f_clear
