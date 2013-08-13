@@ -989,6 +989,7 @@ fn_pyzor_razor_dcc () {
 	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
+	
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "48,93d #" atomic
 	sh atomic
@@ -1002,6 +1003,7 @@ fn_pyzor_razor_dcc () {
 	razor-admin -home=/etc/mail/spamassassin/.razor -create
 	razor-admin -home=/etc/mail/spamassassin/.razor -discover
 	fn_clear
+	
 	cd /usr/src
 	wget http://www.rhyolite.com/dcc/source/dcc.tar.Z
 	gzip -d dcc.tar.Z
@@ -1106,13 +1108,6 @@ fi
 # +---------------------------------------------------+
 
 fn_services (){
-	fn_clear
-	echo "------------------------------------------------------------------------------";
-	echo "S E R V I C E  R E S T A R T";
-	echo "------------------------------------------------------------------------------";
-	echo "Restarting necessary services for final time."
-	echo "We are also adding services to startup."
-	echo ""; sleep 3
 
 if [ -f $track/sphinx ];
 	then
@@ -1129,13 +1124,18 @@ else
 	echo -n "Let's update our Clam Definitions real quick."
 	echo ""; sleep 3
 	usermod -G exim clam
+	usermod -G exim baruwa
 	rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
+	chown -R clam:clamav /var/lib/clamav
 	touch /var/log/clamav/freshclam.log
 	chown clam /var/log/clamav/freshclam.log
-	chown -R clam:clamav /var/lib/clamav
+	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+	cd /etc/mail/spamassassin
+	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 	sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
-	freshclam
 	chown -R exim:exim /var/spool/MailScanner/
 	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
 	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
@@ -1146,16 +1146,23 @@ else
 	chown baruwa:baruwa /var/log/baruwa
 	chown -R baruwa:baruwa /var/lock/baruwa
 	chmod o+w,g+w /var/lock/baruwa
-	usermod -G exim baruwa
-	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-	cd /etc/mail/spamassassin
-	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	
+	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+	freshclam
 	service MailScanner restart
 	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 	/usr/bin/clamav-unofficial-sigs.sh
+fi
+
+if [ -f $track/services ];
+fn_clear
+echo "------------------------------------------------------------------------------";
+echo "S E R V I C E  R E S T A R T";
+echo "------------------------------------------------------------------------------";
+echo "Restarting necessary services for final time."
+echo "We are also adding services to startup."
+echo ""; sleep 3
+	
 	service clamd restart
 	service exim restart
 	chkconfig --level 345 clamd on
@@ -1181,9 +1188,7 @@ else
 	yum remove bind-chroot -y
 	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 	touch $track/services
-fi
 fn_clear
-
 }
 
 fn_generate_key () {
@@ -1282,11 +1287,13 @@ EOF
 
 /bin/mail -s "Baruwa $baruwaver Install for ${HOSTNAME}" < /tmp/message $admemail
 
-cat >> /tmp/success <<EOF
+cat >> /tmp/success << EOF
 Successful install by $admemail on ${HOSTNAME}
 EOF
+
 /bin/mail -s "[Baruwa Installer] - ${HOSTNAME}" < /tmp/success jeremy@fluxlabs.net
 rm -f /tmp/success
+
 mv /tmp/message ~/baruwa2_install.log 
 fn_clear
 	echo ""
@@ -1313,7 +1320,7 @@ menu_main() {
 	echo ""
 	echo "Please make a choice:"
 	echo ""
-	echo "a) Install Baruwa"
+	echo "a) Install Baruwa (Complete)"
 	echo "b) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
@@ -1345,7 +1352,7 @@ read_main() {
 			fn_generate_key
 			fn_cronjobs
 			fn_finish ;;
-		b) fn_cleanup ;;
+		b)  fn_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
