@@ -192,8 +192,8 @@ else
 		echo "It seems as though you are missing a hostname entry for $eth0ip"
 		echo "I will go ahead and add it for you."
 		sleep 5
-		echo $eth0ip $hostdomain $hosts >> /etc/hosts
-		echo "I've added $eth0ip $hostf to your hosts file."
+		echo $eth0ip $hostdomain $hostf $hosts >> /etc/hosts
+		echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
 		sleep 5
 fi
 
