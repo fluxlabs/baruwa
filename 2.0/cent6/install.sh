@@ -192,6 +192,7 @@ else
 	echo "If you have multiple interfaces, you can add those later."
 	sleep 5
 	echo $eth0ip $hostf $hosts >> /etc/hosts
+	echo ""
 	echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
 	echo "Resuming in 5 seconds ... " 
 	sleep 5
@@ -1018,16 +1019,16 @@ fn_pyzor_razor_dcc () {
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
 	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
-	chown -R exim: /var/spool/MailScanner/
+	chown -R exim:exim /var/spool/MailScanner/
 	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
 	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
 	mkdir -p /etc/MailScanner/baruwa/rules
 	mkdir -p /var/lib/baruwa/.spamassassin
 	chown apache:baruwa -R /var/lib/baruwa
-	chown baruwa: /var/run/baruwa
-	chown baruwa: /var/log/baruwa
-	chown -R baruwa.baruwa /var/lock/baruwa
+	chown baruwa:baruwa /var/run/baruwa
+	chown baruwa:baruwa /var/log/baruwa
+	chown -R baruwa:baruwa /var/lock/baruwa
 	chmod o+w,g+w /var/lock/baruwa
 	usermod -G exim baruwa
 	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
