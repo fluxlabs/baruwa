@@ -193,7 +193,8 @@ else
 	sleep 5
 	echo $eth0ip $hostf $hosts >> /etc/hosts
 	echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
-	echo "Resuming in 5 seconds ... " sleep 5
+	echo "Resuming in 5 seconds ... " 
+	sleep 5
 fi
 
 # +---------------------------------------------------+
@@ -1018,6 +1019,23 @@ fn_pyzor_razor_dcc () {
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
 	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 	chown -R exim: /var/spool/MailScanner/
+	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+	mkdir -p /etc/MailScanner/baruwa/rules
+	mkdir -p /var/lib/baruwa/.spamassassin
+	chown apache:baruwa -R /var/lib/baruwa
+	chown baruwa: /var/run/baruwa
+	chown baruwa: /var/log/baruwa
+	chown -R baruwa.baruwa /var/lock/baruwa
+	chmod o+w,g+w /var/lock/baruwa
+	usermod -G exim baruwa
+	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+	cd /etc/mail/spamassassin
+	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 	service MailScanner restart
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
@@ -1131,63 +1149,43 @@ if [ -f $track/services ];
 	then
 	echo "I believe you have already executed this portion. Skipping."
 else
+	echo -n "Let's update our Clam Definitions real quick."
+	echo ""; sleep 3
+	usermod -G exim clam
+	rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
+	touch /var/log/clamav/freshclam.log
+	chown clam /var/log/clamav/freshclam.log
+	chown -R clam:clamav /var/lib/clamav
+	sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 	yum remove bind-chroot -y
-	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
-	/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
-	/etc/MailScanner/baruwa/rules
-	mkdir /var/lib/baruwa/.spamassassin
-	chown apache:baruwa -R /var/lib/baruwa
-	chown baruwa: /var/run/baruwa
-	chown baruwa: /var/log/baruwa
-	chown -R baruwa.baruwa /var/lock/baruwa
-	chmod o+w,g+w /var/lock/baruwa
-	usermod -G exim baruwa
-
-	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-	cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+	freshclam
+	/usr/bin/clamav-unofficial-sigs.sh
+	service clamd restart
+	service exim restart
+	chkconfig --level 345 clamd on
+	service httpd start
+	chkconfig --level 345 httpd on
+	service memcached start
+	chkconfig --level 345 memcached on
+	service postgresql restart
+	chkconfig --level 345 postgresql on
+	service rabbitmq-server restart
+	chkconfig --level 345 rabbitmq-server on
+	service searchd start
+	chkconfig --level 345 searchd on
+	service baruwa start
+	chkconfig --level 345 baruwa on
+	service crond start
+	chkconfig --level 345 crond on
+	service MailScanner start
+	chkconfig --level 345 MailScanner on
+	service spamassassin start
+	chkconfig --level 345 spamassassin on
 	yum update -y
 	touch $track/services
-	fn_complete
 fi
-
-service httpd start
-chkconfig --level 345 httpd on
-service memcached start
-chkconfig --level 345 memcached on
-service postgresql restart
-chkconfig --level 345 postgresql on
-service rabbitmq-server restart
-chkconfig --level 345 rabbitmq-server on
-service searchd start
-chkconfig --level 345 searchd on
-service baruwa start
-chkconfig --level 345 baruwa on
-service crond start
-chkconfig --level 345 crond on
-service MailScanner start
-chkconfig --level 345 MailScanner on
-service spamassassin start
-chkconfig --level 345 spamassassin on
-
 fn_clear
-echo -n "Let's update our Clam Definitions real quick."
-echo ""; sleep 3
-usermod -G exim clam
-rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-touch /var/log/clamav/freshclam.log
-chown clam /var/log/clamav/freshclam.log
-chown -R clam:clamav /var/lib/clamav
-sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-freshclam
-/usr/bin/clamav-unofficial-sigs.sh
-service clamd restart
-service exim restart
-chkconfig --level 345 clamd on
 
 }
 
@@ -1197,6 +1195,13 @@ if [ $useauto == 1 ];
 	openssl req -x509 -newkey rsa:2048 -days 9999 -nodes -x509 -subj "/C=$sslcountry/ST=$sslprovince/L=$sslcity/O=$msorgname/CN=$baruwadomain" -keyout baruwa.key -out baruwa.pem -nodes
 	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
 else
+	fn_clear
+	echo "------------------------------------------------------------------------------";
+	echo "G E N E R A T E  C E R T I F I C A T E";
+	echo "------------------------------------------------------------------------------";
+	echo "Let's generate an ssl certificate for exim."
+	echo "Please answer the questions appropriately."
+	echo ""; sleep 3
 	openssl req -x509 -newkey rsa:2048 -keyout baruwa.key -out baruwa.pem -days 9999 -nodes
 	mkdir /etc/pki/baruwa; mv baruwa.* /etc/pki/baruwa/.
 fi
