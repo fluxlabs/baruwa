@@ -1104,10 +1104,10 @@ fi
 }
 
 # +---------------------------------------------------+
-# Services Function
+# Clam Function
 # +---------------------------------------------------+
 
-fn_services () {
+fn_clam () {
 	if [ -f $track/sphinx ];
 		then
 		echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
@@ -1141,7 +1141,9 @@ fn_services () {
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 		/usr/bin/clamav-unofficial-sigs.sh
 	fi
+}
 
+fn_services () {
 	if [ -f $track/services ];
 		then
 		fn_clear
@@ -1359,10 +1361,11 @@ read_main() {
 			fn_administrator
 			fn_http
 			fn_pyzor_razor_dcc
-			fn_services
+			fn_clam
 			fn_generate_key
 			fn_cronjobs
 			fn_permissions
+			fn_services
 			fn_finish ;;
 		b)  fn_cleanup ;;
 		x) exit 0;;
