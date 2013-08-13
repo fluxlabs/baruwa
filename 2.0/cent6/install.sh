@@ -1037,6 +1037,7 @@ fn_pyzor_razor_dcc () {
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 	service MailScanner restart
+	yum remove bind-chroot -y
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
 	touch $track/pyzor 
@@ -1157,7 +1158,6 @@ else
 	chown clam /var/log/clamav/freshclam.log
 	chown -R clam:clamav /var/lib/clamav
 	sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-	yum remove bind-chroot -y
 	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 	freshclam
 	/usr/bin/clamav-unofficial-sigs.sh
