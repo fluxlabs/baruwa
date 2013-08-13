@@ -194,8 +194,7 @@ else
 	echo $eth0ip $hostf $hosts >> /etc/hosts
 	echo ""
 	echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
-	echo "Resuming in 5 seconds ... " 
-	sleep 5
+	echo "Resuming in 5 seconds ... "; sleep 5
 fi
 
 # +---------------------------------------------------+
