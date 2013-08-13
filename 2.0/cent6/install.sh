@@ -40,9 +40,6 @@ useauto=0
 # Set 1 to pause after every step. (semi-debug?)
 usepause=0
 
-# Hostname of this machine
-hostdomain=mx01.domain.net
-
 # Postgresql Password
 pssqlpass=passw0rd123!
 
@@ -58,7 +55,7 @@ repemail=reports@domain.net
 # Baruwa Error Reports From Email
 erremail=errors@domain.net
 
-# Baruwa URL (Could match the hostname of this machine. Or a nicer url spam.domain.net)
+# Baruwa URL
 baruwadomain=baruwa.domain.net
 
 # Baruwa Admin Username
@@ -186,15 +183,17 @@ if grep $eth0ip /etc/hosts ;
 	then
 	:
 else
+	fn_clear
 	echo "------------------------------------------------------------------------------";
 	echo "M I S S I N G  H O S T  E N T R Y";
 	echo "------------------------------------------------------------------------------";
 	echo "It seems as though you are missing a hostname entry for $eth0ip"
-	echo "I will go ahead and add it for you."
+	echo "I will go ahead and add it for you. For now I am just adding eth0."
+	echo "If you have multiple interfaces, you can add those later."
 	sleep 5
-	echo $eth0ip $hostdomain $hostf $hosts >> /etc/hosts
+	echo $eth0ip $hostf $hosts >> /etc/hosts
 	echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
-	sleep 5
+	echo "Resuming in 5 seconds ... " sleep 5
 fi
 
 # +---------------------------------------------------+
@@ -363,18 +362,6 @@ while :
 		echo ''
 	done
 
-while :
-	do
-		echo ""
-		echo "What hostname would you like Apache to listen on for Baruwa requests?"
-		echo "ie: mx01.domain.com"
-		IFS= read -p "Domain: " hostdomain
-		IFS= read -p "Domain Again: " hostdomain2
-		[[ $hostdomain = "$hostdomain2" ]] && break
-		echo ''
-		echo 'Domain does not match. Please try again.'
-		echo ''
-	done
 
 while :
 	do
@@ -483,7 +470,7 @@ fi
 	echo "Ok, I've got all I've needed from you. Hopefully we'll have an install ready";
 	echo "for you in a bit. The process from here on out is automated."
 	echo "------------------------------------------------------------------------------";
-	echo $admemail $repemail $erremail $hostdomain $baruwadomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
+	echo $admemail $repemail $erremail $baruwadomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
 fn_confirm
 fi
 }
@@ -973,7 +960,7 @@ sleep 3
 #	mkdir -p /var/log/uwsgi; touch /var/log/uwsgi/uwsgi-baruwa.log
 #	curl -O https://raw.github.com/akissa/baruwa2/2.0.0/extras/config/uwsgi/nginx.conf
 #	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
-#	sed -i -e 's:ms.home.topdog-software.com:'$hostdomain':' /etc/nginx/conf.d/baruwa.conf
+#	sed -i -e 's:ms.home.topdog-software.com:'$baruwadomain':' /etc/nginx/conf.d/baruwa.conf
 #	service nginx restart
 #else
 	
@@ -1233,7 +1220,7 @@ sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.repo
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$baruwadomain':' /etc/httpd/conf.d/baruwa.conf
 sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/production.ini
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
-sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$hostdomain'|' $etcdir/production.ini
+sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
 
 fn_clear
 # +---------------------------------------------------+
