@@ -5,7 +5,7 @@
 #
 
 date="8-12-2013"						# Last Updated On
-version="2.3.6"							# Script Version
+version="2.3.7"							# Script Version
 
 # Author - Jeremy McSpadden
 # Contact - jeremy@fluxlabs.net
@@ -365,15 +365,8 @@ while :
 
 while :
 	do
-		echo ""
-		echo "What hostname would you like to be used for baruwa url reports?"
-		echo "ie: spam.domain.com"
-		IFS= read -p "Domain: " baruwadomain
-		IFS= read -p "Domain Again: " bdomain2
-		[[ $baruwadomain = "$bdomain2" ]] && break
-		echo ''
-		echo 'Domain does not match. Please try again.'
-		echo ''
+		unset baruwadomain
+		baruwadomain=$hostf
 	done
 		
 while :
@@ -1133,7 +1126,8 @@ else
 	/etc/MailScanner/baruwa/rules
 	touch $track/sphinx
 fi
-if [ -a $track/services ];
+
+if [ -f $track/services ];
 	then
 	echo "I believe you have already executed this portion. Skipping."
 else
