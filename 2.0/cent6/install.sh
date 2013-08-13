@@ -1107,88 +1107,89 @@ fi
 # Services Function
 # +---------------------------------------------------+
 
-fn_services (){
+fn_services () {
 
-if [ -f $track/sphinx ];
-	then
-	echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
-else
-	indexer --all --rotate
-	touch $track/sphinx
-fi
+	if [ -f $track/sphinx ];
+		then
+		echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
+	else
+		indexer --all --rotate
+		touch $track/sphinx
+	fi
 
-if [ -f $track/services ];
-	then
-	echo "I believe you have already executed this portion. Skipping."
-else
-	echo -n "Let's update our Clam Definitions real quick."
-	echo ""; sleep 3
-	usermod -G exim clam
-	usermod -G exim baruwa
-	rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-	chown -R clam:clamav /var/lib/clamav
-	touch /var/log/clamav/freshclam.log
-	chown clam /var/log/clamav/freshclam.log
-	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-	cd /etc/mail/spamassassin
-	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-	sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
-	chown -R exim:exim /var/spool/MailScanner/
-	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
-	mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
-	mkdir -p /etc/MailScanner/baruwa/rules
-	mkdir -p /var/lib/baruwa/.spamassassin
-	chown apache:baruwa -R /var/lib/baruwa
-	chown baruwa:baruwa /var/run/baruwa
-	chown baruwa:baruwa /var/log/baruwa
-	chown -R baruwa:baruwa /var/lock/baruwa
-	chmod o+w,g+w /var/lock/baruwa
+	if [ -f $track/services ];
+		then
+		echo "I believe you have already executed this portion. Skipping."
+	else
+		echo -n "Let's update our Clam Definitions real quick."
+		echo ""; sleep 3
+		usermod -G exim clam
+		usermod -G exim baruwa
+		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
+		chown -R clam:clamav /var/lib/clamav
+		touch /var/log/clamav/freshclam.log
+		chown clam /var/log/clamav/freshclam.log
+		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+		cd /etc/mail/spamassassin
+		wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
+		chown -R exim:exim /var/spool/MailScanner/
+		mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+		mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+		mkdir -p /etc/MailScanner/baruwa/rules
+		mkdir -p /var/lib/baruwa/.spamassassin
+		chown apache:baruwa -R /var/lib/baruwa
+		chown baruwa:baruwa /var/run/baruwa
+		chown baruwa:baruwa /var/log/baruwa
+		chown -R baruwa:baruwa /var/lock/baruwa
+		chmod o+w,g+w /var/lock/baruwa
 	
-	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
-	freshclam
-	service MailScanner restart
-	sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
-	/usr/bin/clamav-unofficial-sigs.sh
-fi
+		yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+		freshclam
+		service MailScanner restart
+		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
+		/usr/bin/clamav-unofficial-sigs.sh
+	fi
 
-if [ -f $track/services ];
-fn_clear
-echo "------------------------------------------------------------------------------";
-echo "S E R V I C E  R E S T A R T";
-echo "------------------------------------------------------------------------------";
-echo "Restarting necessary services for final time."
-echo "We are also adding services to startup."
-echo ""; sleep 3
+	if [ -f $track/services ];
+		fn_clear
+		echo "------------------------------------------------------------------------------";
+		echo "S E R V I C E  R E S T A R T";
+		echo "------------------------------------------------------------------------------";
+		echo "Restarting necessary services for final time."
+		echo "We are also adding services to startup."
+		echo ""; sleep 3
 	
-	service clamd restart
-	service exim restart
-	chkconfig --level 345 clamd on
-	service httpd start
-	chkconfig --level 345 httpd on
-	service memcached start
-	chkconfig --level 345 memcached on
-	service postgresql restart
-	chkconfig --level 345 postgresql on
-	service rabbitmq-server restart
-	chkconfig --level 345 rabbitmq-server on
-	service searchd start
-	chkconfig --level 345 searchd on
-	service baruwa start
-	chkconfig --level 345 baruwa on
-	service crond start
-	chkconfig --level 345 crond on
-	service MailScanner start
-	chkconfig --level 345 MailScanner on
-	service spamassassin start
-	chkconfig --level 345 spamassassin on
-	yum update -y
-	yum remove bind-chroot -y
-	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-	touch $track/services
-fn_clear
+		service clamd restart
+		service exim restart
+		chkconfig --level 345 clamd on
+		service httpd start
+		chkconfig --level 345 httpd on
+		service memcached start
+		chkconfig --level 345 memcached on
+		service postgresql restart
+		chkconfig --level 345 postgresql on
+		service rabbitmq-server restart
+		chkconfig --level 345 rabbitmq-server on
+		service searchd start
+		chkconfig --level 345 searchd on
+		service baruwa start
+		chkconfig --level 345 baruwa on
+		service crond start
+		chkconfig --level 345 crond on
+		service MailScanner start
+		chkconfig --level 345 MailScanner on
+		service spamassassin start
+		chkconfig --level 345 spamassassin on
+		yum update -y
+		yum remove bind-chroot -y
+		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+		touch $track/services
+		fn_clear
+
 }
 
 fn_generate_key () {
