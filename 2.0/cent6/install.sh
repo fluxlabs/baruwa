@@ -366,15 +366,28 @@ while :
 	do
 		echo ""
 		echo "What hostname would you like Apache to listen on for Baruwa requests?"
-		echo "ie: baruwa.domain.com"
+		echo "ie: mx01.domain.com"
 		IFS= read -p "Domain: " hostdomain
-		IFS= read -p "Domain Again: " bdomain2
-		[[ $hostdomain = "$bdomain2" ]] && break
+		IFS= read -p "Domain Again: " hostdomain2
+		[[ $hostdomain = "$hostdomain2" ]] && break
 		echo ''
 		echo 'Domain does not match. Please try again.'
 		echo ''
 	done
 
+	while :
+		do
+			echo ""
+			echo "What hostname would you like to be used for baruwa url reports?"
+			echo "ie: spam.domain.com"
+			IFS= read -p "Domain: " baruwadomain
+			IFS= read -p "Domain Again: " bdomain2
+			[[ $baruwadomain = "$bdomain2" ]] && break
+			echo ''
+			echo 'Domain does not match. Please try again.'
+			echo ''
+		done
+		
 while :
 	do
 		fn_clear
@@ -467,10 +480,9 @@ fi
 	fn_clear
 	echo "------------------------------------------------------------------------------";
 	echo "Ok, I've got all I've needed from you. Hopefully we'll have an install ready";
-	echo "for you in a bit. The process from here on out is automated. I will prompt you"
-	echo "shortly for some perl mod confirmations."
+	echo "for you in a bit. The process from here on out is automated."
 	echo "------------------------------------------------------------------------------";
-	echo $admemail $repemail $erremail $hostdomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
+	echo $admemail $repemail $erremail $hostdomain $baruwadomain $baruwaadmin $adminpass $adminemail $pssqlpass $rabbpass > $track/answers
 fn_confirm
 fi
 }
@@ -560,7 +572,6 @@ pip install python-memcached
 pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
 cd $home
-#curl http://sphinxsearch.googlecode.com/svn/trunk/api/sphinxapi.py -o px/lib/python$pythonver/site-packages/sphinxapi.py 
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
 curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
@@ -780,11 +791,10 @@ EOF
 chmod 0440 /etc/sudoers.d/baruwa
 fi
 
-if [[ -f $track/exim && -f $eximdir/baruwa/exim-bcrypt.pl ]];
+if [[ -f $track/exim ]];
 	then
 	echo "Exim is already configured. Skipping"; sleep 3
 else
-
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
 	curl -O $fluxlabsgit/extras/config/exim/exim.conf
 	curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
@@ -989,6 +999,10 @@ fi
 
 fn_pyzor_razor_dcc () {
 	fn_clear
+	if [ -a $track/pyzor ];
+		then
+		echo "I believe these are already installed. Skipping."
+	else
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
@@ -1026,7 +1040,9 @@ fn_pyzor_razor_dcc () {
 	service MailScanner restart
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
+	touch $track/pyzor 
 	fn_complete
+fi
 }
 
 # +---------------------------------------------------+
@@ -1129,27 +1145,33 @@ else
 	/etc/MailScanner/baruwa/rules
 	touch $track/sphinx
 fi
+if [ -a $track/services ];
+	then
+	echo "I believe you have already executed this portion. Skipping."
+else
+	yum remove bind-chroot -y
+	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+	mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
+	/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
+	/etc/MailScanner/baruwa/rules
+	mkdir /var/lib/baruwa/.spamassassin
+	chown apache:baruwa -R /var/lib/baruwa
+	chown baruwa: /var/run/baruwa
+	chown baruwa: /var/log/baruwa
+	chown -R baruwa.baruwa /var/lock/baruwa
+	chmod o+w,g+w /var/lock/baruwa
+	usermod -G exim baruwa
 
-yum remove bind-chroot -y
-sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} \
-/var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim \
-/etc/MailScanner/baruwa/rules
-mkdir /var/lib/baruwa/.spamassassin
-chown apache:baruwa -R /var/lib/baruwa
-chown baruwa: /var/run/baruwa
-chown baruwa: /var/log/baruwa
-chown -R baruwa.baruwa /var/lock/baruwa
-chmod o+w,g+w /var/lock/baruwa
-usermod -G exim baruwa
-
-sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
-sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
-yum update -y
+	sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
+	sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+	cd /etc/mail/spamassassin; wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
+	yum update -y
+	touch $track/services
+	fn_complete
+fi
 
 service httpd start
 chkconfig --level 345 httpd on
