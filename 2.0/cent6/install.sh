@@ -1175,7 +1175,7 @@ fi
 # +---------------------------------------------------+
 
 f_permissions (){
-fn_clear
+f_clear
 echo "------------------------------------------------------------------------------";
 echo "S E T  P E R M I S S I O N S";
 echo "------------------------------------------------------------------------------";
@@ -1192,7 +1192,7 @@ chown -R baruwa:baruwa /var/run/baruwa
 chown -R baruwa:baruwa /var/log/baruwa
 chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
-fn_clear
+f_clear
 
 }
 # +---------------------------------------------------+
