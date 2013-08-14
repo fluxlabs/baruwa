@@ -1192,7 +1192,7 @@ chown -R baruwa:baruwa /var/run/baruwa
 chown -R baruwa:baruwa /var/log/baruwa
 chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
-f_clear
+fn_clear
 
 }
 # +---------------------------------------------------+
