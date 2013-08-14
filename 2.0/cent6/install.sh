@@ -81,15 +81,6 @@ sslprovince='Illinois'
 # SSL City Name
 sslcity='Chicago'
 
-# SSL Organization Name
-sslorg=$msorgname
-
-# SSL Common Name
-sslcommon=$baruwadomain
-
-# SSL Email
-sslemail=$adminemail
-
 # +=====================================================================+
 
 # DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
@@ -98,9 +89,8 @@ sslemail=$adminemail
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-12-2013"						# Last Updated On
-version="2.3.7"							# Script Version
-
+date="8-13-2013"						# Last Updated On
+version="2.3.8"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -131,6 +121,16 @@ builddir="/usr/src/b2build/"			# Build Directory
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
+
+
+# SSL Organization Name
+sslorg=$msorgname
+
+# SSL Common Name
+sslcommon=$baruwadomain
+
+# SSL Email
+sslemail=$adminemail
 
 # +---------------------------------------------------+
 # Functions
@@ -1209,7 +1209,7 @@ f_services (){
 		echo "We are also adding services to startup."
 		echo ""; sleep 3
 	
-		service clamd restart
+		service clamd start
 		service exim restart
 		chkconfig --level 345 clamd on
 		service httpd start
