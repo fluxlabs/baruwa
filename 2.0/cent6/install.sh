@@ -1018,6 +1018,8 @@ f_pyzor_razor_dcc (){
 	echo loadplugin Mail::SpamAssassin::Plugin::AWL >> /etc/mail/spamassassin/v310.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody >> /etc/mail/spamassassin/v320.pre
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
+	sed -i '1d' /usr/bin/pyzor
+	sed -i '1i #!/usr/bin/python -Wignore::DeprecationWarning' /usr/bin/pyzor
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
 	touch $track/pyzor 
@@ -1374,7 +1376,7 @@ read_main (){
 			f_configuration
 			f_administrator
 			f_http
-			f_pyzor_razor_dcc
+			f_http_razor_dcc
 			f_clam
 			f_generate_key
 			f_cronjobs
