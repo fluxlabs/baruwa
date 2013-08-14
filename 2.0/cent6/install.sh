@@ -597,9 +597,11 @@ su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 
 # Bayes/AWL DB
 cd /tmp; curl -O $fluxlabsgit/extras/bayes/bayes-postgres.sql
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgres.sql 
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgres.sql
+cd /tmp; curl -O $fluxlabsgit/extras/bayes/grants.sql
 su - postgres -c 'psql baruwa -f /tmp/bayes-postgres.sql'
 su - postgres -c 'psql baruwa -f /tmp/awl-postgres.sql'
+su - postgres -c 'psql baruwa -f /tmp/grants.sql'
 
 service postgresql restart
 
