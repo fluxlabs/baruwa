@@ -1376,7 +1376,7 @@ read_main (){
 			f_configuration
 			f_administrator
 			f_http
-			f_http_razor_dcc
+			f_pyzor_razor_dcc
 			f_clam
 			f_generate_key
 			f_cronjobs
