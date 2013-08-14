@@ -1047,8 +1047,9 @@ f_clam (){
 	else
 		echo -n "Let's update our Clam Definitions real quick."
 		echo ""; sleep 3
-		usermod -G exim clam
-		usermod -G exim baruwa
+		usermod -a -G exim clam,baruwa,clamav
+		usermod -a -G mail clam,baruwa,clamav
+		usermod -a -G clamav exim,baruwa
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 		chown -R clam:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
