@@ -65,7 +65,7 @@ fi
 # Reload MailScanner only if we need to.
 if [ "$reload" = "1" ]; then
   echo Reloading MailScanner and SpamAssassin configuration rules
-  /etc/init.d/mailscanner reload
+  /etc/init.d/MailScanner reload
 fi
 =======
 #!/bin/bash
@@ -135,5 +135,5 @@ fi
 # Reload MailScanner only if we need to.
 if [ "$reload" = "1" ]; then
   echo Reloading MailScanner and SpamAssassin configuration rules
-  /etc/init.d/mailscanner reload
+  /etc/init.d/MailScanner reload
 fi
