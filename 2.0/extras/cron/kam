@@ -1,4 +1,3 @@
-<<<<<<< HEAD:2.0/extras/cron/kam
 #!/bin/bash
 
 # Insert a random delay up to this value, to spread virus updates round
@@ -138,4 +137,3 @@ if [ "$reload" = "1" ]; then
   echo Reloading MailScanner and SpamAssassin configuration rules
   /etc/init.d/mailscanner reload
 fi
->>>>>>> 93040d55691cfca6eef95109e6cef909d85badce:2.0/extras/cron/kam
