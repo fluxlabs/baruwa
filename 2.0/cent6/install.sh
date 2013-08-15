@@ -365,14 +365,8 @@ while :
 		echo ''
 	done
 
-
-while :
-	do
-		unset baruwadomain
 		baruwadomain=$hostf
-	done
-		
-while :
+
 	do
 		f_clear
 		echo "------------------------------------------------------------------------------";
