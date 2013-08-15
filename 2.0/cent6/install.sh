@@ -179,6 +179,7 @@ f_cleanup (){
 # Check hosts file entry
 # +---------------------------------------------------+
 
+fn_hostname () {
 if grep $eth0ip /etc/hosts ;
 	then
 	:
@@ -196,6 +197,7 @@ else
 	echo "I've added '$eth0ip $hostf $hosts' to your hosts file."
 	echo "Resuming in 5 seconds ... "; sleep 5
 fi
+}
 
 # +---------------------------------------------------+
 # Check System
@@ -365,8 +367,19 @@ while :
 		echo ''
 	done
 
-		baruwadomain=$hostf
-
+	while :
+	do
+	echo ""
+	echo "What hostname would you like Apache to listen on for Baruwa requests?"
+	echo "ie: baruwa.domain.com"
+	IFS= read -p "Domain: " baruwadomain
+	IFS= read -p "Domain Again: " bdomain2
+	[[ $baruwadomain = "$bdomain2" ]] && break
+	echo ''
+	echo 'Domain does not match. Please try again.'
+	echo ''
+	done
+		
 while :
 	do
 		f_clear
