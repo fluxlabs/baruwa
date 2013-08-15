@@ -384,7 +384,7 @@ while :
 	do
 		f_clear
 		echo "------------------------------------------------------------------------------";
-		echo "B A R U W A  A D M I N  U S E R";c
+		echo "B A R U W A  A D M I N  U S E R";
 		echo "------------------------------------------------------------------------------";
 		echo ""
 		echo "What would you like your username to be?"
