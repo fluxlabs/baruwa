@@ -23,11 +23,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # +--------------------------------------------------------------------+
 
-home="/home/baruwa/px/bin/"		# Path to bin
+binhome="/home/baruwa/px/bin/"		# Path to bin
 
 # Create Admin Account
 
-fn_admin_account (){
+fn_admin_account () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	A D D  B A R U W A  A D M I N  A C C O U N T";
@@ -44,12 +44,12 @@ echo ""
 echo "What email would you like to use?"
 read -p "Email: " ADMINEMAIL
 echo ""
-$home/paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
+$binhome/paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
 sleep 8
 }
 
 # Change User Password
-fn_reset_password (){
+fn_reset_password () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	C H A N G E  U S E R  P A S S W O R D";
@@ -59,69 +59,69 @@ echo ""
 echo "What user would you like to change the password for?"
 read -p "Username: " USERNAME
 echo ""
-$home/paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
+$binhome/paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
 sleep 8
 }
 
 # Clean Quarantine
-fn_prune_quarantine (){
+fn_prune_quarantine () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	P R U N E  Q U A R A N T I N E";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to prune your Quarantine."
 echo "Processing ....."
-$home/paster prune-quarantine /etc/baruwa/production.ini
+$binhome/paster prune-quarantine /etc/baruwa/production.ini
 sleep 5
 }
 
 # Send Reports
-fn_send_reports (){
+fn_send_reports () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	S E N D  R E P O R T S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to prune your Quarantine."
 echo "Processing ....."
-$home/paster send-quarantine-reports /etc/baruwa/production.ini
+$binhome/paster send-quarantine-reports /etc/baruwa/production.ini
 sleep 5
 }
 
 # Send PDF Reports
-fn_send_pdf_reports (){
+fn_send_pdf_reports () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	S E N D  P D F  R E P O R T S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to send PDF Reports."
 echo "Processing ....."
-$home/paster send-pdf-reports /etc/baruwa/production.ini
+$binhome/paster send-pdf-reports /etc/baruwa/production.ini
 sleep 5
 }
 
 # Update SA Rules
-fn_update_sa_rules (){
+fn_update_sa_rules () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	U P D A T E  S A  R U L E S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to update your spamasasssin rules."
 echo "Processing ....."
-$home/paster update-sa-rules /etc/baruwa/production.ini
+$binhome/paster update-sa-rules /etc/baruwa/production.ini
 sleep 5
 }
 
 # Update Search Index
-fn_update_search_index (){
+fn_update_search_index () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
 echo "	I N D E X  S E A R C H";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to update your search index."
 echo "Processing ....."
-$home/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
+$binhome/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
 sleep 5
-$home/paster update-delta-index --index archive /etc/baruwa/production.ini
+$binhome/paster update-delta-index --index archive /etc/baruwa/production.ini
 sleep 5
 }
 
@@ -162,7 +162,7 @@ read_main() {
 		e) fn_send_pdf_reports ;;
 		f) fn_update_sa_rules ;;
 		g) fn_update_search_index ;;
-		x) exit 0;;
+		x) exit 0 ;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
 }
