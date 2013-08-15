@@ -23,7 +23,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # +--------------------------------------------------------------------+
 
-binhome="/home/baruwa/px/bin/"		# Path to bin
+# +---------------------------------------------------+
+# Version Tracking
+# +---------------------------------------------------+
+
+date="8-15-2013"						# Last Updated On
+version="1.0"							# Script Version
+binhome="/home/baruwa/px/bin/"			# Path to bin
 
 # Create Admin Account
 
