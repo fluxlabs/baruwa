@@ -32,7 +32,6 @@ version="1.0"							# Script Version
 binhome="/home/baruwa/px/bin/"			# Path to bin
 
 # Create Admin Account
-
 function admin_account () {
 clear 2>/dev/null
 echo "------------------------------------------------------------------------------";
