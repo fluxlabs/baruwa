@@ -1,4 +1,4 @@
-Installers for Baruwa 2.0.1
+Installers for Baruwa 2.0.1 (Community Edition)
 =========
 
 Your hostname must match the domain you choose in this script.
