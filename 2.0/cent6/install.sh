@@ -89,8 +89,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-15-2013"						# Last Updated On
-version="2.4"							# Script Version
+date="8-18-2013"						# Last Updated On
+version="2.4.1"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
