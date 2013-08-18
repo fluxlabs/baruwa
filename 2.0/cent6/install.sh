@@ -26,7 +26,7 @@
 
 # +---------------------------------------------------+
 # Automated Install
-# 	If you would like a completely automated install
+#   If you would like a completely automated install
 #   Fill the required fields below.
 # +---------------------------------------------------+
 
@@ -67,10 +67,10 @@ adminemail=admin@domain.net
 timezone=America/Chicago
 
 # MailScanner Organization Name - Long
-msorgname='Your Organization'
+msorgnamelong='Your Organization'
 
 # MailScanner Organization Name - Short (No Spaces)
-msorgnamelong='YourOrganization'
+msorgname='YourOrganization'
 
 # SSL Country Code
 sslcountry='US'
@@ -100,7 +100,7 @@ rpmforge="0.5.2-2"						# RPM Forge Version
 rabbitmq="3.1.5-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
-libmem="1.0.17"                      	# LIB MEM Cache Version
+libmem="1.0.17"							# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
 postgresver="9.1"						# PostgreSQL Version
@@ -431,10 +431,10 @@ while :
 		echo "Lets set a password for Postgres."
 		echo "What would you like this super secret"
 		echo "password to be?"
-	    IFS= read -r -p "Password: " pssqlpass
-	    IFS= read -r -p "Password Again: " pssqlpass2
-	    echo ""
-	    [[ $pssqlpass = "$pssqlpass2" ]] && break
+		IFS= read -r -p "Password: " pssqlpass
+		IFS= read -r -p "Password Again: " pssqlpass2
+		echo ""
+		[[ $pssqlpass = "$pssqlpass2" ]] && break
 		echo ''
 		echo 'Passwords did not match. Please try again.'
 		echo ''
@@ -449,10 +449,10 @@ while :
 		echo "Lets set a password for RabbitMQ."
 		echo "What would you like this super secret"
 		echo "password to be?"
-	    IFS= read -r -p "Password: " rabbpass
-	    IFS= read -r -p "Password Again: " rabbpass2
-	    echo ""
-	    [[ $rabbpass = "$rabbpass2" ]] && break
+		IFS= read -r -p "Password: " rabbpass
+		IFS= read -r -p "Password Again: " rabbpass2
+		echo ""
+		[[ $rabbpass = "$rabbpass2" ]] && break
 		echo ''
 		echo 'Passwords did not match. Please try again.'
 		echo ''
@@ -588,7 +588,7 @@ service postgresql start
 cat > /var/lib/pgsql/data/pg_hba.conf << 'EOF'
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 local   all         postgres                          trust
-local	all	    	baruwa			      			  trust
+local	all         baruwa                            trust
 host    all         all         127.0.0.1/32          md5
 host    all         all         ::1/128               md5
 EOF
@@ -886,9 +886,9 @@ if [ -f $track/baruwaconfig ];
 	sed -i -e 's/sqlalchemy.url/#sqlalchemy.url/' $etcdir/production.ini
 	sed -i "72i sqlalchemy.url = postgresql://baruwa:$pssqlpass@127.0.0.1:5432/baruwa" $etcdir/production.ini
 	sed -i -e 's:broker.password =:broker.password = '$rabbpass':' \
-		   -e 's:broker.vhost = baruwa:broker.vhost = '$hosts':' \
-		   -e "s:snowy.local:$(hostname):g" \
-	       -e 's:^#celery.queues:celery.queues:' $etcdir/production.ini
+           -e 's:broker.vhost = baruwa:broker.vhost = '$hosts':' \
+           -e "s:snowy.local:$(hostname):g" \
+           -e 's:^#celery.queues:celery.queues:' $etcdir/production.ini
 	touch $track/baruwaconfig
 
 fi
@@ -1031,7 +1031,7 @@ f_pyzor_razor_dcc (){
 	sed -i '1i #!/usr/bin/python -Wignore::DeprecationWarning' /usr/bin/pyzor
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
-	touch $track/pyzor 
+	touch $track/pyzor
 	f_complete
 fi
 }
@@ -1334,7 +1334,7 @@ EOF
 /bin/mail -s "[Baruwa Installer] - ${HOSTNAME}" < /tmp/success jeremy@fluxlabs.net
 rm -f /tmp/success
 
-mv /tmp/message ~/baruwa2_install.log 
+mv /tmp/message ~/baruwa2_install.log
 f_clear
 	echo ""
 	echo "An email has been sent to "$admemail"."
