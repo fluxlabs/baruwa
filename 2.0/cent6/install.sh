@@ -1350,7 +1350,8 @@ f_confirm
 # +---------------------------------------------------+
 f_baruwa-admin () {
 	if [ -f /usr/sbin/baruwa-admin ] ;
-		echo "It looks as though baruwa-admin is already installed"
+		then
+		echo "It looks as though baruwa-admin is already installed."
 	else
 	cd /usr/sbin
 	curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/baruwa-admin
