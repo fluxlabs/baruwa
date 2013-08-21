@@ -559,11 +559,6 @@ curl -O $baruwagit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
 patch -p3 -i $home/repoze.who-friendly-form.patch
 patch -p4 -i $home/repoze-who-fix-auth_tkt-tokens.patch
-# Patch added to code
-#cd $home
-#curl -O $baruwagit/extras/patches/subprocess_timeout.patch
-#cd $home/px/lib/python$pythonver/site-packages/
-#patch -p1 -i $home/subprocess_timeout.patch
 touch $track/python
 f_complete
 fi
