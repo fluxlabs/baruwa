@@ -1345,6 +1345,18 @@ f_clear
 	echo ""
 f_confirm
 }
+# +---------------------------------------------------+
+# Baruwa Admin
+# +---------------------------------------------------+
+f_baruwa-admin () {
+	if [ -f /usr/sbin/baruwa-admin ] ;
+		echo "It looks as though baruwa-admin is already installed"
+	else
+	cd /usr/sbin
+	curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/baruwa-admin
+	chmod +x baruwa-admin
+fi
+}
 
 # +---------------------------------------------------+
 # Display menus
@@ -1359,6 +1371,7 @@ menu_main (){
 	echo ""
 	echo "a) Install Baruwa (Complete)"
 	echo "b) Cleanup Installer"
+	echo "c) Install Baruwa-Admin"
 	echo " "
 	echo "x) Exit"
 }
@@ -1392,6 +1405,7 @@ read_main (){
 			f_services
 			f_finish ;;
 		b)  f_cleanup ;;
+		c)  f_baruwa_admin ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
