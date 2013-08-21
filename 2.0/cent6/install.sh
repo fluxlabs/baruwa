@@ -1348,7 +1348,7 @@ f_confirm
 # +---------------------------------------------------+
 # Baruwa Admin
 # +---------------------------------------------------+
-f_baruwa-admin () {
+f_baruwa_admin (){
 	if [ -f /usr/sbin/baruwa-admin ] ;
 		then
 		echo "It looks as though baruwa-admin is already installed."
