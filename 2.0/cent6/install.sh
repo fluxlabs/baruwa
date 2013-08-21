@@ -1356,6 +1356,8 @@ f_baruwa_admin (){
 	cd /usr/sbin
 	curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/baruwa-admin
 	chmod +x baruwa-admin
+	echo "You may now use 'baruwa-admin' as a command."
+	sleep 5
 fi
 }
 
