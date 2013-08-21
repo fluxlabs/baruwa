@@ -509,7 +509,7 @@ else
 
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
     freetype-devel libjpeg-devel zlib-devel openldap-devel openssl-devel swig multitail perl-DBD-Pg perl-DBD-MySQL \
-    cracklib-devel GeoIP-devel mysql-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
+    cracklib-devel GeoIP-devel mariadb-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
     gcc zip tar nano sudo kernel-headers ntp sed perl-DBD-Pg sphinx libsphinxclient mlocate postgresql-server postgresql-plpython  \
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
