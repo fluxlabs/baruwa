@@ -1069,6 +1069,7 @@ f_clam (){
 		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 		yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 		freshclam
+		cd /var/lib/clamav; wget http://www.mailscanner.eu/scamnailer.ndb
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 		/usr/bin/clamav-unofficial-sigs.sh
