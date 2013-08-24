@@ -89,8 +89,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-18-2013"						# Last Updated On
-version="2.4.1"							# Script Version
+date="8-24-2013"						# Last Updated On
+version="2.4.5"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -1338,7 +1338,7 @@ f_confirm
 f_additional_sa (){
 	if [ -f $track/additional_sa ];
 		then
-		echo "The Additional Spam Assassin Rules are already installed."
+			echo "The Additional Spam Assassin Rules are already installed."
 		else
 		f_clear
 		echo "------------------------------------------------------------------------------";
@@ -1359,6 +1359,8 @@ f_additional_sa (){
 		cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
+	service spamd reload
+	service MailScanner reload
 	touch $track/additional_sa
 fi
 }
@@ -1368,7 +1370,7 @@ fi
 f_additional_clam (){
 	if [ -f $track/additional_clam ];
 		then
-		echo "The Additional Clam AV Rules are already installed."
+			echo "The Additional Clam AV Rules are already installed."
 		else
 		f_clear
 		echo "------------------------------------------------------------------------------";
