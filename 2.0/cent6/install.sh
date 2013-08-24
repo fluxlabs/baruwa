@@ -1365,7 +1365,7 @@ fi
 # +---------------------------------------------------+
 # Additional Clam AV
 # +---------------------------------------------------+
-f_additional_sa (){
+f_additional_clam (){
 	if [ -f $track/additional_clam ];
 		then
 		:
