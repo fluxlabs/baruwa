@@ -171,7 +171,7 @@ f_cleanup (){
 	echo "I N S T A L L E R  C L E A N  U P";
 	echo "------------------------------------------------------------------------------";
 	echo "Cleaning up Installer files."; sleep 5
-	rm -f $home/*.patch
+	rm -f $home/*.patch; rm -f /tmp/*.sql; rm -rf /tmp/*tmp*
 	rm -rf {$track,$logs,$builddir}
 }
 
