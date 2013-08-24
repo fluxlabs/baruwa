@@ -1453,8 +1453,8 @@ read_main (){
 			f_finish ;;
 		b)  f_additional_sa ;;
 		c)  f_additional_clam ;;
-		d)  f_cleanup ;;
-		e)  f_baruwa_admin ;;
+		d)  f_baruwa_admin ;;
+		e)  f_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
