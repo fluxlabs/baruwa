@@ -496,7 +496,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL mariadb" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -509,7 +509,7 @@ else
 
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
     freetype-devel libjpeg-devel zlib-devel openldap-devel openssl-devel swig multitail perl-DBD-Pg perl-DBD-MySQL \
-    cracklib-devel GeoIP-devel mariadb-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
+    cracklib-devel GeoIP-devel mysql-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
     gcc zip tar nano sudo kernel-headers ntp sed perl-DBD-Pg sphinx libsphinxclient mlocate postgresql-server postgresql-plpython  \
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
@@ -1395,9 +1395,11 @@ f_baruwa_admin (){
 		then
 		echo "It looks as though baruwa-admin is already installed."
 	else
+		f_clear
 	cd /usr/sbin
 	curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/baruwa-admin
 	chmod +x baruwa-admin
+	f_clear
 	echo "You may now use 'baruwa-admin' as a command."
 	sleep 5
 fi
