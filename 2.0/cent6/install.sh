@@ -1361,7 +1361,8 @@ f_additional_sa (){
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 	yum install spamassassin-iXhash2 -y
-	
+	touch $track/additional_sa
+fi
 }
 # +---------------------------------------------------+
 # Additional Clam AV
@@ -1382,6 +1383,8 @@ f_additional_sa (){
 		echo ""; sleep 3
 		yum install clamav-unofficial-sigs  -y
 		/usr/bin/clamav-unofficial-sigs.sh
+		touch $track/additional_clam
+	fi
 }
 
 # +---------------------------------------------------+
