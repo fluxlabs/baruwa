@@ -1049,8 +1049,6 @@ f_clam (){
 		then
 		echo "I believe you have already executed this portion. Skipping."
 	else
-		echo -n "Let's update our Clam Definitions real quick."
-		echo ""; sleep 3
 		usermod -a -G clamav exim
 		#usermod -a -G clamav baruwa
 		usermod -a -G clamav mail
@@ -1063,6 +1061,9 @@ f_clam (){
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+		fn_clear
+		echo -n "Let's update our Clam Definitions real quick."
+		echo ""; sleep 3
 		freshclam
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
