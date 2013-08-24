@@ -1397,7 +1397,7 @@ f_baruwa_admin (){
 	else
 		f_clear
 	cd /usr/sbin
-	curl -O https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/baruwa-admin
+	curl -O $fluxlabsgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
 	f_clear
 	echo "You may now use 'baruwa-admin' as a command."
