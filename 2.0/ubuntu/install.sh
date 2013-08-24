@@ -88,16 +88,6 @@ sslcity='Your City'
 # SSL Organization Name
 sslorg='Your Organization'
 
-# Thanks Xaroth
-# When testing we'll want to store the install vars elsewhere. That way, when the install script is updated, we don't have to re-set all our
-# You can put your variables (as set above) in a file called local_vars and we'll try to load it here.
-#
-# Answers are saved to $track/answers .. could/should expand on this. See line #477
-if [ -f ./local_vars ];
-    then
-    . ./local_vars
-fi
-
 # NOTHING TO EDIT BELOW HERE !!  NOTHING TO EDIT BELOW HERE !!
 
 # +---------------------------------------------------+
@@ -255,6 +245,16 @@ mkdir $logs
 mkdir $builddir
 }
 
+# Read in answers if provided previously.
+
+if [ -f $track/answers ];
+    then
+	echo " It looks as though I already have an answers file located at $track/answers."
+	echo " I will go ahead and use this."
+	sleep 5
+	useauto=1
+    . .$track/answers
+fi
 
 # +---------------------------------------------------+
 # User Prompt Function
