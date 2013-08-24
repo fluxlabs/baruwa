@@ -998,7 +998,7 @@ f_pyzor_razor_dcc (){
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "48,93d #" atomic
 	sh atomic
-	yum install pyzor razor-agents perl-Razor-Agent -y
+	yum install pyzor razor-agents -y
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
 	chmod -R a+rX /usr/lib/python2.6/site-packages/pyzor
 	mkdir /var/lib/pyzor; mkdir /var/lib/razor; cd /var/lib/pyzor
@@ -1052,7 +1052,7 @@ f_clam (){
 		echo -n "Let's update our Clam Definitions real quick."
 		echo ""; sleep 3
 		usermod -a -G clamav exim
-		usermod -a -G clamav baruwa
+		#usermod -a -G clamav baruwa
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
 		usermod -a -G exim clam
@@ -1100,14 +1100,6 @@ f_clear
 
 f_cronjobs (){
 f_clear
-if [ -f /etc/cron.daily/kam ];
-	then
-	echo "Hourly Cronjob exists. Skipping."; sleep 3
-else
-	cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
-	cd /etc/cron.hourly/; wget $fluxlabsgit/extras/cron/baruwa-expire-bayes; wget $fluxlabsgit/extras/cron/baruwa-clean-eximdb; chmod +x *
-fi
-
 if [ -f /etc/cron.d/baruwa ];
 	then
 	echo "Baruwa Cronjobs exists. Skipping." ; sleep 3
@@ -1360,6 +1352,12 @@ f_additional_sa (){
 	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	if [ -f /etc/cron.daily/kam ];
+		then
+		echo "Hourly Cronjob exists. Skipping."; sleep 3
+	else
+		cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
+	fi
 	yum install spamassassin-iXhash2 -y
 	touch $track/additional_sa
 fi
