@@ -460,9 +460,9 @@ fn_clear
 if [[ -f $track/pssql ]];
         then
                 echo "PostgreSQL seems to already be configured. Skipping." ; sleep 3
-       	 else
-            	while :
-           	 do
+			else
+				while :
+				do
                
 		echo "------------------------------------------------------------------------------";
                 echo "P O S T G R E S Q L  P A S S W O R D";
