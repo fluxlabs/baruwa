@@ -27,8 +27,8 @@ chsh -s /bin/bash
 
 # +---------------------------------------------------+
 #	Automated Install
-# 	If you would like a completely automated install
-# 	Fill the required fields below.
+#   If you would like a completely automated install
+#   Fill the required fields below.
 # +---------------------------------------------------+
 
 # Set 1 to Use the autocomplete. 0 to do prompts.
@@ -104,15 +104,15 @@ fi
 # Version Tracking
 # +---------------------------------------------------+
 
-date="6-29-2013"                                        	# Latest Date
-version="2.3.2"                                            	# Script Version
-ubuntuver="12.04"                                           # Script ID
-baruwaver="2.0.1"                            				# Baruwa Version
-rabbitmq="3.1.1"                                        	# Rabbit MQ Version
-msver="4.84.6-1"                                        	# MailScanner Version
-msver1="4.84.6"                                         	# MS Config Version
-libmem="1.0.17"                                         	# LIB MEM Cache Version
-pythonver="2.7"                                         	# Python Version
+date="6-29-2013"											# Latest Date
+version="2.3.2"												# Script Version
+ubuntuver="12.04"											# Script ID
+baruwaver="2.0.1"											# Baruwa Version
+rabbitmq="3.1.1"											# Rabbit MQ Version
+msver="4.84.6-1"											# MailScanner Version
+msver1="4.84.6"												# MS Config Version
+libmem="1.0.17"												# LIB MEM Cache Version
+pythonver="2.7"												# Python Version
 postgresver="9.1"											# PostgreSQL Version
 libdigestver="2.13-2build2"									# LIB Digest Version
 
@@ -120,14 +120,14 @@ libdigestver="2.13-2build2"									# LIB Digest Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"       		# Extras from Baruwa
-fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"     	# Extras from Flux Labs
-home="/home/baruwa" 							# Home Directory
-etcdir="/etc/baruwa"                                   			# Baruwa etc
-eximdir="/etc/exim4"                                   			# Exim Directory
-track="/tmp/tracking"   						# Tracking Directory
-logs="/tmp/baruwa2" 							# Logs Directory
-builddir="/usr/src/b2build/"						# Build Directory
+baruwagit="https://raw.github.com/akissa/baruwa2/2.0.1"				# Extras from Baruwa
+fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"		# Extras from Flux Labs
+home="/home/baruwa"													# Home Directory
+etcdir="/etc/baruwa"												# Baruwa etc
+eximdir="/etc/exim4"												# Exim Directory
+track="/tmp/tracking"												# Tracking Directory
+logs="/tmp/baruwa2"													# Logs Directory
+builddir="/usr/src/b2build/"										# Build Directory
 hosts=$(hostname -s)
 hostf=$(hostname -f)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
@@ -496,10 +496,10 @@ echo "--------------------------------------------------------------------------
 	echo "Lets set a password for RabbitMQ."
                 echo "What would you like this super secret"
                 echo "password to be?"
-           	IFS= read -r -p "Password: " rabbpass
-           	IFS= read -r -p "Password Again: " rabbpass2
-           	echo ""
-           	[[ $rabbpass = "$rabbpass2" ]] && break
+			IFS= read -r -p "Password: " rabbpass
+			IFS= read -r -p "Password Again: " rabbpass2
+			echo ""
+			[[ $rabbpass = "$rabbpass2" ]] && break
                 echo ''
                 echo 'Passwords did not match. Please try again.'
                 echo ''
@@ -557,7 +557,7 @@ echo "Installing mailscanner dependencies."
 apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl libtest-pod-perl libbusiness-isbn-perl libdata-dump-perl libinline-perl libnet-dns-resolver-programmable-perl -y
 fn_clear
 
-# Thanks Xaroth for this 
+# Thanks Xaroth for this
 # // Replaced with proper if/else
 if [ "$(uname -m)" = x86_64 ];
     then
@@ -580,7 +580,7 @@ fi
 
 fn_dnsmasq (){
 fn_clear
-# Need to add nameserver 127.0.0.1 to line1 of /etc/resolv.conf 
+# Need to add nameserver 127.0.0.1 to line1 of /etc/resolv.conf
 if [[ -a $track/dnsmasq ]];
         then
         echo "Dnsmasq is already configured. Skipping."
@@ -836,7 +836,7 @@ if dpkg --list | grep  mailscanner;
         sed -i 's:bayes_ignore_header X-Baruwa:bayes_ignore_header X-'$orgname'-BaruwaFW:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamCheck:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamCheck:' /etc/MailScanner/spam.assassin.prefs.conf
         sed -i 's:bayes_ignore_header X-Baruwa-SpamScore:bayes_ignore_header X-'$orgname'-BaruwaFW-SpamScore:' /etc/MailScanner/spam.assassin.prefs.conf
-        sed -i 's:bayes_ignore_header X-Baruwa-Information:bayes_ignore_header X-'$orgname'-BaruwaFW-Information:' /etc/MailScanner/spam.assassin.prefs.conf         
+        sed -i 's:bayes_ignore_header X-Baruwa-Information:bayes_ignore_header X-'$orgname'-BaruwaFW-Information:' /etc/MailScanner/spam.assassin.prefs.conf
         mkdir -p /var/spool/exim.in/input
         chown -R Debian-exim:Debian-exim /var/spool/exim.in
         #Add '20i{clamd} to virus.scanners.conf
@@ -845,7 +845,7 @@ if dpkg --list | grep  mailscanner;
 	#sed -i 's:/usr/local/bin/file-wrapper:/usr/bin/file:' /etc/MailScanner/MailScanner.conf
 	#Change clamd.socket to clamd.ctl in MailScanner.conf
 	#sed -i 's:clamd.sock:clamd.ctl:' /etc/MailScanner/MailScanner.conf
-	   
+	
         #Setup Bayes Database
 	echo "Creating role sa_user"
 	su - postgres -c "psql -c\"create role sa_user login;\""
@@ -936,7 +936,7 @@ else
         #Comment out SPF Checks
         #sed -i 's:deny\    message\       = SPF_MSG:#deny\    message\       = SPF_MSG:' /etc/exim4/exim4.conf
         #sed -i -e 's/spf/#spf = /' /etc/exim4/exim4.conf
-      	sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
+		sed -i -e 's/verysecretpw/'$pssqlpass'/' /etc/exim4/macros.conf
         #sed -i -e 's/dbl_/#dbl_/' /etc/exim4/exim_out.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/exim_out.conf
         sed -i s/"\/etc\/exim"/"\/etc\/exim4"/ /etc/exim4/trusted-configs
@@ -1050,7 +1050,7 @@ then
 else
 
 #Create baruwa directories
-mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim /etc/MailScanner/baruwa/rules /var/lib/baruwa/data/templates/{general,accounts} 
+mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates} /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim /etc/MailScanner/baruwa/rules /var/lib/baruwa/data/templates/{general,accounts}
 #Create Baruwa user/group
 getent group baruwa >/dev/null || addgroup --system baruwa
 getent passwd baruwa >/dev/null || adduser --system --ingroup baruwa --home /var/lib/baruwa --no-create-home --gecos "Baruwa user" --disabled-login baruwa
@@ -1504,7 +1504,7 @@ read_main() {
                      fn_pyzor_razor_dcc
                      fn_cronjobs
                      fn_services
-	     	     fn_generate_key
+                     fn_generate_key
                      fn_finish ;;
                 b) fn_cleanup ;;
                 x) exit 0;;
@@ -1528,5 +1528,3 @@ if [ `whoami` = root ]; then
                 exit 0
         fi
 # +---------------------------------------------------+
-
-
