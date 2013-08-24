@@ -1338,7 +1338,7 @@ f_confirm
 f_additional_sa (){
 	if [ -f $track/additional_sa ];
 		then
-		:
+		echo "The Additional Spam Assassin Rules are already installed."
 		else
 		f_clear
 		echo "------------------------------------------------------------------------------";
@@ -1368,7 +1368,7 @@ fi
 f_additional_clam (){
 	if [ -f $track/additional_clam ];
 		then
-		:
+		echo "The Additional Clam AV Rules are already installed."
 		else
 		f_clear
 		echo "------------------------------------------------------------------------------";
