@@ -89,7 +89,7 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-24-2013"						# Last Updated On
+date="8-2-2013"						# Last Updated On
 version="2.4.5"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
@@ -690,14 +690,14 @@ if rpm -q --quiet mailscanner;
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabsgit/extras/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabsgit/extras/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $fluxlabsgit/extras/config/mailscanner/scan.messages.rules
-	curl -O $fluxlabsgit/extras/config/mailscanner/nonspam.actions.rules
-	curl -O $fluxlabsgit/extras/config/mailscanner/filename.rules
-	curl -O $fluxlabsgit/extras/config/mailscanner/filetype.rules
-	curl -O $fluxlabsgit/extras/config/mailscanner/filename.rules.allowall.conf
-	curl -O $fluxlabsgit/extras/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/MailScanner.conf
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/scan.messages.rules
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/nonspam.actions.rules
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
 	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
@@ -779,8 +779,8 @@ if [[ -f $track/exim ]];
 	echo "Exim is already configured. Skipping"; sleep 3
 else
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabsgit/extras/config/exim/exim.conf
-	curl -O $fluxlabsgit/extras/config/exim/exim_out.conf
+	curl -O $fluxlabsgit/extras/centos/config/exim/exim.conf
+	curl -O $fluxlabsgit/extras/centos/config/exim/exim_out.conf
 	curl -O $baruwagit/extras/config/exim/macros.conf
 	curl -O $baruwagit/extras/config/exim/trusted-configs
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
