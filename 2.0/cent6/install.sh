@@ -1356,7 +1356,7 @@ f_additional_sa (){
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
 	else
-		cd /etc/cron.daily/; wget $fluxlabsgit/extras/cron/kam; chmod +x *
+		cd /etc/cron.daily/; wget $fluxlabsgit/extras/centos/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
 	service spamd reload
