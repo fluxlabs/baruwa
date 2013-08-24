@@ -89,7 +89,7 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-2-2013"						# Last Updated On
+date="8-25-2013"						# Last Updated On
 version="2.4.5"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
