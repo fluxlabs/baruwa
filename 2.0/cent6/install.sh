@@ -496,7 +496,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -1063,16 +1063,9 @@ f_clam (){
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-		cd /etc/mail/spamassassin
-		wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-		wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
-		yum install clamav-unofficial-sigs spamassassin-iXhash2 -y
 		freshclam
-		cd /var/lib/clamav; wget http://www.mailscanner.eu/scamnailer.ndb
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
-		/usr/bin/clamav-unofficial-sigs.sh
 		yum update -y
 		touch $track/clam
 	fi
@@ -1262,6 +1255,7 @@ sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/productio
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
 sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
 
+
 f_clear
 # +---------------------------------------------------+
 # Display Results
@@ -1347,6 +1341,50 @@ f_clear
 f_confirm
 }
 # +---------------------------------------------------+
+# Additional SA Rules
+# +---------------------------------------------------+
+f_additional_sa (){
+	if [ -f $track/additional_sa ];
+		then
+		:
+		else
+		f_clear
+		echo "------------------------------------------------------------------------------";
+		echo "A D D I T I O N A L  S A  R U L E S";
+		echo "------------------------------------------------------------------------------";
+		echo "I will now setup ScamNailer, KAM, DecodeShortURLS and iXhash2"
+		echo ""
+		echo ""; sleep 3
+	cd /var/lib/clamav; wget http://www.mailscanner.eu/scamnailer.ndb
+	cd /etc/mail/spamassassin
+	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	yum install spamassassin-iXhash2 -y
+	
+}
+# +---------------------------------------------------+
+# Additional Clam AV
+# +---------------------------------------------------+
+f_additional_sa (){
+	if [ -f $track/additional_clam ];
+		then
+		:
+		else
+		f_clear
+		echo "------------------------------------------------------------------------------";
+		echo "A D D I T I O N A L  C L A M  R U L E S";
+		echo "------------------------------------------------------------------------------";
+		echo "I will now install the unofficial clamav signatures."
+		echo "Please not this will put a heavier load on your server."
+		echo "Make sure you have sufficient system resources."
+		echo "Not recommended for a small VPS!"
+		echo ""; sleep 3
+		yum install clamav-unofficial-sigs  -y
+		/usr/bin/clamav-unofficial-sigs.sh
+}
+
+# +---------------------------------------------------+
 # Baruwa Admin
 # +---------------------------------------------------+
 f_baruwa_admin (){
@@ -1374,8 +1412,10 @@ menu_main (){
 	echo "Please make a choice:"
 	echo ""
 	echo "a) Install Baruwa (Complete)"
-	echo "b) Cleanup Installer"
-	echo "c) Install Baruwa-Admin"
+	echo "b) Install Additional SpamAsassin Rules"
+	echo "c) Install Unofficial ClamAV Signatures"
+	echo "d) Install Baruwa-Admin"
+	echo "e) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
 }
@@ -1408,8 +1448,10 @@ read_main (){
 			f_permissions
 			f_services
 			f_finish ;;
-		b)  f_cleanup ;;
-		c)  f_baruwa_admin ;;
+		b)  f_additional_sa ;;
+		c)  f_additional_clam ;;
+		d)  f_cleanup ;;
+		e)  f_baruwa_admin ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
