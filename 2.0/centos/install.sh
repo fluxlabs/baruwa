@@ -1186,6 +1186,8 @@ chown -R baruwa:baruwa /var/run/baruwa
 chown -R baruwa:baruwa /var/log/baruwa
 chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
+chmod -R 755 /etc/MailScanner/baruwa
+chown -R barwua: /etc/MailScanner/baruwa
 f_clear
 
 }
