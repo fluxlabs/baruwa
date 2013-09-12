@@ -1329,7 +1329,11 @@ f_clear
 	echo ""
 	echo "Please visit http://baruwa.org/docs/2.0/guide/admin/index.html"
 	echo "and follow the guide on how to configure your install."
-	echo ""``
+	echo ""
+	echo "I have also sent a small email to Flux Labs"
+	echo "letting them know that you've succesfully installed Baruwa using"
+	echo "this script. It contains zero information regarding your system."
+	echo ""
 	echo "Please support the Baruwa project by donating at"
 	echo "http://pledgie.com/campaigns/12056"
 	echo ""
