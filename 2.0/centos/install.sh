@@ -669,7 +669,7 @@ if rpm -q --quiet mailscanner;
 		echo "I have detected a previous install of MailScanner." ; sleep 3
 	else
 		echo "This process could take a while. Go make a cup of coffee"; sleep 3
-		cd $builddir; wget http://mailscanner.info/files/4/rpm/MailScanner-$msver.rpm.tar.gz
+		cd $builddir; wget http://athena.fluxlabs.net/~jeremy/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
 		f_clear
 		sh install.sh fast
