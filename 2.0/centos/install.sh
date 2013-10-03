@@ -1058,13 +1058,13 @@ f_clam (){
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 		chown -R clam:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
-		chown clam /var/log/clamav/freshclam.log
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
 		fn_clear
 		echo -n "Let's update our Clam Definitions real quick."
 		echo ""; sleep 3
+		chown -R clamav:clamav /var/log/clamav
 		freshclam
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
