@@ -1139,7 +1139,7 @@ getent passwd baruwa >/dev/null || \
     useradd -r -g baruwa -d /var/lib/baruwa \
     -s /sbin/nologin -c "Baruwa User" baruwa
 fi
-
+}
 
 # +---------------------------------------------------+
 # Permissions Function
