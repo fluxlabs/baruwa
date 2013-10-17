@@ -546,7 +546,7 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O https://raw.github.com/akissa/baruwa2/$baruwaver/requirements.txt
+curl -O https://raw.github.com/akissa/baruwa2/master/equirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
