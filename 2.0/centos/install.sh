@@ -550,7 +550,6 @@ curl -O https://raw.github.com/akissa/baruwa2/master/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
-sed -i -e 's/psutil/psutil==1.0.1/' requirements.txt
 pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
 cd $home
