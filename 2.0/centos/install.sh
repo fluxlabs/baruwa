@@ -89,8 +89,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-25-2013"						# Last Updated On
-version="2.4.5"							# Script Version
+date="10-16-2013"						# Last Updated On
+version="2.4.6"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -1187,7 +1187,7 @@ chown -R baruwa:baruwa /var/log/baruwa
 chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
-chown -R barwua: /etc/MailScanner/baruwa
+chown -R baruwa: /etc/MailScanner/baruwa
 f_clear
 
 }
@@ -1209,7 +1209,7 @@ f_services (){
 		echo ""; sleep 3
 	
 		service clamd start
-		service exim restart
+		#service exim restart
 		chkconfig --level 345 clamd on
 		service httpd start
 		chkconfig --level 345 httpd on
