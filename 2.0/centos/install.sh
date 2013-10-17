@@ -1140,29 +1140,6 @@ getent passwd baruwa >/dev/null || \
     -s /sbin/nologin -c "Baruwa User" baruwa
 fi
 
-if [[ -f /etc/cron.d/mailscanner && -f /etc/cron.d/baruwa ]];
-	then
-	f_clear
-	echo "------------------------------------------------------------------------------";
-	echo "A D D E D  C R O N J O B S";
-	echo "------------------------------------------------------------------------------";
-	echo -n "We have created cron entries for you."
-	echo ""
-	echo "Your Baruwa Cronjobs are setup as:"
-	echo ""
-	cat /etc/cron.d/baruwa
-	echo ""
-	echo "Your MailScanner Cronjobs are setup as:"
-	echo ""
-	cat /etc/cron.d/mailscanner
-	echo ""
-f_confirm
-
-else
-	f_clear
-	echo "It seems I was unable to create your cronjobs. Please look into this"; sleep 5
-fi
-}
 
 # +---------------------------------------------------+
 # Permissions Function
