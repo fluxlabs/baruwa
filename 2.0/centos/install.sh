@@ -546,11 +546,10 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O https://raw.github.com/akissa/baruwa2/master/equirements.txt
+curl -O https://raw.github.com/akissa/baruwa2/master/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
-sed -i -e 's/psutil/psutil==1.0.1/' requirements.txt
 pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
 cd $home
