@@ -1058,6 +1058,7 @@ f_clam (){
 		chown -R clamav:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
+		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
 		fn_clear
