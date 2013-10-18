@@ -1053,9 +1053,9 @@ f_clam (){
 		#usermod -a -G clamav baruwa
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
-		usermod -a -G exim clam
+		#usermod -a -G exim clam
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-		chown -R clam:clamav /var/lib/clamav
+		chown -R clamav:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
