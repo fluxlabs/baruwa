@@ -1016,6 +1016,7 @@ f_pyzor_razor_dcc (){
 	cd dcc-*
 	./configure && make && make install
 	f_clear
+	echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL mariadb" >> /etc/yum.repos.d/atomic.repo
 	yum update -y
 	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
@@ -1050,18 +1051,23 @@ f_clam (){
 		echo "I believe you have already executed this portion. Skipping."
 	else
 		usermod -a -G clamav exim
-		#usermod -a -G clamav baruwa
+		usermod -a -G clamav baruwa
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
 		usermod -a -G exim clam
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-		chown -R clam:clamav /var/lib/clamav
+		ln -s /var/lib/clamav /var/clamav
+		chown -R clamav:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
-		fn_clear
+		f_clear
+		echo -n ""
+		echo -n ""
 		echo -n "Let's update our Clam Definitions real quick."
+		echo -n ""
+		echo -n ""
 		echo ""; sleep 3
 		chown -R clamav:clamav /var/log/clamav
 		freshclam
