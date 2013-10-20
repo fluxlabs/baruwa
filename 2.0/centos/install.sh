@@ -496,7 +496,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL mariadb" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL mariadb mysql" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -1016,7 +1016,9 @@ f_pyzor_razor_dcc (){
 	cd dcc-*
 	./configure && make && make install
 	f_clear
-	echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb-libs mariadb-devel mysql-libs mysql-devel perl-DBD-MySQL mariadb" >> /etc/yum.repos.d/atomic.repo
+	sed -i "13i exclude=mysql mariadb-libs mariadb-devel mysql-libs mysql-devel mariadb" /etc/yum.repos.d/atomic.repo
+	sed -i "24i exclude=mysql mariadb-libs mariadb-devel mysql-libs mysql-devel mariadb" /etc/yum.repos.d/atomic.repo
+	sed -i "34i exclude=mysql mariadb-libs mariadb-devel mysql-libs mysql-devel mariadb" /etc/yum.repos.d/atomic.repo
 	yum update -y
 	sed -i 's:= 3:= 0:' /etc/mail/spamassassin/.razor/razor-agent.conf
 	sed -i '25i loadplugin Mail::SpamAssassin::Plugin::DCC' /etc/mail/spamassassin/v310.pre
