@@ -1166,8 +1166,13 @@ echo "Adjusting file/folder permissions."
 echo ""
 echo ""; sleep 3
 chown -R exim:exim /var/spool/MailScanner/
-mkdir -p /var/log/baruwa /var/run/baruwa /var/lib/baruwa/data/{cache,sessions,uploads,templates}
-mkdir -p /var/lock/baruwa /etc/MailScanner/baruwa/signatures /etc/MailScanner/baruwa/dkim
+mkdir -p /var/log/baruwa 
+mkdir -p /var/run/baruwa 
+mkdir -p /var/lib/baruwa/data/{cache,sessions,uploads,templates}
+mkdir -p /var/lock/baruwa 
+mkdir -p /etc/MailScanner/baruwa/signatures
+mkdir -p /etc/MailScanner/baruwa/signatures/domains
+mkdir -p /etc/MailScanner/baruwa/dkim
 mkdir -p /etc/MailScanner/baruwa/rules
 mkdir -p /var/lib/baruwa/.spamassassin
 chown -R apache:baruwa /var/lib/baruwa
