@@ -519,22 +519,22 @@ else
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident re2c -y
-	if [ $? -eq 0 ]
+	if [ $? -eq 0 ];
 		then
     touch $track/dependencies
     f_complete
 	else
-		echo ""
-		echo "Ooops !"
-		echo "It seems I've run into an error installing these dependencies."
-		echo "Let's try to run this again in semi-debug mode."
-		echo ""
-		f_confirm
-		export usepause=1
-		f_dependencies
+        echo ""
+        echo "Ooops !"
+        echo "It seems I've run into an error installing these dependencies."
+        echo "Let's try to run this again in semi-debug mode."
+        echo ""
+        f_confirm
+        export usepause=1
+        f_dependencies
 	fi
+fi
 }
-
 # +---------------------------------------------------+
 # Virtual Python Function
 # +---------------------------------------------------+
