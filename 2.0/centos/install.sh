@@ -97,7 +97,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.1.5-1"						# Rabbit MQ Version
+rabbitmq="3.2.0-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -121,7 +121,7 @@ builddir="/usr/src/b2build/"			# Build Directory
 hosts=$(hostname -s)
 hostf=$(hostname)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
-
+export LANG=C
 
 # SSL Organization Name
 sslorg=$msorgname
@@ -496,7 +496,7 @@ else
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
 			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx" >> /etc/yum.repos.d/centalt.repo
+			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -518,12 +518,21 @@ else
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav perl-IP-Country \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
-    perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident ret2c -y
-	
-	touch $track/dependencies
-	
-	f_complete
-fi
+    perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident re2c -y
+	if [ $? -eq 0 ]
+		then
+    touch $track/dependencies
+    f_complete
+	else
+		echo ""
+		echo "Ooops !"
+		echo "It seems I've run into an error installing these dependencies."
+		echo "Let's try to run this again in semi-debug mode."
+		echo ""
+		f_confirm
+		export usepause=1
+		f_dependencies
+	fi
 }
 
 # +---------------------------------------------------+
@@ -1052,15 +1061,15 @@ f_clam (){
 		echo "I believe you have already executed this portion. Skipping."
 	else
 		usermod -a -G clamav exim
-		usermod -a -G clamav baruwa
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
-		usermod -a -G exim clam
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 		ln -s /var/lib/clamav /var/clamav
 		chown -R clamav:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
+		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
+		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
 		f_clear
@@ -1224,8 +1233,8 @@ f_services (){
 		yum remove bind-chroot -y
 		yum install bind -y
 		chkconfig --level 345 named on
-		service named start
 		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+		service named start
 		touch $track/services
 		f_clear
 	fi
