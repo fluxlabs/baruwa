@@ -148,6 +148,16 @@ f_pause (){
 	echo "------------------------------------------------------------------------------";
 }
 
+f_exit (){
+	echo ""
+	echo "------------------------------------------------------------------------------";
+	echo "Sorry, but it looks like I have run into an error. I am going to exit now."
+	echo "Please press enter to Exit. You can send any errors to jeremy@fluxlabs.net."
+	echo "------------------------------------------------------------------------------";
+	read -p fackEnterKey
+	exit
+}
+
 f_clear () {
 	clear 2>/dev/null
 }
@@ -526,12 +536,10 @@ else
 	else
         echo ""
         echo "Ooops !"
-        echo "It seems I've run into an error installing these dependencies."
-        echo "Let's try to run this again in semi-debug mode."
+        echo "It seems I've run into an error installing the dependencies."
+        echo "Please send the package dependency error to jeremy@fluxlabs.net"
         echo ""
-        f_confirm
-        export usepause=1
-        f_dependencies
+        f_exit
 	fi
 fi
 }
