@@ -152,9 +152,8 @@ f_exit (){
 	echo ""
 	echo "------------------------------------------------------------------------------";
 	echo "Sorry, but it looks like I have run into an error. I am going to exit now."
-	echo "Please press enter to Exit. You can send any errors to jeremy@fluxlabs.net."
 	echo "------------------------------------------------------------------------------";
-	read -p fackEnterKey
+	read -p "Please press enter to Exit. " fackEnterKey
 	exit
 }
 
