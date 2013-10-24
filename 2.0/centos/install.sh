@@ -1435,12 +1435,15 @@ f_sagrey () {
 }
 
 f_remove_sagrey () {
+	f_clear
+	echo "------------------------------------------------------------------------------";
+	echo "R E M O V E  S A G R E Y";
+	echo "------------------------------------------------------------------------------";
 	cd /etc/mail/spamassassin; rm -f sagrey*
 	service spamassassin restart
 	f_clear
 	echo "SA Grey has been removed & SpamAssassin reloaded."
 	echo ""; sleep 3
-	f_confirm
 }
 
 # +---------------------------------------------------+
@@ -1449,9 +1452,11 @@ f_remove_sagrey () {
 f_baruwa_admin (){
 	if [ -f /usr/sbin/baruwa-admin ] ;
 		then
-		echo "It looks as though baruwa-admin is already installed."
-	else
 		f_clear
+		echo "It looks as though baruwa-admin is already installed."
+		echo ""; sleep 5
+	else
+	f_clear
 	cd /usr/sbin
 	curl -O $fluxlabsgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
