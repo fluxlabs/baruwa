@@ -1404,6 +1404,14 @@ f_additional_clam (){
 }
 
 # +---------------------------------------------------+
+# SA Grey
+# +---------------------------------------------------+
+f_sagrey () {
+	cd /etc/mail/spamassassin; wget $fluxlabsgit/extras/spamassassin/sagrey.cf; wget $fluxlabsgit/extras/spamassassin/sagrey.pm
+	service spamassassin reload
+}
+
+# +---------------------------------------------------+
 # Baruwa Admin
 # +---------------------------------------------------+
 f_baruwa_admin (){
@@ -1416,7 +1424,9 @@ f_baruwa_admin (){
 	curl -O $fluxlabsgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
 	f_clear
+	echo ""
 	echo "You may now use 'baruwa-admin' as a command."
+	echo ""
 	sleep 5
 fi
 }
@@ -1435,8 +1445,9 @@ menu_main (){
 	echo "a) Install Baruwa 2.0 (Complete Install)"
 	echo "b) Install Additional SpamAssassin Rules"
 	echo "c) Install Unofficial ClamAV Signatures"
-	echo "d) Install Baruwa-Admin"
-	echo "e) Cleanup Installer"
+	echo "d) Install SAGrey (GreyList via SpamAssassin)"
+	echo "e) Install Baruwa-Admin"
+	echo "f) Cleanup Installer"
 	echo " "
 	echo "x) Exit"
 }
@@ -1471,8 +1482,9 @@ read_main (){
 			f_finish ;;
 		b)  f_additional_sa ;;
 		c)  f_additional_clam ;;
-		d)  f_baruwa_admin ;;
-		e)  f_cleanup ;;
+		d)	f_sagrey ;;
+		e)  f_baruwa_admin ;;
+		f)  f_cleanup ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
