@@ -1186,6 +1186,8 @@ echo ""; sleep 3
 chown root: /var/spool/MailScanner/
 chown exim:clamav /var/spool/MailScanner/incoming
 chown exim:baruwa /var/spool/MailScanner/quarantine
+chown -R exim:clamav /var/spool/MailScanner/incoming
+chown -R exim:baruwa /var/spool/MailScanner/quarantine
 mkdir -p /var/log/baruwa
 mkdir -p /var/run/baruwa
 mkdir -p /var/lib/baruwa/data/{cache,sessions,uploads,templates}
@@ -1237,7 +1239,7 @@ f_services (){
 		chkconfig --level 345 baruwa on
 		service crond start
 		chkconfig --level 345 crond on
-		service MailScanner start
+		service MailScanner restart
 		chkconfig --level 345 MailScanner on
 		service spamassassin start
 		chkconfig --level 345 spamassassin on
