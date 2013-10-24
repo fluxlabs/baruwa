@@ -1217,8 +1217,8 @@ f_services (){
 		echo "We are also adding services to startup."
 		echo ""; sleep 3
 	
-		service clamd start
-		#service exim restart
+		service clamd restart
+		service exim restart
 		chkconfig --level 345 clamd on
 		service httpd start
 		chkconfig --level 345 httpd on
@@ -1375,7 +1375,7 @@ f_additional_sa (){
 		cd /etc/cron.daily/; wget $fluxlabsgit/extras/centos/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
-	service spamd reload
+	service spamassassin restart
 	service MailScanner reload
 	touch $track/additional_sa
 fi
