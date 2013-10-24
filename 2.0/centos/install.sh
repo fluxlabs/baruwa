@@ -1403,12 +1403,33 @@ f_additional_clam (){
 	fi
 }
 
+f_remove_additional_clam () {
+	echo "------------------------------------------------------------------------------";
+	echo "A D D I T I O N A L  C L A M  R U L E S";
+	echo "------------------------------------------------------------------------------";
+	echo "I will now remove the additional clamav rules."
+	echo ""; sleep 3
+	yum remove clamav-unofficial-sigs -y
+	f_clear
+}
+
 # +---------------------------------------------------+
 # SA Grey
 # +---------------------------------------------------+
 f_sagrey () {
+	echo "------------------------------------------------------------------------------";
+	echo "I N S T A L L  S A G R E Y";
+	echo "------------------------------------------------------------------------------";
+	echo ""; sleep 3
 	cd /etc/mail/spamassassin; wget $fluxlabsgit/extras/spamassassin/sagrey.cf; wget $fluxlabsgit/extras/spamassassin/sagrey.pm
-	service spamassassin reload
+	service spamassassin restart
+	f_clear
+	echo ""
+	echo "SA Grey has been installed and SpamAssassin has been reloaded."
+	echo "You can verify the plugin is running by running a Lint test via "
+	echo "the Baruwa UI under this scanner node."
+	echo ""
+	f_complete
 }
 
 # +---------------------------------------------------+
@@ -1448,6 +1469,7 @@ menu_main (){
 	echo "d) Install SAGrey (GreyList via SpamAssassin)"
 	echo "e) Install Baruwa-Admin"
 	echo "f) Cleanup Installer"
+	echo "g) Remove Unofficial ClamAV Signatures"
 	echo " "
 	echo "x) Exit"
 }
@@ -1485,6 +1507,7 @@ read_main (){
 		d)	f_sagrey ;;
 		e)  f_baruwa_admin ;;
 		f)  f_cleanup ;;
+		g)	f_remove_additional_clam ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
