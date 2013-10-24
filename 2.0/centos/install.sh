@@ -1383,6 +1383,12 @@ f_additional_sa (){
 	service spamassassin restart
 	service MailScanner reload
 	touch $track/additional_sa
+	f_clear
+	echo ""
+	echo "The additional SA Rules have been installed."
+	echo "You can verify the plugins are running by running a Lint test via "
+	echo ""
+	f_confirm
 fi
 }
 # +---------------------------------------------------+
@@ -1407,6 +1413,13 @@ f_additional_clam (){
 		chown -R clamav:clamav /var/lib/clamav
 		service clamd restart
 		touch $track/additional_clam
+		f_clear
+		echo ""
+		echo "Additional ClamAV Rules have been installed."
+		echo "If this is a VPS, please make sure you have atleast 4GB of memory"
+		echo "or you will notice a huge decrease in performance."
+		echo ""
+		f_confirm
 	fi
 }
 
@@ -1418,7 +1431,11 @@ f_remove_additional_clam () {
 	echo "I will now remove the additional clamav rules."
 	echo ""; sleep 3
 	yum remove clamav-unofficial-sigs -y
-	f_complete
+	f_clear
+	echo ""
+	echo "Additional ClamAV Rules have been removed."
+	echo ""
+	f_confirm
 }
 
 # +---------------------------------------------------+
@@ -1450,7 +1467,7 @@ f_remove_sagrey () {
 	service spamassassin restart
 	f_clear
 	echo "SA Grey has been removed & SpamAssassin reloaded."
-	echo ""; sleep 3
+	f_confirm
 }
 
 # +---------------------------------------------------+
@@ -1471,7 +1488,7 @@ f_baruwa_admin (){
 	echo ""
 	echo "You may now use 'baruwa-admin' as a command."
 	echo ""
-	sleep 5
+	f_confirm
 fi
 }
 
