@@ -1079,6 +1079,7 @@ f_clam (){
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
 		sed -i -e '19 s:usr/local:usr:' /etc/MailScanner/virus.scanners.conf
+		sed -i -e 's:/var/lib/spamassassin/3.003001:/var/lib/spamassassin/3.003002:' /etc/baruwa/production.ini
 		f_clear
 		echo -n ""
 		echo -n ""
@@ -1399,6 +1400,8 @@ f_additional_clam (){
 		echo ""; sleep 3
 		yum install clamav-unofficial-sigs  -y
 		/usr/bin/clamav-unofficial-sigs.sh
+		chown -R clamav:clamav /var/lib/clamav
+		service clamd restart
 		touch $track/additional_clam
 	fi
 }
