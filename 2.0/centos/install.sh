@@ -1404,19 +1404,21 @@ f_additional_clam (){
 }
 
 f_remove_additional_clam () {
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "A D D I T I O N A L  C L A M  R U L E S";
 	echo "------------------------------------------------------------------------------";
 	echo "I will now remove the additional clamav rules."
 	echo ""; sleep 3
 	yum remove clamav-unofficial-sigs -y
-	f_clear
+	f_complete
 }
 
 # +---------------------------------------------------+
 # SA Grey
 # +---------------------------------------------------+
 f_sagrey () {
+	f_clear
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L  S A G R E Y";
 	echo "------------------------------------------------------------------------------";
@@ -1429,7 +1431,7 @@ f_sagrey () {
 	echo "You can verify the plugin is running by running a Lint test via "
 	echo "the Baruwa UI under this scanner node."
 	echo ""
-	f_complete
+	f_confirm
 }
 
 # +---------------------------------------------------+
