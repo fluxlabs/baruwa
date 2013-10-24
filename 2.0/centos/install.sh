@@ -1087,6 +1087,7 @@ f_clam (){
 		echo -n ""
 		echo ""; sleep 3
 		chown -R clamav:clamav /var/log/clamav
+		service clamd start
 		freshclam
 		service MailScanner restart
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
