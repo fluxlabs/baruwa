@@ -1,4 +1,5 @@
 #!/bin/sh
+export LANG=C
 # +--------------------------------------------------------------------+
 # Install for Barwua 2.0 for Cent OS/RHEL x86_64
 # +--------------------------------------------------------------------+
@@ -89,8 +90,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="10-23-2013"						# Last Updated On
-version="2.4.9"							# Script Version
+date="10-24-2013"						# Last Updated On
+version="2.5"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -121,7 +122,6 @@ builddir="/usr/src/b2build/"			# Build Directory
 hosts=$(hostname -s)
 hostf=$(hostname)
 eth0ip=$(ifconfig eth0 | grep "inet addr" | awk '{ print $2 }' | sed 's/addr://')
-export LANG=C
 
 # SSL Organization Name
 sslorg=$msorgname
@@ -1183,7 +1183,9 @@ echo "--------------------------------------------------------------------------
 echo "Adjusting file/folder permissions."
 echo ""
 echo ""; sleep 3
-chown -R exim:exim /var/spool/MailScanner/
+chown root: /var/spool/MailScanner/
+chown exim:clamav /var/spool/MailScanner/incoming
+chown exim:baruwa /var/spool/MailScanner/quarantine
 mkdir -p /var/log/baruwa
 mkdir -p /var/run/baruwa
 mkdir -p /var/lib/baruwa/data/{cache,sessions,uploads,templates}
