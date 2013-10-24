@@ -1434,6 +1434,15 @@ f_sagrey () {
 	f_confirm
 }
 
+f_remove_sagrey () {
+	cd /etc/mail/spamassassin; rm -f sagrey*
+	service spamassassin restart
+	f_clear
+	echo "SA Grey has been removed & SpamAssassin reloaded."
+	echo ""; sleep 3
+	f_confirm
+}
+
 # +---------------------------------------------------+
 # Baruwa Admin
 # +---------------------------------------------------+
@@ -1472,6 +1481,7 @@ menu_main (){
 	echo "e) Install Baruwa-Admin"
 	echo "f) Cleanup Installer"
 	echo "g) Remove Unofficial ClamAV Signatures"
+	echo "h) Remove SAGrey"
 	echo " "
 	echo "x) Exit"
 }
@@ -1510,6 +1520,7 @@ read_main (){
 		e)  f_baruwa_admin ;;
 		f)  f_cleanup ;;
 		g)	f_remove_additional_clam ;;
+		h)  f_remove_sagrey ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
