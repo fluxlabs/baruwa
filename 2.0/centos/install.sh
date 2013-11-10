@@ -98,7 +98,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.2-2"						# RPM Forge Version
-rabbitmq="3.2.0-1"						# Rabbit MQ Version
+rabbitmq="3.2.1-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -1386,8 +1386,8 @@ f_additional_sa (){
 	f_clear
 	echo ""
 	echo "The additional SA Rules have been installed."
-	echo "You can verify the plugins are running by running a Lint test via "
-	echo ""
+	echo "You can verify the plugin is running by running a Lint test via "
+	echo "the Baruwa UI under this scanner node."
 	f_confirm
 fi
 }
@@ -1484,7 +1484,7 @@ f_baruwa_admin (){
 	cd /usr/sbin
 	curl -O $fluxlabsgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
-	f_clear
+	clear
 	echo ""
 	echo "You may now use 'baruwa-admin' as a command."
 	echo ""
