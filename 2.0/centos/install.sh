@@ -1188,6 +1188,7 @@ chown exim:clamav /var/spool/MailScanner/incoming
 chown exim:baruwa /var/spool/MailScanner/quarantine
 chown -R exim:clamav /var/spool/MailScanner/incoming
 chown -R exim:baruwa /var/spool/MailScanner/quarantine
+mkdir -p /var/run/MailScanner
 mkdir -p /var/log/baruwa
 mkdir -p /var/run/baruwa
 mkdir -p /var/lib/baruwa/data/{cache,sessions,uploads,templates}

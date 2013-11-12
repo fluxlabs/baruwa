@@ -27,8 +27,8 @@
 # Version Tracking
 # +---------------------------------------------------+
 
-date="8-15-2013"						# Last Updated On
-version="1.0"							# Script Version
+date="10-24-2013"						# Last Updated On
+version="1.1"							# Script Version
 binhome="/home/baruwa/px/bin/"			# Path to bin
 
 # Create Admin Account
@@ -158,11 +158,14 @@ menu_main() {
 	echo ""
 	echo "a) Create Admin Account"
 	echo "b) Reset User Password"
-	echo "c) Clean Quarantine"
-	echo "d) Send Reports"
+	echo "d) Send Quarantine Reports"
 	echo "e) Send PDF Reports"
+	echo "f) Send Top Spammer List"
+	echo "g) Send Whitelist Data"
 	echo "f) Update SA Rules"
 	echo "g) Update Search Index"
+	#echo "h) Clean Quarantine"
+	#echo "i) Clean Database"
 	echo " "
 	echo "x) Exit"
 }
