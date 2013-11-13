@@ -563,6 +563,7 @@ if [ -f $track/python ];
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
 curl -O https://raw.github.com/akissa/baruwa2/master/requirements.txt
+sed -i 's:celery:celery==3.0:' requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
