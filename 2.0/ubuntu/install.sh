@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 chsh -s /bin/bash
 # +--------------------------------------------------------------------+
-# Install for Barwua 2.0 for Ubuntu 12.04 x86_64
+# Install for Barwua 2.0 for Ubuntu 12.10 x86_64
 # +--------------------------------------------------------------------+
 #
 # Author - Jeremy McSpadden
@@ -94,11 +94,11 @@ sslorg='Your Organization'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="6-29-2013"											# Latest Date
-version="2.3.2"												# Script Version
-ubuntuver="12.04"											# Script ID
+date="12-24-2013"											# Latest Date
+version="2.3.3"												# Script Version
+ubuntuver="12.10"											# Script ID
 baruwaver="2.0.1"											# Baruwa Version
-rabbitmq="3.1.1"											# Rabbit MQ Version
+rabbitmq="3.2.2"											# Rabbit MQ Version
 msver="4.84.6-1"											# MailScanner Version
 msver1="4.84.6"												# MS Config Version
 libmem="1.0.17"												# LIB MEM Cache Version
@@ -134,7 +134,7 @@ fn_confirm (){
 fn_pause (){
         echo ""
         echo "------------------------------------------------------------------------------";
-        read -p "You are walking through the script. Press [Enter] to Continue"
+        read -p "You are walking through the script. Press [Enter] to Continue";
         echo "------------------------------------------------------------------------------";
         fackEnterKey
 }
@@ -205,35 +205,28 @@ echo "  |  |--.---.-.----.--.--.--.--.--.---.-. |__    |  |      |"
 echo "  |  _  |  _  |   _|  |  |  |  |  |  _  | |    __|__|  --  |"
 echo "  |_____|___._|__| |_____|________|___._| |______|__|______|"
 echo ""
-echo "  Installer v$version for $DISTRO $RELEASE"
+echo "	Installer v$version for $osver"
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
 echo "Welcome to the Baruwa's $baruwaver Installer. (Unofficial Version)"
 echo ""
-echo "Before we begin: This installer was written for a virtual install of $DISTRO $RELEASE"
+echo "Before we begin: This installer was written for a minimal install of $osver"
 echo "This installer is meant to assist you in installing Baruwa $baruwaver "
 echo ""
 echo "You still need to know linux basics and have an understanding of how Baruwa $baruwaver operates."
 echo "It is a complete re-write from 1.0 branch. Alot of changes were made to the code and how it"
 echo "works."
 echo ""
-echo "Please take the time to review the code that I am using below so you understand what"
-echo "it is doing. This script will prompt you for the minimal amount of questions needed "
-echo "to get Baruwa $baruwaver installed and running. You will need to configure baruwa, your firewall,"
-echo "spamassassin rules, greylisting, RBL, SPF .. etc on your own."
+echo "This script will prompt you for the minimal amount of questions needed "
+echo "to get Baruwa $baruwaver installed and running."
 echo ""
 echo "If you are un-sure that you can maintain a Baruwa install, I recommend going with the"
 echo "commercial product at http://www.baruwa.com or the PAAS model at http://www.baruwa.net"
 echo ""
-echo "Please make sure you have added a hosts entry for your hostname of this server"
-echo "into /etc/hosts or this script will fail. Please cancel if you have not. CTRL+C to Cancel"
-echo ""
-echo "Also, any bugs found in Baruwa itself should be reported to"
-echo "the mailing list @ http://www.baruwa.org." 
-echo "with any concerns or additions you would like to see/add to this script.";
-echo ""
-echo "I will assist you in installing Baruwa 2.0.";
+echo "Any bugs found in Baruwa itself should be reported to"
+echo "the mailing list @ http://www.baruwa.org. You can contact me at jeremy@fluxlabs.net"
+echo "with any concerns or additions you would like to see/add to this script."
 echo ""
 echo "------------------------------------------------------------------------------";
 echo ""
@@ -280,7 +273,7 @@ echo "What email would you like Administrative Emails sent to?"
 echo "ie: you@domain.com"
 IFS= read -p "Email: " admemail
 IFS= read -p "Email Again: " admemail2
-[[ $admemail = "$admemail2" ]] && break
+[[: $admemail = "$admemail2" ]] && break
 echo ''
 echo 'Email does not match. Please try again.'
 echo ''
@@ -545,6 +538,7 @@ apt-get update
 echo "Installing Dependencies."
 apt-get install gcc g++ git subversion curl patch -y
 fn_clear
+
 echo "Installing libraries."
 apt-get install libjpeg62-dev libxml2-dev libxslt1-dev cython libpq-dev libfreetype6-dev libldap2-dev libssl-dev swig libcrack2-dev libgeoip-dev python-dev libsasl2-dev libmysqlclient-dev libcloog-ppl0 libmemcached-dev zlib1g-dev libssl-dev python-dev build-essential liblocal-lib-perl libanyevent-perl libaprutil1-dbd-sqlite3 libaprutil1-ldap libart-2.0-2 libauthen-dechpwd-perl libauthen-passphrase-perl libcap2 libclass-mix-perl libcrypt-des-perl libcrypt-eksblowfish-perl libcrypt-mysql-perl libcrypt-passwdmd5-perl libcrypt-rijndael-perl libcrypt-unixcrypt-xs-perl libdata-entropy-perl libdata-float-perl libdata-integer-perl libdbd-mysql-perl libdbd-pg-perl libdigest-crc-perl libdigest-md4-perl libelf1 libev-perl libhttp-lite-perl liblcms1 liblua5.1-0 liblzo2-2 libmodule-runtime-perl libnspr4 libnss3 libopts25 libparams-classify-perl libscalar-string-perl libstring-crc32-perl -y
 fn_clear
@@ -557,15 +551,13 @@ echo "Installing mailscanner dependencies."
 apt-get install libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libmime-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl libfile-temp-perl libole-storage-lite-perl libarchive-zip-perl libsys-hostname-long-perl libnet-cidr-lite-perl libhtml-parser-perl libdb-file-lock-perl libnet-dns-perl libncurses5-dev libdigest-hmac-perl libnet-ip-perl liburi-perl libfile-spec-perl spamassassin libnet-ident-perl libmail-spf-perl libmail-dkim-perl dnsutils libio-socket-ssl-perl libtest-pod-perl libbusiness-isbn-perl libdata-dump-perl libinline-perl libnet-dns-resolver-programmable-perl -y
 fn_clear
 
-# Thanks Xaroth for this
-# // Replaced with proper if/else
 if [ "$(uname -m)" = x86_64 ];
     then
-    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_"$libdigestver_amd64".deb"
-    LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver_amd64".deb"
+    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_"$libdigestver"_amd64.deb"
+    LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver"_amd64.deb"
 else
-	LIBDIGEST_URL="http://launchpadlibrarian.net/85191561/libdigest-sha1-perl_"$libdigestver_i386".deb"
-	LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver_i386".deb" 
+    LIBDIGEST_URL="http://launchpadlibrarian.net/85191944/libdigest-sha1-perl_"$libdigestver"_i386.deb"
+    LIBDIGEST_FILE="libdigest-sha1-perl_"$libdigestver"_i386.deb"
 fi
 cd $builddir
 wget $LIBDIGEST_URL && dpkg -i $LIBDIGEST_FILE
@@ -801,7 +793,7 @@ if dpkg --list | grep  mailscanner;
         cd /etc/MailScanner
         mv MailScanner.conf MailScanner.conf.orig
         cd $home
-        curl -O $fluxlabsgit/ubuntu12/MailScanner.conf
+        curl -O $fluxlabsgit/ubuntu/MailScanner.conf
         curl -O $baruwagit/extras/config/mailscanner/scan.messages.rules
         curl -O $baruwagit/extras/config/mailscanner/nonspam.actions.rules
         curl -O $baruwagit/extras/config/mailscanner/filename.rules
@@ -809,7 +801,7 @@ if dpkg --list | grep  mailscanner;
         curl -O $baruwagit/extras/config/mailscanner/filename.rules.allowall.conf
         curl -O $baruwagit/extras/config/mailscanner/filetype.rules.allowall.conf
         mv /etc/MailScanner/spam.assassin.prefs.conf /etc/MailScanner/spam.assassin.prefs.conf.orig
-        curl -O $fluxlabsgit/ubuntu12/spam.assassin.prefs.conf
+        curl -O $fluxlabsgit/ubuntu/spam.assassin.prefs.conf
         mv *.rules /etc/MailScanner/rules/
         mv *.conf /etc/MailScanner/
         chmod -R 777 /var/spool/MailScanner/
@@ -1255,7 +1247,7 @@ if [[ -f /usr/sbin/check_mailscanner ]];
         then
         echo "check_mailscanner exists Skipping." ; sleep 3
 else
-curl $fluxlabsgit/ubuntu12/check_mailscanner -o /usr/sbin/check_mailscanner
+curl $fluxlabsgit/ubuntu/check_mailscanner -o /usr/sbin/check_mailscanner
 chmod +x /usr/sbin/check_mailscanner
 fi
 
@@ -1264,7 +1256,7 @@ if [[ -f /usr/sbin/update_bad_phishing_sites ]];
         then
         echo " update_bad_phishing_sites exists Skipping." ; sleep 3
 else
-curl $fluxlabsgit/ubuntu12/update_bad_phishing_sites -o /usr/sbin/update_bad_phishing_sites
+curl $fluxlabsgit/ubuntu/update_bad_phishing_sites -o /usr/sbin/update_bad_phishing_sites
 chmod +x /usr/sbin/update_bad_phishing_sites
 fi
 
@@ -1273,7 +1265,7 @@ if [[ -f /usr/sbin/update_bad_phishing_emails ]];
         then
         echo " update_bad_phishing_emails exists Skipping." ; sleep 3
 else
-curl $fluxlabsgit/ubuntu12/update_bad_phishing_emails -o /usr/sbin/update_bad_phishing_emails
+curl $fluxlabsgit/ubuntu/update_bad_phishing_emails -o /usr/sbin/update_bad_phishing_emails
 chmod +x /usr/sbin/update_bad_phishing_emails
 fi
 
