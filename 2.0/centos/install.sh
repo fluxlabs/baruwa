@@ -98,7 +98,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
-rabbitmq="3.2.2-1"						# Rabbit MQ Version
+rabbitmq="3.2.3-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -373,22 +373,7 @@ while :
 		echo 'Email does not match. Please try again.'
 		echo ''
 	done
-	
-	baruwadomain = $(hostname)
-	
-	#while :
-	#do
-	#echo ""
-	#echo "What hostname would you like Apache to listen on for Baruwa requests?"
-	#echo "ie: baruwa.domain.com"
-	#IFS= read -p "Domain: " baruwadomain
-	#IFS= read -p "Domain Again: " bdomain2
-	#[[ $baruwadomain = "$bdomain2" ]] && break
-	#echo ''
-	#echo 'Domain does not match. Please try again.'
-	#echo ''
-	#done
-		
+
 while :
 	do
 		f_clear
