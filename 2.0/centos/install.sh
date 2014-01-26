@@ -1398,6 +1398,10 @@ f_additional_clam (){
 		echo "Not recommended for a small VPS!"
 		echo ""; sleep 3
 		yum install clamav-unofficial-sigs  -y
+		sed -i 's:clam_user:#clam_user:' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
+		sed -i 's:clam_group:#clam_group:' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
+		sed -i '42i clam_user=clamav' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
+		sed -i '43i clam_group=clamav' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
 		/usr/bin/clamav-unofficial-sigs.sh
 		chown -R clamav:clamav /var/lib/clamav
 		service clamd restart
