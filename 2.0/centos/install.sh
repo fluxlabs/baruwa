@@ -1073,6 +1073,9 @@ f_clam (){
 		echo -n ""
 		echo ""; sleep 3
 		chown -R clamav:clamav /var/log/clamav
+		pkill -9 freshclam
+		pkill -9 clamd
+		sleep 5
 		freshclam
 		service clamd start
 		service MailScanner restart
