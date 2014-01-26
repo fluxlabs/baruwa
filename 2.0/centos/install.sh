@@ -1076,9 +1076,9 @@ f_clam (){
 		pkill -9 freshclam
 		pkill -9 clamd
 		sleep 5
-		freshclam
 		service clamd start
-		service MailScanner restart
+		freshclam
+		service MailScanner start
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 		f_clear
 		echo ""
