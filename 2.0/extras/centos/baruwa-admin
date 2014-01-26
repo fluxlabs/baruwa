@@ -162,7 +162,7 @@ menu_main() {
 	echo "e) Send PDF Reports"
 	#echo "f) Send Top Spammer List"
 	#echo "g) Send Whitelist Data"
-	echo "f) Update SA Rules"
+	echo "f) Update SpamAssassin Rules"
 	echo "g) Update Search Index"
 	#echo "h) Clean Quarantine"
 	#echo "i) Clean Database"
