@@ -111,8 +111,8 @@ spamassver="3.3.2"						# Spamasassin Version
 # More Stuff
 # +---------------------------------------------------+
 
-baruwagit="https://raw.github.com/akissa/baruwa2/master/"			# Extras from Baruwa
-fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0/"	# Extras from Flux Labs
+baruwagit="https://raw.github.com/akissa/baruwa2/master"			# Extras from Baruwa
+fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
