@@ -1134,18 +1134,12 @@ cat > /etc/cron.d/mailscanner << 'EOF'
 42 * * * * /usr/sbin/update_virus_scanners
 3,23,43 * * * * /usr/sbin/check_mailscanner
 EOF
-fi
 
-if grep baruwa /etc/passwd ;
-	then
-	:
-else
-getent group baruwa >/dev/null || groupadd -r baruwa
-getent passwd baruwa >/dev/null || \
-    useradd -r -g baruwa -d /var/lib/baruwa \
-    -s /sbin/nologin -c "Baruwa User" baruwa
+cd /etc/cron.hourly;
+curl -O $fluxlabsgit/extras/centos/cron/baruwa-expire-bayes
+curl -O $fluxlabsgit/extras/centos/cron/baruwa-clean-eximdb
+chmod +x *
 fi
-}
 
 # +---------------------------------------------------+
 # Permissions Function
@@ -1179,6 +1173,18 @@ chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
+
+if grep baruwa /etc/passwd ;
+	then
+	:
+else
+getent group baruwa >/dev/null || groupadd -r baruwa
+getent passwd baruwa >/dev/null || \
+    useradd -r -g baruwa -d /var/lib/baruwa \
+    -s /sbin/nologin -c "Baruwa User" baruwa
+fi
+}
+
 f_clear
 
 }
