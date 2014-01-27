@@ -1,3 +1,4 @@
 #!/bin/bash
 [ -x /usr/sbin/exim_tidydb ] || exit 0
 /usr/sbin/exim_tidydb -t 1m /var/spool/exim.in retry &>/dev/null
+/usr/sbin/exim_tidydb -t 1m /var/spool/exim retry &>/dev/null
