@@ -1153,6 +1153,18 @@ echo "--------------------------------------------------------------------------
 echo "Adjusting file/folder permissions."
 echo ""
 echo ""; sleep 3
+
+if grep baruwa /etc/passwd ;
+	then
+	:
+else
+getent group baruwa >/dev/null || groupadd -r baruwa
+getent passwd baruwa >/dev/null || \
+    useradd -r -g baruwa -d /var/lib/baruwa \
+    -s /sbin/nologin -c "Baruwa User" baruwa
+fi
+}
+
 chown root: /var/spool/MailScanner/
 chown exim:clamav /var/spool/MailScanner/incoming
 chown exim:baruwa /var/spool/MailScanner/quarantine
@@ -1174,16 +1186,6 @@ chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
 
-if grep baruwa /etc/passwd ;
-	then
-	:
-else
-getent group baruwa >/dev/null || groupadd -r baruwa
-getent passwd baruwa >/dev/null || \
-    useradd -r -g baruwa -d /var/lib/baruwa \
-    -s /sbin/nologin -c "Baruwa User" baruwa
-fi
-}
 
 f_clear
 
