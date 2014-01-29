@@ -114,8 +114,8 @@ spamassver="3.3.2"						# Spamasassin Version
 # More Stuff
 # +---------------------------------------------------+
 
-akissa_github="https://raw.github.com/akissa/baruwa2/master"			# Extras from Baruwa
-fluxlabs_github="https://raw.github.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
+agit="https://raw.github.com/akissa/baruwa2/master"			# Extras from Baruwa
+fgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -151,7 +151,7 @@ input_pause (){
 	echo "------------------------------------------------------------------------------";
 }
 
-function_exit (){
+do_exit (){
 	echo ""
 	echo "------------------------------------------------------------------------------";
 	echo "Sorry, but it looks like I have run into an error. I am going to exit now."
@@ -164,7 +164,7 @@ function_clear () {
 	clear 2>/dev/null
 }
  
-function_complete (){
+do_complete (){
 	if [ $usepause == 1 ];
 		then
 		input_pause
@@ -177,7 +177,7 @@ function_complete (){
 	fi
 }
 
-function_cleanup (){
+do_cleanup (){
 	function_clear
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L E R  C L E A N  U P";
@@ -519,14 +519,14 @@ else
 	if [ $? -eq 0 ];
 		then
     touch $track/dependencies
-    function_complete
+    do_complete
 	else
         echo ""
         echo "Ooops !"
         echo "It seems I've run into an error installing the dependencies."
         echo "Please send the package dependency error to jeremy@fluxlabs.net"
         echo ""
-        function_exit
+        do_exit
 	fi
 fi
 }
@@ -558,13 +558,13 @@ pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
 cd $home
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
-curl -O $akissa_github/extras/patches/repoze.who-friendly-form.patch
-curl -O $akissa_github/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
+curl -O $agit/extras/patches/repoze.who-friendly-form.patch
+curl -O $agit/extras/patches/repoze-who-fix-auth_tkt-tokens.patch
 cd $home/px/lib/python$pythonver/site-packages/repoze/who/plugins/
 patch -p3 -i $home/repoze.who-friendly-form.patch
 patch -p4 -i $home/repoze-who-fix-auth_tkt-tokens.patch
 touch $track/python
-function_complete
+do_complete
 fi
 }
 
@@ -600,13 +600,13 @@ su - postgres -c "psql postgres -c \"CREATE ROLE baruwa WITH LOGIN PASSWORD '$ps
 su - postgres -c 'createdb -E UTF8 -O baruwa -T template0 baruwa'
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpgsql;\""
 su - postgres -c "psql baruwa -c \"CREATE LANGUAGE plpythonu;\""
-curl -O $akissa_github/baruwa/config/sql/admin-functions.sql
+curl -O $agit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 
 # Bayes/AWL DB
-cd /tmp; curl -O $fluxlabs_github/extras/bayes/bayes-postgres.sql
-cd /tmp; curl -O $fluxlabs_github/extras/bayes/awl-postgres.sql
-cd /tmp; curl -O $fluxlabs_github/extras/bayes/grants.sql
+cd /tmp; curl -O $fgit/extras/bayes/bayes-postgres.sql
+cd /tmp; curl -O $fgit/extras/bayes/awl-postgres.sql
+cd /tmp; curl -O $fgit/extras/bayes/grants.sql
 su - postgres -c 'psql baruwa -f /tmp/bayes-postgres.sql'
 su - postgres -c 'psql baruwa -f /tmp/awl-postgres.sql'
 su - postgres -c 'psql baruwa -f /tmp/grants.sql'
@@ -614,13 +614,13 @@ su - postgres -c 'psql baruwa -f /tmp/grants.sql'
 service postgresql restart
 
 cd /etc/sphinx; mv /etc/sphinx/sphinx.conf /etc/sphinx/sphinx.conf.orig
-curl -O $akissa_github/extras/config/sphinx/sphinx.conf
+curl -O $agit/extras/config/sphinx/sphinx.conf
 sed -i -e 's:sql_host =:sql_host = 127.0.0.1:' \
 -e 's:sql_user =:sql_user = baruwa:' \
 -e 's:sql_pass =:sql_pass = '$pssqlpass':' \
 -e 's:sql_db =:sql_db = baruwa:' sphinx.conf
 touch $track/pssql
-function_complete
+do_complete
 fi
 }
 
@@ -654,7 +654,7 @@ else
 	rabbitmqctl add_vhost $hosts
 	rabbitmqctl set_permissions -p $hosts baruwa ".*" ".*" ".*"
 	touch $track/rabbit
-	function_complete
+	do_complete
 fi
 }
 
@@ -682,26 +682,26 @@ if rpm -q --quiet mailscanner;
 		echo "Now let's patch it up."; sleep 3
 		echo ""
 	cd $home
-	curl -O $akissa_github/extras/patches/mailscanner-baruwa-iwantlint.patch
-	curl -O $akissa_github/extras/patches/mailscanner-baruwa-sql-config.patch
+	curl -O $agit/extras/patches/mailscanner-baruwa-iwantlint.patch
+	curl -O $agit/extras/patches/mailscanner-baruwa-sql-config.patch
 	cd /usr/sbin
 	patch -i $home/mailscanner-baruwa-iwantlint.patch
 	cd /usr/lib/MailScanner/MailScanner
 	patch -p3 -i $home/mailscanner-baruwa-sql-config.patch
 	cd $home
-	curl -O $akissa_github/extras/perl/BS.pm
+	curl -O $agit/extras/perl/BS.pm
 	mv BS.pm /usr/lib/MailScanner/MailScanner/CustomFunctions
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/scan.messages.rules
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/nonspam.actions.rules
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/filename.rules
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/filetype.rules
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/filename.rules.allowall.conf
-	curl -O $fluxlabs_github/extras/centos/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fgit/extras/centos/config/mailscanner/MailScanner.conf
+	curl -O $fgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $fgit/extras/centos/config/mailscanner/scan.messages.rules
+	curl -O $fgit/extras/centos/config/mailscanner/nonspam.actions.rules
+	curl -O $fgit/extras/centos/config/mailscanner/filename.rules
+	curl -O $fgit/extras/centos/config/mailscanner/filetype.rules
+	curl -O $fgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
 	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
@@ -719,7 +719,7 @@ if rpm -q --quiet mailscanner;
 	sed -i '1i #!/usr/bin/perl -I/usr/lib/MailScanner -U' /usr/sbin/MailScanner
 	touch $track/mailscanner
 	rm -rf $builddir/MailScanner-$msver
-function_complete
+do_complete
 fi
 }
 
@@ -783,15 +783,15 @@ if [[ -f $track/exim ]];
 	echo "Exim is already configured. Skipping"; sleep 3
 else
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabs_github/extras/centos/config/exim/exim.conf
-	curl -O $fluxlabs_github/extras/centos/config/exim/exim_out.conf
-	curl -O $akissa_github/extras/config/exim/macros.conf
-	curl -O $akissa_github/extras/config/exim/trusted-configs
+	curl -O $fgit/extras/centos/config/exim/exim.conf
+	curl -O $fgit/extras/centos/config/exim/exim_out.conf
+	curl -O $agit/extras/config/exim/macros.conf
+	curl -O $agit/extras/config/exim/trusted-configs
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $akissa_github/extras/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $agit/extras/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
-function_complete
+do_complete
 fi
 }
 
@@ -816,7 +816,7 @@ else
 
 	yes, y, yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
 	touch $track/perlmods
-function_complete
+do_complete
 fi
 }
 
@@ -840,7 +840,7 @@ else
 	tar -zxvf libmemcached*.tar.gz; cd libmemcached*; ./configure --with-memcached
 	make && make install
 	touch $track/libmem
-function_complete
+do_complete
 fi
 }
 
@@ -848,7 +848,7 @@ fi
 # Baruwa Configuration Function
 # +---------------------------------------------------+
 
-do_config (){
+install_config (){
 	function_clear
 echo "------------------------------------------------------------------------------";
 echo "B U I L D I N G  B A R U W A";
@@ -913,11 +913,11 @@ if [ -x /etc/init.d/baruwa ];
 	echo "Skipping, as I already detect a baruwa init file." ; sleep 3
 else
 	cd $home
-	curl -O $akissa_github/extras/scripts/init/centos/baruwa.init
+	curl -O $agit/extras/scripts/init/centos/baruwa.init
 	mv baruwa.init /etc/init.d/baruwa
 	chmod +x /etc/init.d/baruwa
 fi
-function_complete
+do_complete
 }
 
 # +---------------------------------------------------+
@@ -932,7 +932,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabs_github/extras/websetup.py
+	curl -O $fgit/extras/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
@@ -961,7 +961,7 @@ if [ $vps == 1 ];
 	yum install python-pip
 	pip install uwqsgi
 	mkdir -p /var/log/uwsgi; touch /var/log/uwsgi/uwsgi-baruwa.log
-	curl -O $fluxlabs_github/2.0/extras/config/uwsgi/nginx.conf
+	curl -O $fgit/2.0/extras/config/uwsgi/nginx.conf
 	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
 	sed -i -e 's:ms.home.topdog-software.com:'$baruwadomain':' /etc/nginx/conf.d/baruwa.conf
 	service nginx restart
@@ -978,9 +978,9 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 	then
 	echo "It looks as though you already have a baruwa.conf file for Apache, Skipping."; sleep 3
 else
-	curl -O $akissa_github/extras/config/mod_wsgi/apache.conf
+	curl -O $agit/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
-	function_complete
+	do_complete
 fi
 }
 
@@ -1034,7 +1034,7 @@ install_pyzor_razor_dcc (){
 	echo "root $adminemail" >> /etc/aliases
 	newaliases
 	touch $track/pyzor
-	function_complete
+	do_complete
 fi
 }
 
@@ -1062,7 +1062,7 @@ install_clam (){
 		ln -s /var/lib/clamav /var/clamav
 		chown -R clamav:clamav /var/lib/clamav
 		touch /var/log/clamav/freshclam.log
-		cd /etc; rm -f clamd.conf; wget $fluxlabs_github/extras/centos/config/clamd.conf
+		cd /etc; rm -f clamd.conf; wget $fgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
@@ -1247,7 +1247,7 @@ restart_services (){
 # +---------------------------------------------------+
 # Additional SA Rules
 # +---------------------------------------------------+
-function_add_sa (){
+do_add_sa (){
 	if [ -f $track/additional_sa ];
 		then
 			echo "The Additional Spam Assassin Rules are already installed."
@@ -1268,7 +1268,7 @@ function_add_sa (){
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
 	else
-		cd /etc/cron.daily/; wget $fluxlabs_github/extras/centos/cron/kam; chmod +x *
+		cd /etc/cron.daily/; wget $fgit/extras/centos/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
 	service spamassassin restart
@@ -1285,7 +1285,7 @@ fi
 # +---------------------------------------------------+
 # Additional Clam AV
 # +---------------------------------------------------+
-function_add_clam (){
+do_add_clam (){
 	if [ -f $track/additional_clam ];
 		then
 			echo "The Additional Clam AV Rules are already installed."
@@ -1318,7 +1318,7 @@ function_add_clam (){
 	fi
 }
 
-function_add_remove_clam () {
+do_add_remove_clam () {
 	function_clear
 	echo "------------------------------------------------------------------------------";
 	echo "A D D I T I O N A L  C L A M  R U L E S";
@@ -1336,13 +1336,13 @@ function_add_remove_clam () {
 # +---------------------------------------------------+
 # SA Grey
 # +---------------------------------------------------+
-function_add_sagrey () {
+do_add_sagrey () {
 	function_clear
 	echo "------------------------------------------------------------------------------";
 	echo "I N S T A L L  S A G R E Y";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
-	cd /etc/mail/spamassassin; wget $fluxlabs_github/extras/spamassassin/sagrey.cf; wget $fluxlabs_github/extras/spamassassin/sagrey.pm
+	cd /etc/mail/spamassassin; wget $fgit/extras/spamassassin/sagrey.cf; wget $fgit/extras/spamassassin/sagrey.pm
 	service spamassassin restart
 	function_clear
 	echo ""
@@ -1353,7 +1353,7 @@ function_add_sagrey () {
 	input_confirm
 }
 
-function_add_remove_sagrey () {
+do_add_remove_sagrey () {
 	function_clear
 	echo "------------------------------------------------------------------------------";
 	echo "R E M O V E  S A G R E Y";
@@ -1368,7 +1368,7 @@ function_add_remove_sagrey () {
 # +---------------------------------------------------+
 # Baruwa Admin
 # +---------------------------------------------------+
-function_baruwa_admin (){
+do_baruwa_admin (){
 	if [ -f /usr/sbin/baruwa-admin ] ;
 		then
 		function_clear
@@ -1377,7 +1377,7 @@ function_baruwa_admin (){
 	else
 	function_clear
 	cd /usr/sbin
-	curl -O $fluxlabs_github/extras/centos/baruwa-admin
+	curl -O $fgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
 	clear
 	echo ""
@@ -1391,7 +1391,7 @@ fi
 # Finish Up
 # +---------------------------------------------------+
 
-function_finish (){
+do_finish (){
 sed -i 's:error_email_from = baruwa@localhost:error_email_from = '$erremail':' $etcdir/production.ini
 sed -i 's:baruwa.reports.sender = baruwa@ms.home.topdog-software.com:baruwa.reports.sender = '$repemail':' $etcdir/production.ini
 sed -i 's:ServerName ms.home.topdog-software.com:ServerName '$baruwadomain':' /etc/httpd/conf.d/baruwa.conf
@@ -1529,7 +1529,7 @@ read_menu (){
 			install_exim
 			install_perl
 			install_libmem
-			do_config
+			install_config
 			add_baruwa_admin
 			install_http
 			install_pyzor_razor_dcc
@@ -1538,14 +1538,14 @@ read_menu (){
 			setup_cronjobs
 			fix_permissions
 			restart_services
-			function_finish ;;
-		b)  function_add_sa ;;
-		c)  function_add_clam ;;
-		d)	function_add_sagrey ;;
-		e)  function_baruwa_admin ;;
-		f)  function_cleanup ;;
-		g)	function_add_remove_clam ;;
-		h)  function_add_remove_sagrey ;;
+			do_finish ;;
+		b)  do_add_sa ;;
+		c)  do_add_clam ;;
+		d)	do_add_sagrey ;;
+		e)  do_baruwa_admin ;;
+		f)  do_cleanup ;;
+		g)	do_add_remove_clam ;;
+		h)  do_add_remove_sagrey ;;
 		x) exit 0;;
 		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
 	esac
