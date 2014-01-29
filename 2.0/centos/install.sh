@@ -508,7 +508,7 @@ else
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
-    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df perl-File-Temp \
+    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df \
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav perl-IP-Country \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
@@ -1153,6 +1153,18 @@ echo "--------------------------------------------------------------------------
 echo "Adjusting file/folder permissions."
 echo ""
 echo ""; sleep 3
+
+if grep baruwa /etc/passwd ;
+	then
+	:
+else
+getent group baruwa >/dev/null || groupadd -r baruwa
+getent passwd baruwa >/dev/null || \
+    useradd -r -g baruwa -d /var/lib/baruwa \
+    -s /sbin/nologin -c "Baruwa User" baruwa
+fi
+}
+
 chown root: /var/spool/MailScanner/
 chown exim:clamav /var/spool/MailScanner/incoming
 chown exim:baruwa /var/spool/MailScanner/quarantine
@@ -1174,16 +1186,6 @@ chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
 
-if grep baruwa /etc/passwd ;
-	then
-	:
-else
-getent group baruwa >/dev/null || groupadd -r baruwa
-getent passwd baruwa >/dev/null || \
-    useradd -r -g baruwa -d /var/lib/baruwa \
-    -s /sbin/nologin -c "Baruwa User" baruwa
-fi
-}
 
 f_clear
 
