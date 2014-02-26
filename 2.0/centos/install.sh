@@ -553,6 +553,8 @@ pip install -U distribute
 pip install python-memcached
 pip install --timeout 120 -r requirements.txt
 pip install babel==0.9.6
+pip uninstall reportlab -y
+pip install reportlab==2.7
 cd $home
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
