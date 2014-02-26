@@ -12,7 +12,7 @@
 # INSTALL GUIDE
 # cd /etc/cron.daily; wget https://raw.github.com/fluxlabs/baruwa/master/2.0/extras/update-atomic-clamav.sh
 # Just edit your username and password
-# Put this file in /etc/cron.daily
+#
 
 USER=username
 PASS=password

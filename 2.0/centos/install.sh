@@ -1047,8 +1047,6 @@ f_clam (){
 		usermod -a -G exim clamav
 		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 		ln -s /var/lib/clamav /var/clamav
-		chown -R clamav:clamav /var/lib/clamav
-		touch /var/log/clamav/freshclam.log
 		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
@@ -1062,7 +1060,9 @@ f_clam (){
 		echo -n ""
 		echo -n ""
 		echo ""; sleep 3
-		chown -R clamav:clamav /var/log/clamav
+		touch /var/log/clamav/freshclam.log
+		chown -R clam: /var/log/clamav
+		chown -R clam: /var/lib/clamav
 		pkill -9 freshclam
 		pkill -9 clamd
 		sleep 5

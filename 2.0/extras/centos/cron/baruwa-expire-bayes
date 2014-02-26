@@ -1,3 +1,2 @@
 #!/bin/bash
-
 /usr/bin/sa-learn --force-expire --sync -p /etc/MailScanner/spam.assassin.prefs.conf &>/dev/null
