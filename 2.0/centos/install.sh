@@ -98,7 +98,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
-rabbitmq="3.2.3-1"						# Rabbit MQ Version
+rabbitmq="3.2.4-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -1045,7 +1045,7 @@ f_clam (){
 		usermod -a -G clamav exim
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
-		rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
+		#rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
 		ln -s /var/lib/clamav /var/clamav
 		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
@@ -1066,8 +1066,8 @@ f_clam (){
 		pkill -9 freshclam
 		pkill -9 clamd
 		sleep 5
-		service clamd start
 		freshclam
+		service clamd start
 		service MailScanner start
 		sa-learn --sync /usr/share/doc/spamassassin-$spamassver/sample-spam.txt
 		f_clear
