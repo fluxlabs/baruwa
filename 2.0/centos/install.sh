@@ -10,6 +10,7 @@ export LANG=C
 #
 # Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/cent6/install.sh
 #
+# 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -90,7 +91,7 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="3-05-2014"						# Last Updated On
+date="2014-03-06"						# Last Updated On
 version="2.8.1"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
@@ -960,7 +961,7 @@ else
 	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
 fi
 
-f_uwsgi () {
+	f_uwsgi () {
 	if [ -a $track/uwsgi ];
 		then
 		echo "It looks like uwsgi has already been installed, skipping."
@@ -983,16 +984,7 @@ f_uwsgi () {
 		/etc/init.d/uwsgi start
 		touch $track/uwsgi
 	fi
-}
-
-#if [ -f /etc/httpd/conf.d/baruwa.conf ];
-#	then
-#	echo "It looks as though you already have a baruwa.conf file for Apache, Skipping."; sleep 3
-#else
-#	curl -O $baruwagit/extras/config/mod_wsgi/apache.conf
-#	mv apache.conf /etc/httpd/conf.d/baruwa.conf
-#	f_complete
-#fi
+	}
 }
 
 # +---------------------------------------------------+
