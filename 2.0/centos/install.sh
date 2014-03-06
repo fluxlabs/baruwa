@@ -651,8 +651,8 @@ if rpm -q --quiet rabbitmq-server-$rabbitmq;
 	## eXtremeSHOK.com
 	# compute the correct version folder to prevent 404 not found errors by linking to a non current version.
 	# eg. http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.4/rabbitmq-server-3.2.4-1.noarch.rpm
-	rabbitmqfolder=$(echo $rabbitmq | cut -c -5)
-	rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+		rabbitmqfolder=$(echo $rabbitmq | cut -c -5)
+		rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 		cd $builddir; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmqfolder/rabbitmq-server-$rabbitmq.noarch.rpm
 		yum install rabbitmq-server-$rabbitmq.noarch.rpm -y
 	if [ $? -eq 0 ];
