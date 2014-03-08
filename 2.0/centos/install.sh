@@ -10,7 +10,11 @@ export LANG=C
 #
 # Sourced at https://github.com/fluxlabs/baruwa/blob/master/2.0/cent6/install.sh
 #
-# 
+# +--------------------------------------------------------------------+
+# NginX + uWSGI and enhancements by Adrian Jon Kriel :: admin@extremeshok.com
+# NginX + uWSGI Configs Copyright (C) 2014 eXtremeSHOK :: https://eXtremeSHOK.com
+# +--------------------------------------------------------------------+
+#  
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -91,8 +95,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="2014-03-06"						# Last Updated On
-version="2.8.1"							# Script Version
+date="2014-03-08"						# Last Updated On
+version="2.8.3-xs"						# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -114,7 +118,9 @@ uwsgi="2.0.2"							# UWSGI Version
 # +---------------------------------------------------+
 
 baruwagit="https://raw.github.com/akissa/baruwa2/master"			# Extras from Baruwa
-fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
+#fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/testing/2.0"	# Extras from Flux Labs
+fluxlabsgit="https://raw.github.com/extremeshok/baruwa/master/2.0" #testing for eXtremeSHOK
+
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -307,6 +313,9 @@ echo "Any bugs found in Baruwa itself should be reported to"
 echo "the mailing list @ http://www.baruwa.org. You can contact me at jeremy@fluxlabs.net"
 echo "with any concerns or additions you would like to see/add to this script."
 echo ""
+echo "------------------------------------------------------------------------------";
+echo "NginX + uWSGI and enhancements by Adrian Jon Kriel :: admin@extremeshok.com"
+echo "NginX + uWSGI Configs Copyright (C) 2014 eXtremeSHOK :: https://eXtremeSHOK.com"
 echo "------------------------------------------------------------------------------";
 echo ""
 f_confirm
@@ -518,7 +527,7 @@ fi
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
-    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df \
+    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df python-pip \
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav perl-IP-Country \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
@@ -648,26 +657,10 @@ if rpm -q --quiet rabbitmq-server-$rabbitmq;
 	then
 	echo "Good, It looks as though RABBITMQ $rabbitmq is already installed. Skipping"; sleep 2
 	else
-	## eXtremeSHOK.com
-	# compute the correct version folder to prevent 404 not found errors by linking to a non current version.
-	# eg. http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.4/rabbitmq-server-3.2.4-1.noarch.rpm
 		rabbitmqfolder=$(echo $rabbitmq | cut -c -5)
 		rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 		cd $builddir; wget http://www.rabbitmq.com/releases/rabbitmq-server/v$rabbitmqfolder/rabbitmq-server-$rabbitmq.noarch.rpm
 		yum install rabbitmq-server-$rabbitmq.noarch.rpm -y
-	if [ $? -eq 0 ];
-			then
-	    touch $track/rabbit
-	    f_complete
-	else
-	        echo ""
-	        echo "Ooops !"
-	        echo "It seems I've run into an error installing the Rabbit MQ."
-			echo "This usually happens when the RabbitMQ Team updates, and I'm a little behind."
-	        echo "Please send this error to jeremy@fluxlabs.net"
-	        echo ""
-	        f_exit
-	fi
 fi
 
 if [ -a $track/rabbit ];
@@ -720,14 +713,14 @@ if rpm -q --quiet mailscanner;
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/scan.messages.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/nonspam.actions.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxlabsgit/centos/config/mailscanner/MailScanner.conf
+	curl -O $fluxlabsgit/centos/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $fluxlabsgit/centos/config/mailscanner/scan.messages.rules
+	curl -O $fluxlabsgit/centos/config/mailscanner/nonspam.actions.rules
+	curl -O $fluxlabsgit/centos/config/mailscanner/filename.rules
+	curl -O $fluxlabsgit/centos/config/mailscanner/filetype.rules
+	curl -O $fluxlabsgit/centos/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fluxlabsgit/centos/config/mailscanner/filetype.rules.allowall.conf
 	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
@@ -809,13 +802,13 @@ if [[ -f $track/exim ]];
 	echo "Exim is already configured. Skipping"; sleep 3
 else
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabsgit/extras/centos/config/exim/exim.conf
-	curl -O $fluxlabsgit/extras/centos/config/exim/exim_out.conf
-	curl -O $baruwagit/extras/config/exim/macros.conf
-	curl -O $baruwagit/extras/config/exim/trusted-configs
+	curl -O $fluxlabsgit/centos/config/exim/exim.conf
+	curl -O $fluxlabsgit/centos/config/exim/exim_out.conf
+	curl -O $baruwagit/config/exim/macros.conf
+	curl -O $baruwagit/config/exim/trusted-configs
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $baruwagit/extras/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $baruwagit/config/exim/baruwa/exim-bcrypt.pl
 	touch $track/exim
 f_complete
 fi
@@ -946,49 +939,90 @@ f_complete
 }
 
 # +---------------------------------------------------+
-# NGINX/UWSGI Function
+# NGINX Function by Adrian Jon Kriel : https://eXtremeSHOK.com
 # +---------------------------------------------------+
 
 f_nginx (){
 f_clear
 echo "------------------------------------------------------------------------------";
-echo "H T T P  I N S T A L L A T I O N";
+echo "N G I N X  I N S T A L L A T I O N";
 echo "------------------------------------------------------------------------------";
 sleep 3
+
+if rpm -q --quiet httpd;
+	then
+	echo "It looks like Apache is installed. Removing."; sleep 3
+	yum erase httpd mod_wsgi -y
+	rm -rf /etc/httpd
+	rm -f /etc/init.d/httpd
+fi
+
 	
 if rpm -q --quiet nginx;
 	then
 	echo "It looks like NGINX is already installed. Skipping."; sleep 3
 else
 	yum install nginx -y
-	curl -O $fluxlabsgit/extras/nginx/nginx.conf
-	mv nginx.conf /etc/nginx/conf.d/baruwa.conf
+	rm -f /etc/nginx/conf.d/*.conf
+	rm -f /etc/nginx/nginx.conf
+	cd /etc/nginx
+	curl -O $fluxlabsgit/extras/nginx-uwsgi/nginx.conf
+	mkdir -p /var/log/nginx
 fi
+f_complete
+}
 
-	f_uwsgi () {
-	if [ -a $track/uwsgi ];
-		then
-		echo "It looks like uwsgi has already been installed, skipping."
-	else
-		cd /opt/; wget http://projects.unbit.it/downloads/uwsgi-$uwsgi.tar.gz
-		tar -zxvf uwsgi*.tar.gz; rm -f *.gz; mv uwsgi-* uwsgi; cd uwsgi*; python setup.py build; make
-		useradd -M -r --shell /bin/sh --home-dir /opt/uwsgi uwsgi
-		chown -R uwsgi:uwsgi /opt/uwsgi
-		touch /var/log/uwsgi.log
-		chown uwsgi /var/log/uwsgi.log
-		chmod +x /etc/init.d/uwsgi
-		mkdir /var/log/uwsgi/
-		cd /etc/init.d/
-		curl -O $fluxlabsgit/extras/nginx/uwsgi
-		chmod +x uwsgi
-		chkconfig --add uwsgi
-		chkconfig uwsgi on
-		sed -i "14i home = /home/baruwa/px" $etcdir/production.ini
-		/opt/uwsg/uwsgi --ini-paste /etc/baruwa/production.ini
-		/etc/init.d/uwsgi start
-		touch $track/uwsgi
-	fi
-	}
+# +---------------------------------------------------+
+# UWSGI Function by Adrian Jon Kriel : https://eXtremeSHOK.com
+# +---------------------------------------------------+
+
+f_uwsgi (){
+f_clear
+echo "------------------------------------------------------------------------------";
+echo "U W S G I  I N S T A L L A T I O N";
+echo "------------------------------------------------------------------------------";
+sleep 3
+
+if [ -a $track/uwsgi ];
+	then
+	echo "It looks like uwsgi has already been installed, skipping."
+else
+	cd /opt/; wget http://projects.unbit.it/downloads/uwsgi-$uwsgi.tar.gz
+	tar -zxvf uwsgi*.tar.gz; rm -f *.gz; mv uwsgi-* uwsgi; cd uwsgi*; python setup.py build; make
+	useradd -M -r --shell /bin/sh --home-dir /opt/uwsgi uwsgi
+	chown -R uwsgi:uwsgi /opt/uwsgi
+	touch /var/log/uwsgi.log
+	chown uwsgi /var/log/uwsgi.log
+	mkdir /var/log/uwsgi/
+	cd /etc/init.d/
+	curl -O $fluxlabsgit/centos/nginx-uwsgi/uwsgi.init
+	mv /etc/init.d/uwsgi.init /etc/init.d/uwsgi
+	chmod +x /etc/init.d/uwsgi
+	chmod +x uwsgi
+
+	mkdir -p /var/run/uwsgi/
+	chown -R uwsgi:uwsgi /var/run/uwsgi/
+
+	sed -i "14i home = /home/baruwa/px" $etcdir/production.ini
+	sed -i -e "s|uid = baruwa|uid = uwsgi|" $etcdir/production.ini
+	sed -i -e "s|gid = baruwa|gid = uwsgi|" $etcdir/production.ini
+
+	ln -s $etcdir/production.ini /etc/uwsgi
+
+	###### leave for future reference ######
+	# [uwsgi]
+	# socket = /var/run/uwsgi/baruwa.sock
+	# master = true
+	# processes = 5
+	# uid = uwsgi
+	# gid = uwsgi
+	# daemonize = /var/log/uwsgi/uwsgi-baruwa.log
+	# home = /home/baruwa/px
+	######
+
+	touch $track/uwsgi
+fi
+f_complete
 }
 
 # +---------------------------------------------------+
@@ -1078,6 +1112,7 @@ f_sphinx () {
 		then
 		echo "Sphinx has already Indexed & Rotated. Skipping."; sleep 3
 	else
+		service searchd start
 		indexer --all --rotate
 		touch $track/sphinx
 	fi
@@ -1097,7 +1132,7 @@ f_clam () {
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
 		ln -s /var/clamav /var/lib/clamav 
-		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
+		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
@@ -1189,8 +1224,8 @@ cat > /etc/cron.d/mailscanner << 'EOF'
 EOF
 
 cd /etc/cron.hourly;
-curl -O $fluxlabsgit/extras/centos/cron/baruwa-expire-bayes
-curl -O $fluxlabsgit/extras/centos/cron/baruwa-clean-eximdb
+curl -O $fluxlabsgit/centos/cron/baruwa-expire-bayes
+curl -O $fluxlabsgit/centos/cron/baruwa-clean-eximdb
 chmod +x *
 fi
 }
@@ -1247,6 +1282,28 @@ chown baruwa.baruwa -R /var/lib/baruwa/data/sessions
 f_clear
 
 }
+
+# +---------------------------------------------------+
+# Install bind
+# +---------------------------------------------------+
+
+f_bind (){
+f_clear
+if [ -a $track/bind ];
+	then
+	echo "I believe bind already installed. Skipping."; sleep 3
+else
+	yum remove bind-chroot -y
+	yum install bind -y
+	sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
+fi
+touch $track/bind
+f_clear
+
+}
+
+
+
 # +---------------------------------------------------+
 # Services Function
 # +---------------------------------------------------+
@@ -1263,12 +1320,14 @@ f_services (){
 		echo "Restarting necessary services for final time."
 		echo "We are also adding services to startup."
 		echo ""; sleep 3
-	
+		service named start
+		chkconfig --level 345 named on
 		service clamd restart
-		service exim restart
 		chkconfig --level 345 clamd on
-		service nginx start
-		chkconfig --level 345 nginx on
+		service exim restart
+		chkconfig --level 345 exim on
+		service uwsgi start
+		chkconfig --level 345 uwsgi on
 		service memcached start
 		chkconfig --level 345 memcached on
 		service postgresql restart
@@ -1285,11 +1344,9 @@ f_services (){
 		chkconfig --level 345 MailScanner on
 		service spamassassin start
 		chkconfig --level 345 spamassassin on
-		yum remove bind-chroot -y
-		yum install bind -y
-		chkconfig --level 345 named on
-		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
-		service named start
+		#always start the frontend last
+		service nginx start
+		chkconfig --level 345 nginx on
 		touch $track/services
 		f_clear
 	fi
@@ -1305,7 +1362,8 @@ sed -i 's:server_name ms.home.topdog-software.com:server_name '$baruwadomain':' 
 sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/production.ini
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
 sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
-
+sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/base.html
+sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/general/error.html
 
 f_clear
 # +---------------------------------------------------+
@@ -1419,7 +1477,7 @@ f_additional_sa (){
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
 	else
-		cd /etc/cron.daily/; wget $fluxlabsgit/extras/centos/cron/kam; chmod +x *
+		cd /etc/cron.daily/; wget $fluxlabsgit/centos/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
 	service spamassassin restart
@@ -1589,6 +1647,7 @@ read_main (){
 			f_generate_key
 			f_cronjobs
 			f_permissions
+			f_bind
 			f_services
 			f_finish ;;
 		b)  f_additional_sa ;;
