@@ -119,7 +119,7 @@ uwsgi="2.0.2"							# UWSGI Version
 
 baruwagit="https://raw.github.com/akissa/baruwa2/master"			# Extras from Baruwa
 #fluxlabsgit="https://raw.github.com/fluxlabs/baruwa/testing/2.0"	# Extras from Flux Labs
-fluxlabsgit="https://raw.github.com/extremeshok/baruwa/master/2.0" #testing for eXtremeSHOK
+fluxlabsgit="https://raw.github.com/extremeshok/baruwa/testing/2.0" #testing for eXtremeSHOK
 
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
@@ -966,7 +966,7 @@ else
 	rm -f /etc/nginx/conf.d/*.conf
 	rm -f /etc/nginx/nginx.conf
 	cd /etc/nginx
-	curl -O $fluxlabsgit/extras/nginx-uwsgi/nginx.conf
+	curl -O $fluxlabsgit/centos/nginx-uwsgi/nginx.conf
 	mkdir -p /var/log/nginx
 fi
 f_complete
@@ -1002,10 +1002,13 @@ else
 
 	mkdir -p /var/run/uwsgi/
 	chown -R uwsgi:uwsgi /var/run/uwsgi/
+	
+	unix:///var/run/uwsgi/baruwa.sock;
 
 	sed -i "14i home = /home/baruwa/px" $etcdir/production.ini
 	sed -i -e "s|uid = baruwa|uid = uwsgi|" $etcdir/production.ini
 	sed -i -e "s|gid = baruwa|gid = uwsgi|" $etcdir/production.ini
+	sed -i -e "s|socket = /var/run/baruwa/baruwa.sock|socket = /var/run/uwsgi/baruwa.sock|" $etcdir/production.ini
 
 	ln -s $etcdir/production.ini /etc/uwsgi
 
@@ -1274,11 +1277,11 @@ chown -R exim:baruwa /var/spool/MailScanner/quarantine
 chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 mkdir -p /var/lib/baruwa/data/templates
-chown baruwa.baruwa -R /var/lib/baruwa/data/cache
-chown baruwa.baruwa -R /var/lib/baruwa/data/uploads
-chown baruwa.baruwa -R /var/lib/baruwa/data/templates
-chown baruwa.baruwa -R /var/lib/baruwa/data/sessions
-
+chown uwsgi:uwsgi -R /var/lib/baruwa/data/
+chown uwsgi.uwsgi -R /var/lib/baruwa/data/cache
+chown uwsgi.uwsgi -R /var/lib/baruwa/data/uploads
+chown uwsgi.uwsgi -R /var/lib/baruwa/data/templates
+chown uwsgi.uwsgi -R /var/lib/baruwa/data/sessions
 f_clear
 
 }
@@ -1362,8 +1365,8 @@ sed -i 's:server_name ms.home.topdog-software.com:server_name '$baruwadomain':' 
 sed -i 's:email_to = baruwa@localhost:email_to = '$admemail':' $etcdir/production.ini
 sed -i 's:Africa/Johannesburg:'$timezone':' $etcdir/production.ini
 sed -i 's|baruwa.default.url = http://localhost|baruwa.default.url = http://'$baruwadomain'|' $etcdir/production.ini
-sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/base.html
-sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/general/error.html
+sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;\|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;\|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/base.html
+sed -i 's|<li><a href="http://www.baruwa.net/">Baruwa Hosted</a> &copy; 2012 Andrew Colin Kissa</li>|<li>Deployed by <a href="http://www.baruwa-install.com">Baruwa-Install</a></li><li>&nbsp;\|&nbsp;</li><li>Project Maintained by <a href="https://www.fluxlabs.net/">Flux Labs</a></li><li>&nbsp;\|&nbsp;</li><li>Enhanced by <a href="https://extremeshok.com">eXtremeSHOK</a></li>|g' /home/baruwa/px/lib/python2.6/site-packages/baruwa/templates/general/error.html
 
 f_clear
 # +---------------------------------------------------+
