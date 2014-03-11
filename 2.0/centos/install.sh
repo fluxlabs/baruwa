@@ -414,6 +414,18 @@ while :
 		echo 'Passwords do not match. Please try again.'
 		echo ''
 	done
+
+while :
+	do
+		echo ""
+		echo "What domain will you use? example - baruwa.domain.net"
+		IFS= read -p "Email: " baruwadomain
+		IFS= read -p "Email Again: " baruwadomain2
+		[[ $baruwadomain = "$baruwadomain2" ]] && break
+		echo ''
+		echo 'Passwords do not match. Please try again.'
+		echo ''
+	done
 	
 while :
 	do
