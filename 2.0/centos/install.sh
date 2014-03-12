@@ -1007,7 +1007,6 @@ f_pyzor_razor_dcc (){
 	echo "I N S T A L L  P Y Z O R  R A Z O R  & D C C";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
-	
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
 	sed -i "48,93d #" atomic
 	sh atomic
@@ -1044,7 +1043,7 @@ f_pyzor_razor_dcc (){
 	newaliases
 	touch $track/pyzor
 	f_complete
-fi
+fi	
 }
 
 # +---------------------------------------------------+
@@ -1163,6 +1162,7 @@ curl -O $fluxlabsgit/extras/centos/cron/baruwa-expire-bayes
 curl -O $fluxlabsgit/extras/centos/cron/baruwa-clean-eximdb
 chmod +x *
 fi
+}
 
 # +---------------------------------------------------+
 # Permissions Function
@@ -1209,7 +1209,7 @@ chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
 
 f_clear
-
+}
 # +---------------------------------------------------+
 # Services Function
 # +---------------------------------------------------+
