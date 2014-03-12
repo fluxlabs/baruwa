@@ -511,6 +511,7 @@ else
 		else
 			rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-$rpmforge.el6.rf.x86_64.rpm
 			sed -i "12i exclude=openssh openssh-clients perl-File-Temp perl perl-Razor-Agent razor-agents" /etc/yum.repos.d/rpmforge.repo
+			sed -i '19 s:0:1:' /etc/yum.repos.d/rpmforge.repo
 		fi
 	if [ -f $track/cent-exclude ];
 		then 
