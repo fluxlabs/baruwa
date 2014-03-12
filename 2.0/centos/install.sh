@@ -1043,7 +1043,7 @@ f_pyzor_razor_dcc (){
 	newaliases
 	touch $track/pyzor
 	f_complete
-fi	
+fi
 }
 
 # +---------------------------------------------------+
