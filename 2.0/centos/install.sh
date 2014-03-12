@@ -512,6 +512,14 @@ else
 			rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-$rpmforge.el6.rf.x86_64.rpm
 			sed -i "12i exclude=openssh openssh-clients perl-File-Temp perl perl-Razor-Agent razor-agents" /etc/yum.repos.d/rpmforge.repo
 		fi
+	if [ -f $track/cent-exclude ];
+		then 
+			echo "Skipping"; sleep 2
+	else
+	sed -i "19i exclude=perl-Compress-Raw-Zlib perl-Archive-Zip perl-Compress-Zlib perl-libwww-perl spamassassin perl-IO-Zlib perl-DBI" /etc/yum.repos.d/CentOS-Base.repo
+	sed -i "28i exclude=spamassassin" /etc/yum.repos.d/CentOS-Base.repo
+	touch $track/cent-exclude
+	fi
 
 	yum install gcc git gcc-c++ svn curl patch wget libxml2-devel libxslt-devel Cython postgresql-devel perl-CGI \
     freetype-devel libjpeg-devel zlib-devel openldap-devel openssl-devel swig multitail perl-DBD-Pg perl-DBD-MySQL \
@@ -520,11 +528,12 @@ else
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
     perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
-    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df \
+    perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df perl-EV perl-String-CRC32 \
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav perl-IP-Country \
     perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes \
-    perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF \
+    perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF mod_wsgi \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident re2c -y
+    
 	if [ $? -eq 0 ];
 		then
     touch $track/dependencies
@@ -825,7 +834,7 @@ else
 	echo "that are not available via Yum Repo's."
 	sleep 3
 
-	yes, y, yes | cpan String::CRC32 Encoding::FixLatin AnyEvent::Handle EV DBD::mysql DBD::Pg
+	yes | cpan Encoding::FixLatin AnyEvent::Handle
 	touch $track/perlmods
 f_complete
 fi
@@ -979,6 +988,7 @@ if [ -f /etc/httpd/conf.d/baruwa.conf ];
 else
 	curl -O $baruwagit/extras/config/mod_wsgi/apache.conf
 	mv apache.conf /etc/httpd/conf.d/baruwa.conf
+	echo LoadModule wsgi_module modules/mod_wsgi.so >> /etc/httpd/conf.d/wsgi.conf
 	f_complete
 fi
 }
@@ -1057,8 +1067,7 @@ f_clam (){
 		usermod -a -G clamav exim
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
-		#rm -rf /var/lib/clamav; mkdir -p /var/lib/clamav
-		ln -s /var/lib/clamav /var/clamav
+		mkdir -p /var/lib/clamav
 		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
@@ -1177,7 +1186,6 @@ getent passwd baruwa >/dev/null || \
     useradd -r -g baruwa -d /var/lib/baruwa \
     -s /sbin/nologin -c "Baruwa User" baruwa
 fi
-}
 
 chown root: /var/spool/MailScanner/
 chown exim:clamav /var/spool/MailScanner/incoming
@@ -1200,10 +1208,8 @@ chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
 
-
 f_clear
 
-}
 # +---------------------------------------------------+
 # Services Function
 # +---------------------------------------------------+
