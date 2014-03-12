@@ -423,7 +423,7 @@ while :
 		IFS= read -p "Email Again: " baruwadomain2
 		[[ $baruwadomain = "$baruwadomain2" ]] && break
 		echo ''
-		echo 'Passwords do not match. Please try again.'
+		echo 'These domains do not match. Please try again.'
 		echo ''
 	done
 	
@@ -435,8 +435,8 @@ while :
 		echo "------------------------------------------------------------------------------";
 		echo ""
 		echo "Lets set a password for Postgres."
-		echo "What would you like this super secret"
-		echo "password to be?"
+		echo "What would you like this super secret password to be?"
+		echo "(Not Complex, no special Characters)"
 		IFS= read -r -p "Password: " pssqlpass
 		IFS= read -r -p "Password Again: " pssqlpass2
 		echo ""
@@ -453,8 +453,8 @@ while :
 		echo "R A B B I T M Q  P A S S W O R D";
 		echo "------------------------------------------------------------------------------";
 		echo "Lets set a password for RabbitMQ."
-		echo "What would you like this super secret"
-		echo "password to be?"
+		echo "What would you like this super secret password to be?"
+		echo "(Not Complex, no special Characters)"
 		IFS= read -r -p "Password: " rabbpass
 		IFS= read -r -p "Password Again: " rabbpass2
 		echo ""
