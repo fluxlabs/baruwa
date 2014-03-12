@@ -1378,6 +1378,7 @@ f_additional_sa (){
 	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
 	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+fi
 	if [ -f /etc/cron.daily/kam ];
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
@@ -1394,7 +1395,6 @@ f_additional_sa (){
 	echo "You can verify the plugin is running by running a Lint test via "
 	echo "the Baruwa UI under this scanner node."
 	f_confirm
-fi
 }
 # +---------------------------------------------------+
 # Additional Clam AV
