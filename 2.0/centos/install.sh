@@ -1040,7 +1040,7 @@ f_pyzor_razor_dcc (){
 	echo loadplugin Mail::SpamAssassin::Plugin::RelayCountry >> /etc/mail/spamassassin/init.pre
 	sed -i '1d' /usr/bin/pyzor
 	sed -i '1i #!/usr/bin/python -Wignore::DeprecationWarning' /usr/bin/pyzor
-	echo "root $adminemail" >> /etc/aliases
+	echo "root: $adminemail" >> /etc/aliases
 	newaliases
 	touch $track/pyzor
 	f_complete
@@ -1193,6 +1193,9 @@ chown exim:clamav /var/spool/MailScanner/incoming
 chown exim:baruwa /var/spool/MailScanner/quarantine
 chown -R exim:clamav /var/spool/MailScanner/incoming
 chown -R exim:baruwa /var/spool/MailScanner/quarantine
+mkdir -p /var/spool/exim.in/{db,input,msglog}
+mkdir -p /var/spool/exim/{db,input,msglog}
+chown -R exim: /var/spool/exim
 mkdir -p /var/run/MailScanner
 mkdir -p /var/log/baruwa
 mkdir -p /var/run/baruwa
