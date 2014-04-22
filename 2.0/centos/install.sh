@@ -98,7 +98,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
-rabbitmq="3.2.4-1"						# Rabbit MQ Version
+rabbitmq="3.3.0-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -1082,10 +1082,8 @@ f_clam (){
 		echo -n ""
 		echo ""; sleep 3
 		touch /var/log/clamav/freshclam.log
-		chown -R clam: /var/log/clamav
-		chown -R clam: /var/lib/clamav
-		pkill -9 freshclam
-		pkill -9 clamd
+		chown -R clamav: /var/log/clamav
+		chown -R clamav: /var/lib/clamav
 		sleep 5
 		freshclam
 		service clamd start
