@@ -569,7 +569,7 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O https://raw.github.com/akissa/baruwa2/master/requirements.txt
+curl -O $baruwagit/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
@@ -694,7 +694,7 @@ if rpm -q --quiet mailscanner;
 		echo "I have detected a previous install of MailScanner." ; sleep 3
 	else
 		echo "This process could take a while. Go make a cup of coffee"; sleep 3
-		cd $builddir; wget https://github.com/fluxlabs/baruwa/raw/master/2.0/extras/centos/MailScanner-$msver.rpm.tar.gz
+		cd $builddir; wget $fluxlabsgit/extras/centos/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
 		f_clear
 		sh install.sh fast
@@ -1378,8 +1378,8 @@ f_additional_sa (){
 	cd /var/lib/clamav; wget http://www.mailscanner.eu/scamnailer.ndb
 	cd /etc/mail/spamassassin
 	wget http://www.peregrinehw.com/downloads/SpamAssassin/contrib/KAM.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
-	wget https://raw.github.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
+	wget https://raw.githubusercontent.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.cf
+	wget https://raw.githubusercontent.com/smfreegard/DecodeShortURLs/master/DecodeShortURLs.pm
 fi
 	if [ -f /etc/cron.daily/kam ];
 		then
