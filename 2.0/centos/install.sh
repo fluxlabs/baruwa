@@ -1443,6 +1443,8 @@ f_remove_additional_clam () {
 	echo "I will now remove the additional clamav rules."
 	echo ""; sleep 3
 	yum remove clamav-unofficial-sigs -y
+	cd /var/lib/clamav; rm -f *
+	freshclam
 	f_clear
 	echo ""
 	echo "Additional ClamAV Rules have been removed."
