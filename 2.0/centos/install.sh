@@ -1209,6 +1209,7 @@ chown -R baruwa:baruwa /var/lock/baruwa
 chmod o+w,g+w /var/lock/baruwa
 chmod -R 755 /etc/MailScanner/baruwa
 chown -R baruwa: /etc/MailScanner/baruwa
+chown -R exim: /var/spool/exim.in /var/spool/exim
 
 f_clear
 }
