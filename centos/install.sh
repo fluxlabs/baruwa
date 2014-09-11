@@ -90,8 +90,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="2-23-2014"						# Last Updated On
-version="2.7"							# Script Version
+date="09-11-2014"						# Last Updated On
+version="2.8"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -112,7 +112,7 @@ spamassver="3.3.2"						# Spamasassin Version
 # +---------------------------------------------------+
 
 baruwagit="https://raw.githubusercontent.com/akissa/baruwa2/master"			# Extras from Baruwa
-fluxgit="https://raw.githubusercontent.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
+fluxgit="https://raw.githubusercontent.com/fluxlabs/baruwa/master"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
