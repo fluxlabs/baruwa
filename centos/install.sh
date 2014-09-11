@@ -98,7 +98,7 @@ baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
-rabbitmq="3.3.1-1"						# Rabbit MQ Version
+rabbitmq="3.3.5-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
@@ -112,7 +112,7 @@ spamassver="3.3.2"						# Spamasassin Version
 # +---------------------------------------------------+
 
 baruwagit="https://raw.githubusercontent.com/akissa/baruwa2/master"			# Extras from Baruwa
-fluxlabsgit="https://raw.githubusercontent.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
+fluxgit="https://raw.githubusercontent.com/fluxlabs/baruwa/master/2.0"	# Extras from Flux Labs
 home="/home/baruwa"						# Home Directory
 etcdir="/etc/baruwa"					# Baruwa etc
 eximdir="/etc/exim"						# Exim Directory
@@ -501,7 +501,8 @@ else
 		then
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
-			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
+			rpm -Uvh http://mirror.neu.edu.cn/CentALT/6/x86_64/centalt-release-$centalt.noarch.rpm
+			sed -i 's/centos.alt.ru\/repository\/centos/mirror.neu.edu.cn\/CentALT/g' /etc/yum.repos.d/centalt.repo
 			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
 	fi
 
@@ -569,7 +570,7 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O $baruwagit/requirements.txt
+curl -O $fluxgit/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
@@ -625,9 +626,9 @@ curl -O $baruwagit/baruwa/config/sql/admin-functions.sql
 su - postgres -c 'psql baruwa -f '$home'/admin-functions.sql'
 
 # Bayes/AWL DB
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/bayes-postgres.sql
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/awl-postgres.sql
-cd /tmp; curl -O $fluxlabsgit/extras/bayes/grants.sql
+cd /tmp; curl -O $fluxgit/extras/bayes/bayes-postgres.sql
+cd /tmp; curl -O $fluxgit/extras/bayes/awl-postgres.sql
+cd /tmp; curl -O $fluxgit/extras/bayes/grants.sql
 su - postgres -c 'psql baruwa -f /tmp/bayes-postgres.sql'
 su - postgres -c 'psql baruwa -f /tmp/awl-postgres.sql'
 su - postgres -c 'psql baruwa -f /tmp/grants.sql'
@@ -694,7 +695,7 @@ if rpm -q --quiet mailscanner;
 		echo "I have detected a previous install of MailScanner." ; sleep 3
 	else
 		echo "This process could take a while. Go make a cup of coffee"; sleep 3
-		cd $builddir; wget $fluxlabsgit/extras/centos/MailScanner-$msver.rpm.tar.gz
+		cd $builddir; wget $fluxgit/extras/centos/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
 		f_clear
 		sh install.sh fast
@@ -715,14 +716,14 @@ if rpm -q --quiet mailscanner;
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
 	cd $home
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/MailScanner.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/scan.messages.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/nonspam.actions.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
-	curl -O $fluxlabsgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
+	curl -O $fluxgit/extras/centos/config/mailscanner/MailScanner.conf
+	curl -O $fluxgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
+	curl -O $fluxgit/extras/centos/config/mailscanner/scan.messages.rules
+	curl -O $fluxgit/extras/centos/config/mailscanner/nonspam.actions.rules
+	curl -O $fluxgit/extras/centos/config/mailscanner/filename.rules
+	curl -O $fluxgit/extras/centos/config/mailscanner/filetype.rules
+	curl -O $fluxgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fluxgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
 	rm -f /etc/mail/spamassassin/local.cf
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
 	mv *.rules /etc/MailScanner/rules/
@@ -804,8 +805,8 @@ if [[ -f $track/exim ]];
 	echo "Exim is already configured. Skipping"; sleep 3
 else
 	cd $eximdir; mv $eximdir/exim.conf $eximdir/exim.conf.orig
-	curl -O $fluxlabsgit/extras/centos/config/exim/exim.conf
-	curl -O $fluxlabsgit/extras/centos/config/exim/exim_out.conf
+	curl -O $fluxgit/extras/centos/config/exim/exim.conf
+	curl -O $fluxgit/extras/centos/config/exim/exim_out.conf
 	curl -O $baruwagit/extras/config/exim/macros.conf
 	curl -O $baruwagit/extras/config/exim/trusted-configs
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
@@ -953,7 +954,7 @@ if [ -a $track/baruwaadmin ];
 else
 	mv $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py $home/px/lib/python$pythonver/site-packages/baruwa/websetup.py.orig
 	cd $home/px/lib/python$pythonver/site-packages/baruwa/
-	curl -O $fluxlabsgit/extras/websetup.py
+	curl -O $fluxgit/extras/websetup.py
 	cd $home
 	virtualenv --distribute px
 	source px/bin/activate
@@ -1068,7 +1069,7 @@ f_clam (){
 		usermod -a -G clamav mail
 		usermod -a -G exim clamav
 		mkdir -p /var/lib/clamav
-		cd /etc; rm -f clamd.conf; wget $fluxlabsgit/extras/centos/config/clamd.conf
+		cd /etc; rm -f clamd.conf; wget $fluxgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/freshclam.conf
 		sed -i -e 's:CHANGE:'$pssqlpass':' /etc/MailScanner/spam.assassin.prefs.conf
@@ -1157,8 +1158,8 @@ cat > /etc/cron.d/mailscanner << 'EOF'
 EOF
 
 cd /etc/cron.hourly;
-curl -O $fluxlabsgit/extras/centos/cron/baruwa-expire-bayes
-curl -O $fluxlabsgit/extras/centos/cron/baruwa-clean-eximdb
+curl -O $fluxgit/extras/centos/cron/baruwa-expire-bayes
+curl -O $fluxgit/extras/centos/cron/baruwa-clean-eximdb
 chmod +x *
 fi
 }
@@ -1386,7 +1387,7 @@ fi
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
 	else
-		cd /etc/cron.daily/; wget $fluxlabsgit/extras/centos/cron/kam; chmod +x *
+		cd /etc/cron.daily/; wget $fluxgit/extras/centos/cron/kam; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
 	service spamassassin restart
@@ -1461,7 +1462,7 @@ f_sagrey () {
 	echo "I N S T A L L  S A G R E Y";
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
-	cd /etc/mail/spamassassin; wget $fluxlabsgit/extras/spamassassin/sagrey.cf; wget $fluxlabsgit/extras/spamassassin/sagrey.pm
+	cd /etc/mail/spamassassin; wget $fluxgit/extras/spamassassin/sagrey.cf; wget $fluxgit/extras/spamassassin/sagrey.pm
 	service spamassassin restart
 	f_clear
 	echo ""
@@ -1496,7 +1497,7 @@ f_baruwa_admin (){
 	else
 	f_clear
 	cd /usr/sbin
-	curl -O $fluxlabsgit/extras/centos/baruwa-admin
+	curl -O $fluxgit/extras/centos/baruwa-admin
 	chmod +x baruwa-admin
 	clear
 	echo ""
