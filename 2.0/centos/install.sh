@@ -501,7 +501,7 @@ else
 		then
 			echo "Good, It looks as though CENTALT $centalt is already intalled. Skipping"; sleep 2
 		else
-			rpm -Uvh http://centos.alt.ru/repository/centos/6/x86_64/centalt-release-$centalt.noarch.rpm
+			rpm -Uvh http://mirror.neu.edu.cn/CentALT/6/x86_64/centalt-release-$centalt.noarch.rpm
 			sed -i 's/centos.alt.ru\/repository\/centos/mirror.neu.edu.cn\/CentALT/g' /etc/yum.repos.d/centalt.repo
 			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
 	fi
