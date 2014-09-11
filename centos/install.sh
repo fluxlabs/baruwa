@@ -570,7 +570,7 @@ if [ -f $track/python ];
 		mkdir -p $home; cd $home
 python -c 'import virtualenv'; virtualenv --distribute px
 source px/bin/activate; export SWIG_FEATURES="-cpperraswarn -includeall -D__`uname -m`__ -I/usr/include/openssl"
-curl -O $fluxgit/requirements.txt
+curl -O $fluxgit/extras/centos/requirements.txt
 pip install distribute
 pip install -U distribute
 pip install python-memcached
