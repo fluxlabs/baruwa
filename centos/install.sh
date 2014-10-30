@@ -1214,6 +1214,44 @@ chown -R exim: /var/spool/exim.in /var/spool/exim
 
 f_clear
 }
+
+# +---------------------------------------------------+
+# Re-Brand Function
+# +---------------------------------------------------+
+
+f_rebrand (){
+if [ -f $track/rebrand ];
+		then
+		:
+		else
+		f_clear	
+		echo "------------------------------------------------------------------------------";
+		echo "R E B R A N D   B A R U W A";
+		echo "------------------------------------------------------------------------------";
+		echo "We are now editing the Baruwa Branding to your configuration"
+		echo ""; sleep 3
+		cd $home/px/lib/python$pythonver/site-packages/baruwa
+		sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/base.html
+		sed -i "s_Baruwa ::_$msorgname ::_" ./templates/base.html
+		sed -i "s_\&copy; 2012 Powered by <a style=\"text-decoration:none;\" href=\"http://www.baruwa.net/\">Baruwa Hosted</a>_Powered by <a style=\"text-decoration:none;\" href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/email/quarantine.orig.html
+		sed -i "s_Powered by Baruwa Hosted http://www.baruwa.net_Powered by $msorgnamelong http://$baruwadomain _" ./templates/email/quarantine.txt
+		sed -i "s_Powered by Baruwa Hosted http://www.baruwa.net_Powered by $msorgnamelong http://$baruwadomain _" ./templates/email/pdfreports.txt
+		sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwreset.txt
+		sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwchanged.txt
+		sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> &copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/accounts/login.html
+		sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/general/error.html
+		sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> \&copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/messages/autorelease.html
+		sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
+		sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
+		sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
+		cd $eximdir
+		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim.conf
+		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim_out.conf
+		touch $track/rebrand
+		f_clear
+	fi
+}
+
 # +---------------------------------------------------+
 # Services Function
 # +---------------------------------------------------+
