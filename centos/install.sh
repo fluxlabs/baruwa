@@ -1594,6 +1594,7 @@ read_main (){
 			f_generate_key
 			f_cronjobs
 			f_permissions
+			f_rebrand
 			f_services
 			f_finish ;;
 		b)  f_additional_sa ;;
