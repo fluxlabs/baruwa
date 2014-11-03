@@ -248,7 +248,12 @@ if sestatus | grep enabled;
 	echo "sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config"
 	echo "Then reboot and try running this script again."
 	echo ""
-	echo "Resuming in 10 seconds ..."; sleep 10
+	read -p "Would you like to fix this? [y/n] (CAUTION: Will Reboot the Server)" fixselinux
+	if [[ $fixselinux =~ ^[Yy]$ ]] ; 
+	then
+	  sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+	  reboot
+	fi
 else
 	:
 fi
