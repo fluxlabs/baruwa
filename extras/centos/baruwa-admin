@@ -27,8 +27,8 @@
 # Version Tracking
 # +---------------------------------------------------+
 
-date="10-24-2013"						# Last Updated On
-version="1.1"							# Script Version
+date="11-03-2014"						# Last Updated On
+version="2.0"							# Script Version
 binhome="/home/baruwa/px/bin/"			# Path to bin
 
 # Create Admin Account
@@ -145,49 +145,416 @@ $binhome/paster update-delta-index --index archive /etc/baruwa/production.ini
 sleep 5
 }
 
+# Update QueueStats
+function update_queuestats () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Update Queue Stats";
+echo "------------------------------------------------------------------------------";
+echo "Updating Queue Stats.."
+echo ""; sleep 1
+/home/baruwa/px/bin/paster update-queue-stats
+echo "Updated!!!"
+sleep 5
+}
+
+# Run Incoming Mail Queue
+function runmailin () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Run Incoming Mail Queue";
+echo "------------------------------------------------------------------------------";
+echo "Running Mail Queue.."
+echo ""; sleep 1
+exim -C /etc/exim/exim.conf -v -qff
+echo "Completed!!!"
+sleep 2
+}
+
+# Run Outgoing Mail Queue
+function runmailout () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Run Outgoing Mail Queue";
+echo "------------------------------------------------------------------------------";
+echo "Running Mail Queue.."
+echo ""; sleep 1
+exim -C /etc/exim/exim_out.conf -v -qff
+echo "Completed!!!"
+sleep 2
+}
+
+# +---------------------------------------------------+
+# Log and Drive Functions
+# +---------------------------------------------------+
+
+# Search Mail Log
+function eximmain () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Search Last 10,000 Records In Exim Logs";
+echo "/var/log/exim/main.log";
+echo "------------------------------------------------------------------------------";
+echo "";
+local search
+read -p "Search for what in maillog: " search
+echo "";
+case $search in
+quit) exit 0 ;;
+*) tail -n 10000 /var/log/exim/main.log | grep $search
+esac
+sleep 0
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View Baruwa Log
+function maillog () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Search Last 10,000 Records In Baruwa Log";
+echo "Tail /var/log/maillog";
+echo "------------------------------------------------------------------------------";
+echo "";
+tail -n 1000 /var/log/maillog
+sleep 2
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View AV Log
+function clamdlog () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Search Last 1,000 Records In ClamAV Log";
+echo "Tail /var/log/clamd/clamd.log";
+echo "------------------------------------------------------------------------------";
+echo "";
+tail -n 1000 /var/log/clamav/clamd.log
+sleep 2
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View AV Update Log
+function freshclamlog () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Search Last 1,000 Records In ClamAV Updater Log";
+echo "Tail /var/log/clamd/freshclam.log";
+echo "------------------------------------------------------------------------------";
+echo "";
+tail -n 1000 /var/log/clamav/freshclam.log
+sleep 2
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View Baruwa Web Error Log
+function httpdbaruwaerror () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Search Last 10,000 Records In Baruwa Web Error Log";
+echo "Tail /var/log/httpd/baruwa-error_log";
+echo "------------------------------------------------------------------------------";
+echo "";
+tail -n 1000 /var/log/httpd/baruwa-error_log
+sleep 2
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View Drive Space
+function drivespace () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "View Drive Space";
+echo "------------------------------------------------------------------------------";
+echo "";
+df -h
+sleep 1
+echo " "
+echo "Completed!!!";
+read -p "Press [Enter] to exit to menu..."
+}
+
+# View Folder Size
+function foldersize () {
+clear 2>/dev/null
+echo "------------------------------------------------------------------------------";
+echo "Browse Folder Sizes";
+echo "------------------------------------------------------------------------------";
+echo " ";
+if rpm -qa | grep ncdu;
+then
+ncdu /
+else
+yum install ncdu -y
+ncdu /
+fi
+sleep 1
+echo " "
+echo "Completed!!!";
+sleep 1
+}
+
+# +---------------------------------------------------+
+# Services Restart Functions
+# +---------------------------------------------------+
+
+# Restart ClamAV Service
+function clamdrestart () {
+clear 2>/dev/null
+service clamd restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Exim Service
+function eximrestart () {
+clear 2>/dev/null
+service exim restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Apache Service
+function httpdrestart () {
+clear 2>/dev/null
+service httpd restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart MemCache Service
+function memcacherestart () {
+clear 2>/dev/null
+service memcached restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart PostGreSQL Service
+function postgresqlrestart () {
+clear 2>/dev/null
+service postgresql restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart RabbitMQ Service
+function rabbitmqserverrestart () {
+clear 2>/dev/null
+service rabbitmq-server restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Search Service 
+function searchdrestart () {
+clear 2>/dev/null
+service searchd restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Baruwa Services
+function baruwarestart () {
+clear 2>/dev/null
+service baruwa restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Cron Service
+function crondrestart () {
+clear 2>/dev/null
+service crond restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart MailScanner Service
+function MailScannerrestart () {
+clear 2>/dev/null
+service MailScanner restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart SpamAssassin Service
+function spamassassinrestart () {
+clear 2>/dev/null
+service spamassassin restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart Name Service
+function namedrestart () {
+clear 2>/dev/null
+service named restart
+echo " "
+echo "Completed!!!"
+sleep 3
+}
+# Restart All Services
+function restart_allservices () {
+clear 2>/dev/null
+service clamd restart
+service exim restart
+service httpd restart
+service memcached restart
+service postgresql restart
+service rabbitmq-server restart
+service searchd restart
+service baruwa restart
+service crond restart
+service MailScanner restart
+service spamassassin restart
+service named restart
+sleep 5
+}
+
 # +---------------------------------------------------+
 # Display menus
 # +---------------------------------------------------+
-
 menu_main() {
-	clear
-	echo "------------------------------"
-	echo "Baruwa Admin"
-	echo ""
-	echo "Please make a choice:"
+clear
+echo "------------------------------"
+echo "Baruwa Admin"
+echo "------------------------------"
+echo ""
+echo "Please make a choice:"
 	echo ""
 	echo "a) Create Admin Account"
 	echo "b) Reset User Password"
 	echo "d) Send Quarantine Reports"
 	echo "e) Send PDF Reports"
-	#echo "f) Send Top Spammer List"
-	#echo "g) Send Whitelist Data"
 	echo "f) Update SpamAssassin Rules"
 	echo "g) Update Search Index"
-	#echo "h) Clean Quarantine"
-	#echo "i) Clean Database"
+	echo ""
+	echo "p) View Logs/Drive Space"
+	echo "q) Restart Services"
+	echo ""
+	echo "v) Update Anti-Virus Rules"
+	echo "w) Run Incoming Mail Queue"
+	echo "y) Run Outgoing Mail Queue"
+	echo "z) Update Mail Queue Stats"
 	echo " "
-	echo "x) Exit"
+	echo "Type 'x' to quit"
 }
+
+menu_logs() {
+clear
+echo "------------------------------"
+echo "Baruwa Log Search"
+echo "------------------------------"
+echo ""
+echo "Please make a choice:"
+	echo ""
+	echo "a) Search last 10,000 MailLogs"
+	echo "b) View MailScanner Log File (Last 1,000 records)"
+	echo "c) View AV Log File (Last 1,000 records)"
+	echo "d) View AV Updater Log File (Last 1,000 records)"
+	echo "e) View HttpError Log File (Last 1,000 records)"
+	echo "f) View Available Drive Space"
+	echo "g) Browse Folder Sizes"
+	echo " "
+	echo "Type 'x' to Return to Main Menu"
+}
+
+menu_services() {
+clear
+echo "------------------------------"
+echo "Restart Service Menu"
+echo "------------------------------"
+echo ""
+echo "Please make a choice:"
+echo ""
+	echo "1) clamd - Runs the AntiVirus"
+	echo "2) exim - Runs the Mail Queues"
+	echo "3) httpd - Runs the Web Server"
+	echo "4) memcached"
+	echo "5) postgresql - Runs the SQL database"
+	echo "6) rabbitmq-server"
+	echo "7) searchd"
+	echo "8) baruwa - Runs Baruwa"
+	echo "9) crond - Runs the Scheduled Tasks"
+	echo "10) MailScanner - Runs MailScanner"
+	echo "11) spamassassin - Runs SpamAssassin"
+	echo "12) named - Runs the Local DNS Server used for sending mail"
+	echo "all) Restart All Services (in above order)"
+	echo "rebootserver) Reboots the whole Server"
+	echo " "
+	echo "Type 'x' to Return to Main Menu"
+}
+
 
 # +---------------------------------------------------+
 # Choices
 # +---------------------------------------------------+
-
 read_main() {
-	local choice
-	read -p "Enter Choice: " choice
-	case $choice in
-		a) admin_account ;;
-		b) reset_password ;;
-		c) prune_quarantine ;;
-		d) send_reports ;;
-		e) send_pdf_reports ;;
-		f) update_sa_rules ;;
-		g) update_search_index ;;
-		x) exit 0 ;;
-		*) echo -e "Error \"$choice\" is not an option..." && sleep 2
-	esac
+local choice
+read -p "Enter Choice: " choice
+case $choice in
+	a) admin_account ;;
+	b) reset_password ;;
+	c) prune_quarantine ;;
+	d) send_reports ;;
+	e) send_pdf_reports ;;
+	f) update_sa_rules ;;
+	g) update_search_index ;;
+	
+	p) menu_logs && read_logs;;
+	q) menu_services && read_services ;;
+	
+	v) freshclam ;;
+	w) runmailin ;;
+	y) runmailout ;;
+	z) update_queuestats ;;
+	x) exit 0 ;;
+	*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+esac
+}
+
+read_logs() {
+local choice
+read -p "Enter Choice: " choice
+case $choice in
+	a) eximmain ;;
+	b) maillog ;;
+	c) clamdlog ;;
+	d) freshclamlog ;;
+	e) httpdbaruwaerror ;;
+	f) drivespace ;;
+	g) foldersize ;;
+	x) menu_main ;;
+	*) echo -e "Error \"$choice\" is not an option..." && sleep 2
+esac
+}
+
+read_services() {
+local choiceserv
+read -p "Enter Choice: " choiceserv
+case $choiceserv in
+	1) clamdrestart ;;
+	2) eximrestart ;;
+	3) httpdrestart ;;
+	4) memcachedrestart ;;
+	5) postgresqlrestart ;;
+	6) rabbitmqserverrestart ;;
+	7) searchdrestart ;;
+	8) baruwarestart ;;
+	9) crondrestart ;;
+	10) MailScannerrestart ;;
+	11) spamassassinrestart ;;
+	12) namedrestart ;;
+	all) restart_allservices ;;
+	rebootserver) reboot ;;
+	x) menu_main ;;
+	*) echo -e "Error \"$choiceserv\" is not an option..." && sleep 2
+esac
 }
 
 # +---------------------------------------------------+
