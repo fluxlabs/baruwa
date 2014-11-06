@@ -1249,6 +1249,28 @@ if [ -f $track/rebrand ];
 		sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
 		sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
 		sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
+		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/quarantinereport.py
+		sed -i "s:Baruwa quarantine report:$msorgname Quarantine Report:" ./commands/quarantinereport.py
+		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreport.py
+		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreport.py
+		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreport.py
+		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
+		sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
+		sed -i "s:\[Baruwa\] Password reset request:\[$msorgname\] Password reset request:" ./controllers/accounts.py
+		sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
+		sed -i "s:\[Baruwa\] Password reset:\[$msorgname\] Password reset:" ./controllers/accounts.py
+		sed -i -i "s:Baruwa mail report:$msorgname Mail Report:" ./controllers/reports.py
+		sed -i "s:X-Baruwa:X-$msorgname:" ./forms/settings.py
+		sed -i "s:the %org-name% ($HOSTNAME) Baruwa:The %org-name% ($HOSTNAME) $msorgname:" ./forms/settings.py
+		sed -i "s:-- \nBaruwa\nEmail Security\n%website%:-- \n$msorgnamelong\n%website%:" ./forms/settings.py
+		sed -i "s:default='Baruwa':default='$msorgname':" ./forms/settings.py
+		sed -i "s:X-%org-name%-Baruwa-Watermark:X-%org-name%-Baruwa-Watermark:" ./forms/settings.py
+		sed -i "s:Baruwa Audit log export:Baruwa Audit log export:" ./tasks/status.py
 		cd $eximdir
 		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim.conf
 		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim_out.conf
