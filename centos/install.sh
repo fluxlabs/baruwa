@@ -512,13 +512,14 @@ else
 		else
 			rpm -Uvh http://mirror.neu.edu.cn/CentALT/6/x86_64/centalt-release-$centalt.noarch.rpm
 			sed -i 's/centos.alt.ru\/repository\/centos/mirror.neu.edu.cn\/CentALT/g' /etc/yum.repos.d/centalt.repo
-	if [ -f $track/centalt-exclude ];
-		then 		
-			echo "Skipping"; sleep 2
-		else
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
-			touch $track/centalt-exclude
-		fi
+			
+			if [ -f $track/centalt-exclude ];
+			then 		
+				echo "Skipping"; sleep 2
+			else
+				echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
+				touch $track/centalt-exclude
+			fi
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
