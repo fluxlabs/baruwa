@@ -512,7 +512,14 @@ else
 		else
 			rpm -Uvh http://mirror.neu.edu.cn/CentALT/6/x86_64/centalt-release-$centalt.noarch.rpm
 			sed -i 's/centos.alt.ru\/repository\/centos/mirror.neu.edu.cn\/CentALT/g' /etc/yum.repos.d/centalt.repo
-			echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
+			
+			if [ -f $track/centalt-exclude ];
+			then 		
+				echo "Skipping"; sleep 2
+			else
+				echo -n "exclude=openssh-server openssh openssh-clients perl-Razor-Agent razor-agents clamav clamav-db clamd bind-chroot sphinx mariadb* mysql* perl-DBD-MySQL*" >> /etc/yum.repos.d/centalt.repo
+				touch $track/centalt-exclude
+			fi
 	fi
 
 	if rpm -q --quiet rpmforge-release-$rpmforge.el6.rf.x86_64;
@@ -522,13 +529,14 @@ else
 			rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-$rpmforge.el6.rf.x86_64.rpm
 			sed -i "12i exclude=openssh openssh-clients perl-File-Temp perl perl-Razor-Agent razor-agents" /etc/yum.repos.d/rpmforge.repo
 			sed -i '19 s:0:1:' /etc/yum.repos.d/rpmforge.repo
+			sed -i "23i exclude=perl-IO-Compress*" /etc/yum.repos.d/rpmforge.repo
 		fi
 	if [ -f $track/cent-exclude ];
 		then 
 			echo "Skipping"; sleep 2
 	else
 	sed -i "19i exclude=perl-Compress-Raw-Zlib perl-Archive-Zip perl-Compress-Zlib perl-libwww-perl spamassassin perl-IO-Zlib perl-DBI" /etc/yum.repos.d/CentOS-Base.repo
-	sed -i "28i exclude=spamassassin perl-Compress-Raw-Zlib" /etc/yum.repos.d/CentOS-Base.repo
+	sed -i "28i exclude=spamassassin" /etc/yum.repos.d/CentOS-Base.repo
 	touch $track/cent-exclude
 	fi
 
