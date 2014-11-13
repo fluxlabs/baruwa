@@ -132,6 +132,9 @@ sslcommon=$baruwadomain
 # SSL Email
 sslemail=$adminemail
 
+# Overwrite Values from unattend.sh file - useful for multiple installs and testing. 
+. ./unattend.sh
+
 # +---------------------------------------------------+
 # Functions
 # +---------------------------------------------------+
