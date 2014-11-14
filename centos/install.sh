@@ -134,7 +134,13 @@ sslemail=$adminemail
 
 # Overwrite Values from unattend.sh file - useful for multiple installs and testing. 
 # Download unattend.sh from  extras/centos/unattend.sh and fill out yoru deatils
+
+if [ -f ./unattend.sh ];
+then
 . ./unattend.sh
+else
+:
+fi
 
 # +---------------------------------------------------+
 # Functions
