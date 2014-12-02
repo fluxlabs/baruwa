@@ -27,9 +27,9 @@
 # Version Tracking
 # +---------------------------------------------------+
 
-date="11-03-2014"						# Last Updated On
+date="12-02-2014"						# Last Updated On
 version="2.0"							# Script Version
-binhome="/home/baruwa/px/bin/"			# Path to bin
+bin="/home/baruwa/px/bin/"				# Path to bin
 
 # Create Admin Account
 function admin_account () {
@@ -49,7 +49,7 @@ echo ""
 echo "What email would you like to use?"
 read -p "Email: " ADMINEMAIL
 echo ""
-$binhome/paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
+$bin/paster create-admin-user -u ${ADMINUSER} -p ${ADMINPASS} -e ${ADMINEMAIL} -t UTC /etc/baruwa/production.ini
 
 cat >> /tmp/message << EOF
 New Admin User Added
@@ -79,7 +79,7 @@ echo ""
 echo "What user would you like to change the password for?"
 read -p "Username: " USERNAME
 echo ""
-$binhome/paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
+$bin/paster change-user-password --username ${USERNAME} /etc/baruwa/production.ini
 sleep 8
 }
 
@@ -91,7 +91,7 @@ echo "	P R U N E  Q U A R A N T I N E";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to prune your Quarantine."
 echo "Processing ....."
-$binhome/paster prune-quarantine /etc/baruwa/production.ini
+$bin/paster prune-quarantine /etc/baruwa/production.ini
 sleep 5
 }
 
@@ -103,7 +103,7 @@ echo "	S E N D  R E P O R T S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to prune your Quarantine."
 echo "Processing ....."
-$binhome/paster send-quarantine-reports /etc/baruwa/production.ini
+$bin/paster send-quarantine-reports /etc/baruwa/production.ini
 sleep 5
 }
 
@@ -115,7 +115,7 @@ echo "	S E N D  P D F  R E P O R T S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to send PDF Reports."
 echo "Processing ....."
-$binhome/paster send-pdf-reports /etc/baruwa/production.ini
+$bin/paster send-pdf-reports /etc/baruwa/production.ini
 sleep 5
 }
 
@@ -127,7 +127,7 @@ echo "	U P D A T E  S A  R U L E S";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to update your spamasasssin rules."
 echo "Processing ....."
-$binhome/paster update-sa-rules /etc/baruwa/production.ini
+$bin/paster update-sa-rules /etc/baruwa/production.ini
 sleep 5
 }
 
@@ -139,9 +139,9 @@ echo "	I N D E X  S E A R C H";
 echo "------------------------------------------------------------------------------";
 echo "We are now going to update your search index."
 echo "Processing ....."
-$binhome/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
+$bin/paster update-delta-index --index messages --realtime /etc/baruwa/production.ini
 sleep 5
-$binhome/paster update-delta-index --index archive /etc/baruwa/production.ini
+$bin/paster update-delta-index --index archive /etc/baruwa/production.ini
 sleep 5
 }
 
