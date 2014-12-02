@@ -90,15 +90,15 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="09-11-2014"						# Last Updated On
-version="2.8"							# Script Version
+date="12-02-2014"						# Last Updated On
+version="3.0"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
-rabbitmq="3.4.1-1"						# Rabbit MQ Version
+rabbitmq="3.4.2-1"						# Rabbit MQ Version
 msver="4.84.6-1"						# MailScanner Version
 msver1="4.84.6"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
