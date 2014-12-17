@@ -7,7 +7,7 @@ M2Crypto
 Mako
 MarkupSafe
 Pillow
-Paste
+Paste==1.7
 PasteDeploy
 PasteScript
 Pygments

@@ -254,10 +254,6 @@ if sestatus | grep enabled;
 	echo "You will have to work out the necessary permissions in SELinux "
 	echo "for Baruwa $baruwaver to work properly. I cannot guarantee anything."
 	echo ""
-	echo "You can disable it by typing:"
-	echo "sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config"
-	echo "Then reboot and try running this script again."
-	echo ""
 	read -p "Would you like to fix this? [y/n] (CAUTION: Will Reboot the Server)" fixselinux
 	if [[ $fixselinux =~ ^[Yy]$ ]] ; 
 	then
