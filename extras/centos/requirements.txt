@@ -9,7 +9,7 @@ MarkupSafe
 Pillow
 Paste==1.7
 PasteDeploy
-PasteScript
+PasteScript==1.7.5
 Pygments
 Pylons
 Routes
