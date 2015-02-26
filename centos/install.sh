@@ -830,7 +830,7 @@ else
 	curl -O $baruwagit/extras/config/exim/trusted-configs
 	sed -i -e 's/verysecretpw/'$pssqlpass'/' $eximdir/macros.conf
 	mkdir $eximdir/baruwa; cd $eximdir/baruwa
-	curl -0 $baruwagit/extras/config/exim/baruwa/exim-bcrypt.pl
+	curl -0 $baruwagit/extras/perl/exim-bcrypt.pl
 	touch $track/exim
 f_complete
 fi
@@ -855,7 +855,7 @@ else
 	echo "that are not available via Yum Repo's."
 	sleep 3
 
-	yes | cpan Encoding::FixLatin AnyEvent::Handle
+	yes | cpan Encoding::FixLatin AnyEvent::Handle Authen::Passphrase::BlowfishCrypt
 	touch $track/perlmods
 f_complete
 fi
@@ -1467,7 +1467,7 @@ fi
 		then
 		echo "Hourly Cronjob exists. Skipping."; sleep 3
 	else
-		cd /etc/cron.daily/; wget $fluxgit/extras/centos/cron/kam; chmod +x *
+		cd /etc/cron.daily/; wget $fluxgit/extras/centos/cron/kam; wget $fluxgit/extras/centos/cron/scamnailer; chmod +x *
 	fi
 	yum install spamassassin-iXhash2 -y
 	service spamassassin restart

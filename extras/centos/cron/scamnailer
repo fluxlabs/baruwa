@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /var/lib/clamav;
+rm -f scamnailer.nbd.old
+mv scamnailer.ndb scamnailer.ndb.old 
+wget http://www.mailscanner.eu/scamnailer.ndb
+service clamd restart
