@@ -1084,9 +1084,9 @@ f_clam (){
 		then
 		echo "I believe you have already executed this portion. Skipping."
 	else
-		usermod -a -G clamav exim
-		usermod -a -G clamav mail
-		usermod -a -G exim clamav
+		usermod -a -G clam exim
+		usermod -a -G clam mail
+		usermod -a -G exim clam
 		mkdir -p /var/lib/clamav
 		cd /etc; rm -f clamd.conf; wget $fluxgit/extras/centos/config/clamd.conf
 		sed -i -e 's:var/clamav:var/lib/clamav:' /etc/clamd.conf
@@ -1102,8 +1102,8 @@ f_clam (){
 		echo -n ""
 		echo ""; sleep 3
 		touch /var/log/clamav/freshclam.log
-		chown -R clamav: /var/log/clamav
-		chown -R clamav: /var/lib/clamav
+		chown -R clam: /var/log/clamav
+		chown -R clam: /var/lib/clamav
 		chmod 664 /var/log/clamav/freshclam.log
 		sleep 5
 		freshclam
