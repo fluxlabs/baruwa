@@ -1104,6 +1104,7 @@ f_clam (){
 		touch /var/log/clamav/freshclam.log
 		chown -R clamav: /var/log/clamav
 		chown -R clamav: /var/lib/clamav
+		chmod 664 /var/lib/clamav/freshclam.log
 		sleep 5
 		freshclam
 		service clamd start
