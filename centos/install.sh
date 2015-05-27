@@ -1265,6 +1265,7 @@ if [ -f $track/rebrand ];
 		sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
 		sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
 		sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
+		sed -i "s:X-%org-name%-Baruwa-Watermark:X-%org-name%-$msorgname-Watermark:" ./forms/settings.py
 		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/quarantinereport.py
 		sed -i "s:Baruwa quarantine report:$msorgname Quarantine Report:" ./commands/quarantinereport.py
 		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreport.py
