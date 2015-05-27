@@ -1263,6 +1263,7 @@ if [ -f $track/rebrand ];
 		sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/general/error.html
 		sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> \&copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/messages/autorelease.html
 		sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
+		sed -i "s:Baruwa\nEmail Security\n%website%:$msorgnamelong\n%website%:" ./forms/settings.py
 		sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
 		sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
 		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/quarantinereport.py
