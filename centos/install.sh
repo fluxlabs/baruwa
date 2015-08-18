@@ -1169,8 +1169,7 @@ fi
 cd /etc/cron.hourly;
 curl -O $fluxgit/extras/centos/cron/baruwa-expire-bayes
 curl -O $fluxgit/extras/centos/cron/baruwa-clean-eximdb
-chmod +x *
-fi
+chmod +x baruwa-*
 }
 
 # +---------------------------------------------------+
@@ -1406,7 +1405,7 @@ Please visit http://baruwa.org/docs/2.0/guide/admin/index.html
 and follow the guide on how to start adding Organizations and Domains.
 
 --
-Baruwa $baruwaver Installer by Jeremy McSpadden (jeremy at fluxlabs dot net)
+Baruwa $baruwaver Installer by Flux Labs (jeremy at fluxlabs dot net)
 
 Please support the Baruwa project by donating at
 http://pledgie.com/campaigns/12056
