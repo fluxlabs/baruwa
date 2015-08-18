@@ -90,8 +90,8 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="06-4-2015"						# Last Updated On
-version="3.2"							# Script Version
+date="08-14-2015"						# Last Updated On
+version="3.2.1"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
 baruwaver="2.0.1"						# Baruwa Version
@@ -99,8 +99,8 @@ centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
 rabbitmq="3.5.4-1"						# Rabbit MQ Version
-msver="4.84.6-1"						# MailScanner Version
-msver1="4.84.6"							# MS Config Version
+msver="4.85.2-3"						# MailScanner Version
+msver1="4.85.2"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
@@ -1165,18 +1165,6 @@ cat > /etc/cron.d/baruwa << 'EOF'
 0 6 1 * * baruwa /home/baruwa/px/bin/paster send-pdf-reports /etc/baruwa/production.ini >/dev/null 2>&1
 EOF
 fi
- 
-if [ -f /etc/cron.d/mailscanner ];
-	then
-	echo "MailScanner Cronjob Exists. Skipping." ; sleep 3
-else
-cat > /etc/cron.d/mailscanner << 'EOF'
-37 5 * * * /usr/sbin/update_phishing_sites
-07 * * * * /usr/sbin/update_bad_phishing_sites
-58 23 * * * /usr/sbin/clean.quarantine
-42 * * * * /usr/sbin/update_virus_scanners
-3,23,43 * * * * /usr/sbin/check_mailscanner
-EOF
 
 cd /etc/cron.hourly;
 curl -O $fluxgit/extras/centos/cron/baruwa-expire-bayes
