@@ -82,6 +82,9 @@ sslprovince='Illinois'
 # SSL City Name
 sslcity='Chicago'
 
+# Disable Re-Branding
+disablerebranding=1
+
 # +=====================================================================+
 
 # DONE EDITING >>>> DONE EDITING >>>>> DONE EDITING >>>>> DONE EDITING
@@ -1232,61 +1235,64 @@ if [ -f $track/rebrand ];
 		then
 		:
 		else
-		f_clear	
-		echo "------------------------------------------------------------------------------";
-		echo "R E B R A N D   B A R U W A";
-		echo "------------------------------------------------------------------------------";
-		echo "We are now editing the Baruwa Branding to your configuration"
-		echo ""; sleep 3
-		cd $home/px/lib/python$pythonver/site-packages/baruwa
-		sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/base.html
-		sed -i "s_Baruwa ::_$msorgname ::_" ./templates/base.html
-		sed -i "s:Baruwa Quarantine report:$msorgname Quarantine Report:" ./templates/email/quarantine.html
-		sed -i "s:alt="Baruwa":alt="$msorgname":" ./templates/email/quarantine.html
-		sed -i "s:Powered By Baruwa &copy; 2010-2012:Powered By $msorgnamelong &copy; 2015:" ./templates/email/quarantine.html
-		sed -i "s_\&copy; 2012 Powered by <a style=\"text-decoration:none;\" href=\"http://www.baruwa.net/\">Baruwa Hosted</a>_Powered by <a style=\"text-decoration:none;\" href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/email/quarantine.orig.html
-		sed -i "s_Powered by Baruwa Hosted - http://www.baruwa.net_Powered by $msorgnamelong - http://$baruwadomain _" ./templates/email/quarantine.txt
-		sed -i "s:Baruwa:$msorgname:" ./templates/email/quarantine.txt
-		sed -i "s_Powered by Baruwa Hosted - http://www.baruwa.net_Powered by $msorgnamelong - http://$baruwadomain _" ./templates/email/pdfreports.txt
-		sed -i "s:find attached your Baruwa usage report:find attached your SpamCleric usage report:" ./templates/email/pdfreports.txt
-		sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwreset.txt
-		sed -i "s:Baruwa Bot:$msorgnamelong:" ./templates/email/pwreset.txt
-		sed -i "s:Baruwa:$msorgname:" ./templates/email/pwreset.txt
-		sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwchanged.txt
-		sed -i "s:Baruwa:$msorgnamelong:" ./templates/email/pwchanged.txt
-		sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> &copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/accounts/login.html
-		sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/general/error.html
-		sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> \&copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/messages/autorelease.html
-		sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
-		sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
-		sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
-		sed -i "s:X-Baruwa:X-$msorgname:" ./forms/settings.py
-		sed -i "s:the %org-name% ($HOSTNAME) Baruwa:The %org-name% ($HOSTNAME) $msorgname:" ./forms/settings.py
-		sed -i "s:-- \nBaruwa\nEmail Security\n%website%:-- \n$msorgnamelong\n%website%:" ./forms/settings.py
-		sed -i "s:default='Baruwa':default='$msorgname':" ./forms/settings.py
-		sed -i "s:X-%org-name%-Baruwa-Watermark:X-%org-name%-Baruwa-Watermark:" ./forms/settings.py
-		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/quarantinereport.py
-		sed -i "s:Baruwa quarantine report:$msorgname Quarantine Report:" ./commands/quarantinereport.py
-		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreport.py
-		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreport.py
-		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreport.py
-		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
-		sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
-		sed -i "s:\[Baruwa\] Password reset request:\[$msorgname\] Password reset request:" ./controllers/accounts.py
-		sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
-		sed -i "s:\[Baruwa\] Password reset:\[$msorgname\] Password reset:" ./controllers/accounts.py
-		sed -i -i "s:Baruwa mail report:$msorgname Mail Report:" ./controllers/reports.py
-		sed -i "s:Baruwa Audit log export:Baruwa Audit log export:" ./tasks/status.py
-		cd $eximdir
-		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim.conf
-		sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim_out.conf
-		touch $track/rebrand
-		f_clear
+		if [$disablerebranding == 1]; 
+			then 
+			f_clear	
+			echo "------------------------------------------------------------------------------";
+			echo "R E B R A N D   B A R U W A";
+			echo "------------------------------------------------------------------------------";
+			echo "We are now editing the Baruwa Branding to your configuration"
+			echo ""; sleep 3
+			cd $home/px/lib/python$pythonver/site-packages/baruwa
+			sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/base.html
+			sed -i "s_Baruwa ::_$msorgname ::_" ./templates/base.html
+			sed -i "s:Baruwa Quarantine report:$msorgname Quarantine Report:" ./templates/email/quarantine.html
+			sed -i "s:alt="Baruwa":alt="$msorgname":" ./templates/email/quarantine.html
+			sed -i "s:Powered By Baruwa &copy; 2010-2012:Powered By $msorgnamelong &copy; 2015:" ./templates/email/quarantine.html
+			sed -i "s_\&copy; 2012 Powered by <a style=\"text-decoration:none;\" href=\"http://www.baruwa.net/\">Baruwa Hosted</a>_Powered by <a style=\"text-decoration:none;\" href=\"http://$baruwadomain\">$msorgnamelong</a>_" ./templates/email/quarantine.orig.html
+			sed -i "s_Powered by Baruwa Hosted - http://www.baruwa.net_Powered by $msorgnamelong - http://$baruwadomain _" ./templates/email/quarantine.txt
+			sed -i "s:Baruwa:$msorgname:" ./templates/email/quarantine.txt
+			sed -i "s_Powered by Baruwa Hosted - http://www.baruwa.net_Powered by $msorgnamelong - http://$baruwadomain _" ./templates/email/pdfreports.txt
+			sed -i "s:find attached your Baruwa usage report:find attached your SpamCleric usage report:" ./templates/email/pdfreports.txt
+			sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwreset.txt
+			sed -i "s:Baruwa Bot:$msorgnamelong:" ./templates/email/pwreset.txt
+			sed -i "s:Baruwa:$msorgname:" ./templates/email/pwreset.txt
+			sed -i "s_www.baruwa.net_$baruwadomain _" ./templates/email/pwchanged.txt
+			sed -i "s:Baruwa:$msorgnamelong:" ./templates/email/pwchanged.txt
+			sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> &copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/accounts/login.html
+			sed -i "s_<a href=\"http://www.baruwa.net/\">Baruwa Hosted</a> \&copy; 2012 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/general/error.html
+			sed -i "s_<a href=\"http://www.baruwa.org/\">Baruwa</a> \&copy; 2011 Andrew Colin Kissa_<a href=\"http://$baruwadomain/\">$msorgnamelong</a>_" ./templates/messages/autorelease.html
+			sed -i "s:org_name = TextField(_('Sitename'), default='BARUWA'):org_name = TextField(_('Sitename'), default='$msorgname'):" ./forms/settings.py
+			sed -i "s:default='BARUWA MAIL GATEWAY':default='$msorgnamelong':" ./forms/settings.py
+			sed -i "s:default='www.baruwa.org'):default='$baruwadomain'):" ./forms/settings.py
+			sed -i "s:X-Baruwa:X-$msorgname:" ./forms/settings.py
+			sed -i "s:the %org-name% ($HOSTNAME) Baruwa:The %org-name% ($HOSTNAME) $msorgname:" ./forms/settings.py
+			sed -i "s:-- \nBaruwa\nEmail Security\n%website%:-- \n$msorgnamelong\n%website%:" ./forms/settings.py
+			sed -i "s:default='Baruwa':default='$msorgname':" ./forms/settings.py
+			sed -i "s:X-%org-name%-Baruwa-Watermark:X-%org-name%-Baruwa-Watermark:" ./forms/settings.py
+			sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/quarantinereport.py
+			sed -i "s:Baruwa quarantine report:$msorgname Quarantine Report:" ./commands/quarantinereport.py
+			sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreport.py
+			sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreport.py
+			sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreport.py
+			sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa mail report:$msorgname Mail Report:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa Reports:$msorgname Reports:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa usage report:$msorgname Usage Report:" ./commands/pdfreportsng.py
+			sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
+			sed -i "s:\[Baruwa\] Password reset request:\[$msorgname\] Password reset request:" ./controllers/accounts.py
+			sed -i "s:Baruwa Hosted:$msorgnamelong:" ./controllers/accounts.py
+			sed -i "s:\[Baruwa\] Password reset:\[$msorgname\] Password reset:" ./controllers/accounts.py
+			sed -i -i "s:Baruwa mail report:$msorgname Mail Report:" ./controllers/reports.py
+			sed -i "s:Baruwa Audit log export:Baruwa Audit log export:" ./tasks/status.py
+			cd $eximdir
+			sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim.conf
+			sed -i "s:smtp_banner = Baruwa 2.0 $tod_full:smtp_banner = $msorgnamelong $tod_full:" ./exim_out.conf
+			touch $track/rebrand
+			f_clear
+		fi	
 	fi
 }
 
