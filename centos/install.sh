@@ -90,17 +90,17 @@ sslcity='Chicago'
 # Version Tracking
 # +---------------------------------------------------+
 
-date="09-12-2015"						# Last Updated On
-version="3.2.2"							# Script Version
+date="08-14-2015"						# Last Updated On
+version="3.2.1"							# Script Version
 
 osver="Cent OS/RHEL x86_64"				# Script ID
-baruwaver="2.0.9"						# Baruwa Version
+baruwaver="2.0.1"						# Baruwa Version
 centalt="6-1"							# CenAlt Version
 epel="6-8"								# EPEL Version
 rpmforge="0.5.3-1"						# RPM Forge Version
 rabbitmq="3.5.4-1"						# Rabbit MQ Version
 msver="4.85.2-3"						# MailScanner Version
-msver1="4.85.2-3-1"						# MS Config Version
+msver1="4.85.2"							# MS Config Version
 libmem="1.0.17"							# LIB MEM Cache Version
 pythonver="2.6"							# Python Version
 pyzorver="0.5.0"						# Pyzor Version
@@ -166,9 +166,6 @@ f_exit (){
 	read -p "Please press enter to Exit. " fackEnterKey
 	exit
 }
-
-# 32 or 64 bit
-MACHINE_TYPE=`uname -m`
 
 f_clear () {
 	clear 2>/dev/null
@@ -433,8 +430,8 @@ while :
 	do
 		echo ""
 		echo "What domain will you use? example - baruwa.domain.net"
-		IFS= read -p "Domain: " baruwadomain
-		IFS= read -p "Domain Again: " baruwadomain2
+		IFS= read -p "Email: " baruwadomain
+		IFS= read -p "Email Again: " baruwadomain2
 		[[ $baruwadomain = "$baruwadomain2" ]] && break
 		echo ''
 		echo 'These domains do not match. Please try again.'
@@ -536,12 +533,11 @@ else
 			sed -i '19 s:0:1:' /etc/yum.repos.d/rpmforge.repo
 			sed -i "23i exclude=perl-IO-Compress*" /etc/yum.repos.d/rpmforge.repo
 		fi
-
 	if [ -f $track/cent-exclude ];
 		then 
 			echo "Skipping"; sleep 2
 	else
-	sed -i "19i exclude=perl-Archive-Zip perl-libwww-perl spamassassin perl-IO-Zlib perl-DBI" /etc/yum.repos.d/CentOS-Base.repo
+	sed -i "19i exclude=perl-Compress-Raw-Zlib perl-Archive-Zip perl-Compress-Zlib perl-libwww-perl spamassassin perl-IO-Zlib perl-DBI" /etc/yum.repos.d/CentOS-Base.repo
 	sed -i "28i exclude=spamassassin" /etc/yum.repos.d/CentOS-Base.repo
 	touch $track/cent-exclude
 	fi
@@ -551,7 +547,7 @@ else
     cracklib-devel GeoIP-devel mysql-devel perl-CPAN rpm-build binutils glibc-devel perl-String-CRC32  perl-YAML \
     gcc zip tar nano sudo kernel-headers ntp sed perl-DBD-Pg sphinx libsphinxclient mlocate postgresql-server postgresql-plpython  \
     memcached spamassassin python-setuptools python-virtualenv tnef mailx clamd libmemcached-devel \
-    perl-Net-CIDR perl-Sys-SigActionmake perl-Archive-Zip perl-Compress-Raw-Zlib \
+    perl-Net-CIDR perl-Sys-SigAction perl-Compress-Raw-Zlib make perl-Archive-Zip perl-Compress-Raw-Zlib \
     perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC \
     perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-Filesys-Df perl-EV perl-String-CRC32 \
     perl-HTML-Parser perl-HTML-Tagset perl-IO-stringy perl-MailTools unzip clamav perl-IP-Country \
@@ -559,9 +555,6 @@ else
     perl-Pod-Simple perl-Sys-Hostname-Long perl-Sys-SigAction unrar perl-Mail-SPF mod_wsgi \
     perl-Test-Harness perl-Test-Pod perl-Test-Simple perl-TimeDate perl-Time-HiRes perl-Net-Ident re2c -y
     
-    yum remove bind-chroot -y
-	yum install bind -y
-
 	if [ $? -eq 0 ];
 		then
     touch $track/dependencies
@@ -601,6 +594,9 @@ pip install distribute
 pip install -U distribute
 pip install python-memcached
 pip install --timeout 120 -r requirements.txt
+pip install babel==0.9.6
+pip uninstall reportlab -y
+pip install reportlab==2.7
 cd $home
 cp /usr/share/doc/libsphinxclient-*/sphinxapi.py px/lib/python$pythonver/site-packages/sphinxapi.py
 curl -O $baruwagit/extras/patches/repoze.who-friendly-form.patch
@@ -721,53 +717,49 @@ if rpm -q --quiet mailscanner;
 		cd $builddir; wget $fluxgit/extras/centos/MailScanner-$msver.rpm.tar.gz
 		tar -zxvf MailScanner-$msver.rpm.tar.gz; cd MailScanner-$msver
 		f_clear
-		# get the public signing key for the mailscanner rpm
-		cd /tmp
-		rm -f jb_ms_rpm_public.key
-		$CURL -O https://s3.amazonaws.com/mailscanner/gpg/jb_ms_rpm_public.key
-		rpm --import jb_ms_rpm_public.key
-		rm -f jb_ms_rpm_public.key
-		$RPM -Uvh --force $NODEPS mailscanner*noarch.rpm
+		sh install.sh fast
 		f_clear
-	#	echo ""
-	#	echo "Now let's patch it up."; sleep 3
-	#	echo ""
+		echo ""
+		echo "Now let's patch it up."; sleep 3
+		echo ""
 	cd $home
-	#curl -O $baruwagit/extras/patches/mailscanner-baruwa-iwantlint.patch
-	#curl -O $baruwagit/extras/patches/mailscanner-baruwa-sql-config.patch
-	#cd /usr/sbin
-	#patch -i $home/mailscanner-baruwa-iwantlint.patch
-	#cd /usr/lib/MailScanner/MailScanner
-	#patch -p3 -i $home/mailscanner-baruwa-sql-config.patch
-	#cd $home
-	
-	cd /usr/share/MailScanner/MailScanner/CustomFunctions
+	curl -O $baruwagit/extras/patches/mailscanner-baruwa-iwantlint.patch
+	curl -O $baruwagit/extras/patches/mailscanner-baruwa-sql-config.patch
+	cd /usr/sbin
+	patch -i $home/mailscanner-baruwa-iwantlint.patch
+	cd /usr/lib/MailScanner/MailScanner
+	patch -p3 -i $home/mailscanner-baruwa-sql-config.patch
+	cd $home
 	curl -O $baruwagit/extras/perl/BS.pm
+	mv BS.pm /usr/lib/MailScanner/MailScanner/CustomFunctions
 	cd /etc/MailScanner
 	mv MailScanner.conf MailScanner.conf.orig
+	cd $home
 	curl -O $fluxgit/extras/centos/config/mailscanner/MailScanner.conf
 	curl -O $fluxgit/extras/centos/config/mailscanner/spam.assassin.prefs.conf
-	curl -O $fluxgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
-	curl -O $fluxgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
-	rm -f /etc/mail/spamassassin/local.cf
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
-    
-    cd rules
 	curl -O $fluxgit/extras/centos/config/mailscanner/scan.messages.rules
 	curl -O $fluxgit/extras/centos/config/mailscanner/nonspam.actions.rules
 	curl -O $fluxgit/extras/centos/config/mailscanner/filename.rules
 	curl -O $fluxgit/extras/centos/config/mailscanner/filetype.rules
+	curl -O $fluxgit/extras/centos/config/mailscanner/filename.rules.allowall.conf
+	curl -O $fluxgit/extras/centos/config/mailscanner/filetype.rules.allowall.conf
+	rm -f /etc/mail/spamassassin/local.cf
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/local.cf
+	mv *.rules /etc/MailScanner/rules/
+	mv *.conf /etc/MailScanner/
 	chmod -R 777 /var/spool/MailScanner/
 
-	sed -i 's:/usr/local:/usr/:' /usr/share/MailScanner/clamav-autoupdate
+	sed -i 's:/usr/local:/usr/:' /usr/lib/MailScanner/clamav-autoupdate
 	sed -i 's:DB Password = verysecretpw:DB Password = '$pssqlpass':' /etc/MailScanner/MailScanner.conf
 	sed -i 's:EXIM:#EXIM:' /etc/sysconfig/MailScanner
 	echo EXIM=/usr/sbin/exim >> /etc/sysconfig/MailScanner
 	echo EXIMINCF=$eximdir/exim.conf >> /etc/sysconfig/MailScanner
 	echo EXIMSENDCF=$eximdir/exim_out.conf >> /etc/sysconfig/MailScanner
 	rm -f /etc/mail/spamassassin/mailscanner.cf
+	sed -i '1d' /usr/sbin/MailScanner
+	sed -i '1i #!/usr/bin/perl -I/usr/lib/MailScanner -U' /usr/sbin/MailScanner
 	touch $track/mailscanner
-	rm -rf $builddir/MailScanner*
+	rm -rf $builddir/MailScanner-$msver
 f_complete
 fi
 }
@@ -787,8 +779,6 @@ if rpm -q --quiet postfix
 	then
 	service postfix stop
 	yum remove postfix -y
-	service sendmail stop
-	chkconfig sendmail off
 else
 	echo "Good, Postfix is not installed."; sleep 3
 fi
@@ -1338,6 +1328,8 @@ f_services (){
 		chkconfig --level 345 MailScanner on
 		service spamassassin start
 		chkconfig --level 345 spamassassin on
+		yum remove bind-chroot -y
+		yum install bind -y
 		chkconfig --level 345 named on
 		sed -i '1i nameserver 127.0.0.1' /etc/resolv.conf
 		service named start
@@ -1502,12 +1494,11 @@ f_additional_clam (){
 		echo "Not recommended for a small VPS!"
 		echo ""; sleep 3
 		yum install clamav-unofficial-sigs  -y
-		/usr/bin/clamav-unofficial-sigs.sh
 		sed -i 's:clam_user:#clam_user:' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
 		sed -i 's:clam_group:#clam_group:' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
 		sed -i '42i clam_user=clamav' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
 		sed -i '43i clam_group=clamav' /etc/clamav-unofficial-sigs/clamav-unofficial-sigs.conf
-		chmod +X /etc/cron.d/clamav-unofficial-sigs
+		/usr/bin/clamav-unofficial-sigs.sh
 		chown -R clamav:clamav /var/lib/clamav
 		service clamd restart
 		touch $track/additional_clam
