@@ -258,7 +258,7 @@ if sestatus | grep enabled;
 	echo "for Baruwa $baruwaver to work properly. I cannot guarantee anything."
 	echo ""
 	read -p "Would you like to fix this? [y/n] (CAUTION: Will Reboot the Server)" fixselinux
-	if [[ $fixselinux =~ ^[Yy]$ ]] ;
+	if [[ $fixselinux =~ ^[Yy]$ ]] ; 
 	then
 	  sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 	  reboot
@@ -1039,7 +1039,7 @@ f_pyzor_razor_dcc (){
 	echo "------------------------------------------------------------------------------";
 	echo ""; sleep 3
 	cd $builddir; curl -O http://www.atomicorp.com/installers/atomic
-	sed -i "48d,93d #" atomic
+	sed -i "48,93d #" atomic
 	sh atomic
 	yum install pyzor razor-agents -y
 	chmod -R a+rX /usr/share/doc/pyzor-$pyzorver /usr/bin/pyzor /usr/bin/pyzord
