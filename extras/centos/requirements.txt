@@ -1,4 +1,4 @@
-Babel
+babel==0.9.6
 Beaker
 FormEncode
 http://geolite.maxmind.com/download/geoip/api/python/GeoIP-Python-1.2.4.tar.gz
@@ -61,3 +61,4 @@ simplejson
 six
 wsgiref
 zope.interface
+Cython
